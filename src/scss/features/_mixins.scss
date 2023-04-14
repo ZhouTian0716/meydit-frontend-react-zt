@@ -1,0 +1,11 @@
+@use "../variables/" as *;
+
+@mixin wrapper-style {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0.5rem;
+  border-radius: 10px;
+  box-shadow: var(--bg-contrast) 0px 4px 12px;
+}
+

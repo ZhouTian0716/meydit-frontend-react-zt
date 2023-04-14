@@ -1,0 +1,16 @@
+@use "../variables" as *;
+@use "../features" as *;
+
+#root {
+  min-height: 100vh;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  font-family: $font-main;
+}
+
+.green {
+  color: red;
+}
