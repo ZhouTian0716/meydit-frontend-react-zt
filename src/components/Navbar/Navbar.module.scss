@@ -1,1 +1,46 @@
+@use "../../scss//variables/colors" as *;
 
+.nav {
+  background-color: $theme-main;
+  color: white;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &__links {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-weight: 500;
+    &__link {
+      padding: 0.5rem 1rem;
+      transition: all 0.3s ease-in-out;
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+    }
+  }
+}
+
+.logo {
+  aspect-ratio: 1.2;
+  width: 4rem;
+}
+
+.nav__btn {
+  background-color: transparent;
+  color: white;
+  font-size: 1rem;
+  font-family: inherit;
+  border: 1px solid white;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  &:hover {
+    background-color: white;
+    color: $theme-main;
+  }
+}
