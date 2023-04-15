@@ -1,4 +1,4 @@
-@use "../../scss//variables/colors" as *;
+@use "../../scss//variables" as *;
 
 .nav {
   position: absolute;
@@ -22,6 +22,9 @@
     align-items: center;
     gap: 1rem;
     font-weight: 500;
+    @include media-tablet-sm {
+      display: none;
+    }
     .nav__link {
       padding: 0.5rem 1rem;
       border-radius: 5px;
@@ -95,4 +98,13 @@
   align-items: center;
   gap: 0.5rem;
   cursor: pointer;
+}
+
+.menuBtn {
+  display: none;
+  @include media-tablet-sm {
+    display: block;
+    font-size: 2rem;
+    cursor: pointer;
+  }
 }

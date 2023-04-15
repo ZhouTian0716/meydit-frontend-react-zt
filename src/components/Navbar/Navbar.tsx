@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { HiMenuAlt1 } from "react-icons/hi";
 import styles from "./Navbar.module.scss";
 import logo from "../../../src/assets/img/white_logo.png";
 import avatar from "../../../src/assets/img/avatar.jpg";
@@ -9,7 +10,8 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
   const { pathname } = useLocation();
 
-  const navClass = active || pathname !== "/" ? `${styles.nav} ${styles.active}` : styles.nav;
+  const navClass =
+    active || pathname !== "/" ? `${styles.nav} ${styles.active}` : styles.nav;
   const optionsClass = open
     ? `${styles.options} ${styles.active}`
     : styles.options;
@@ -81,6 +83,7 @@ const Navbar = () => {
           </div>
         )}
       </div>
+      <HiMenuAlt1 className={styles.menuBtn} />
     </div>
   );
 };
