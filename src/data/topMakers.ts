@@ -1,5 +1,3 @@
-const prefix = "https://meydit-frontend-react-zt.vercel.app/";
-
 const isOnDeploy = import.meta.env.VITE_VERCEL_IMG_DEPLOY === "true";
 
 export const topMakers = [
@@ -9,7 +7,7 @@ export const topMakers = [
     bio: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quaerat adipisci ipsum facere illo quis beatae.",
     profile: "https://meyd.it",
     avatar: isOnDeploy
-      ? prefix + "assets/img/makers/1.jpg"
+      ? "assets/img/makers/1.jpg"
       : "/src/assets/img/makers/1.jpg",
   },
   {
@@ -17,34 +15,44 @@ export const topMakers = [
     name: "Rose",
     bio: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quaerat adipisci ipsum facere illo quis beatae.",
     profile: "https://meyd.it",
-    avatar: "/src/assets/img/makers/2.jpg",
+    avatar: isOnDeploy
+      ? "assets/img/makers/2.jpg"
+      : "/src/assets/img/makers/2.jpg",
   },
   {
     id: "3",
     name: "Maria",
     bio: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quaerat adipisci ipsum facere illo quis beatae.",
     profile: "https://meyd.it",
-    avatar: "/src/assets/img/makers/3.jpg",
+    avatar: isOnDeploy
+      ? "assets/img/makers/3.jpg"
+      : "/src/assets/img/makers/3.jpg",
   },
   {
     id: "4",
     name: "Lucy",
     bio: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quaerat adipisci ipsum facere illo quis beatae.",
     profile: "https://meyd.it",
-    avatar: "/src/assets/img/makers/4.jpg",
+    avatar: isOnDeploy
+      ? "assets/img/makers/4.jpg"
+      : "/src/assets/img/makers/4.jpg",
   },
   {
     id: "5",
     name: "Jessica",
     bio: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quaerat adipisci ipsum facere illo quis beatae.",
     profile: "https://meyd.it",
-    avatar: "/src/assets/img/makers/5.jpg",
+    avatar: isOnDeploy
+      ? "assets/img/makers/5.jpg"
+      : "/src/assets/img/makers/5.jpg",
   },
   {
     id: "6",
     name: "Luoise",
     bio: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quaerat adipisci ipsum facere illo quis beatae.",
     profile: "https://meyd.it",
-    avatar: "/src/assets/img/makers/6.jpg",
+    avatar: isOnDeploy
+      ? "assets/img/makers/6.jpg"
+      : "/src/assets/img/makers/6.jpg",
   },
 ];
