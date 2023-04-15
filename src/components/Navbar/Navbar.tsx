@@ -36,7 +36,7 @@ const Navbar = () => {
         <Link to="#" className={styles.nav__link}>
           Business
         </Link>
-        <Link to="#" className={styles.nav__link}>
+        <Link to="https://meyd.it" className={styles.nav__link}>
           Explore
         </Link>
         {currentUser?.role === "maker" && (
