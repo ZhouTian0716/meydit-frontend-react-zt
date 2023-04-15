@@ -27,7 +27,7 @@ const Navbar = () => {
     };
   }, []);
 
-  const currentUser = { id: 1, username: "Joe", role: "buyer" };
+  const currentUser = { id: 1, username: "Joe", role: "maker" };
 
   return (
     <div className={navClass}>

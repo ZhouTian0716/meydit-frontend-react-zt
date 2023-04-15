@@ -7,6 +7,7 @@ import BuyerDesigns from "./pages/BuyerDesigns/BuyerDesigns";
 import BuyerDesign from "./pages/BuyerDesign/BuyerDesign";
 import Account from "./pages/Account/Account";
 import Messages from "./pages/Messages/Messages";
+import MakerAtelier from "./pages/MakerAtelier/MakerAtelier";
 
 function App() {
   const Layout = () => {
@@ -39,6 +40,10 @@ function App() {
         {
           path: "/buyer-designs/:id",
           element: <BuyerDesign />,
+        },
+        {
+          path: "/maker-atelier/:id",
+          element: <MakerAtelier />,
         },
         {
           path: "/messages",

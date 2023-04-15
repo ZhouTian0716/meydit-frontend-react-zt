@@ -9,7 +9,7 @@ interface ISlideCardProps {
 
 const SlideCard = ({ item }: ISlideCardProps) => {
   return (
-    <Link to={`maker-design/${item.id}`}>
+    <Link to={`maker-atelier/${item.id}`}>
       <div className={styles.makerCard}>
         <img src={item.avatar} alt={item.id} className={styles.makerImg} />
         <div className={styles.makerInfo}>
