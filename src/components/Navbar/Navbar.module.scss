@@ -3,22 +3,57 @@
 .nav {
   background-color: $theme-main;
   color: white;
-  padding: 1rem 2rem;
+  padding: 0.5rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: sticky;
+  top: 0;
+  transition: all 0.3s ease-in-out;
+  &.active {
+    background-color: yellow;
+  }
 
   &__links {
-    list-style: none;
     display: flex;
     align-items: center;
     gap: 1rem;
     font-weight: 500;
-    &__link {
+    .nav__link {
       padding: 0.5rem 1rem;
+      border-radius: 5px;
       transition: all 0.3s ease-in-out;
       &:hover {
         background-color: rgba(255, 255, 255, 0.1);
+      }
+    }
+    .account {
+      position: relative;
+      .options {
+        display: none;
+        position: absolute;
+        top: calc(100% + 0.5em);
+        right: 0;
+        overflow: hidden;
+        width: 100px;
+        background-color: white;
+        border: 1px solid $border;
+        border-radius: 5px;
+        color: $text-main;
+        &.active{
+          display: block;
+        }
+        .option {
+          display: block;
+          font-size: 0.8em;
+          font-weight: 300;
+          padding: 0.3em 0.5em;
+          cursor: pointer;
+          transition: all 0.3s ease-in-out;
+          &:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+          }
+        }
       }
     }
   }
@@ -43,4 +78,18 @@
     background-color: white;
     color: $theme-main;
   }
+}
+
+.avatar {
+  aspect-ratio: 1;
+  width: 2rem;
+  border-radius: 50%;
+  display: block;
+}
+
+.accountBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
 }
