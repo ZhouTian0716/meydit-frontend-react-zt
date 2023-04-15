@@ -1,10 +1,16 @@
+const prefix = "https://meydit-frontend-react-zt.vercel.app/";
+
+const isOnDeploy = import.meta.env.VITE_VERCEL_IMG_DEPLOY === "true";
+
 export const topMakers = [
   {
     id: "1",
     name: "Jane",
     bio: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quaerat adipisci ipsum facere illo quis beatae.",
     profile: "https://meyd.it",
-    avatar: "/src/assets/img/makers/1.jpg",
+    avatar: isOnDeploy
+      ? prefix + "assets/img/makers/1.jpg"
+      : "/src/assets/img/makers/1.jpg",
   },
   {
     id: "2",
