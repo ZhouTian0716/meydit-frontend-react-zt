@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./Slide.module.scss";
 import { ITopMaker } from "../../types";
 import SlideCard from "../SlideCard/SlideCard";
@@ -16,18 +15,18 @@ interface ISlideProps {
 
 const Slide = (props: ISlideProps) => {
   const { topMakers } = props;
+
   return (
     <>
-      <h2>Top Makers</h2>
+      <h2 className={styles.slideTitle}>Top Makers</h2>
       <Swiper
+        grabCursor={true}
         slidesPerView={1}
         spaceBetween={10}
         pagination={{
           clickable: true,
         }}
         navigation={true}
-        modules={[Pagination, Navigation]}
-        className="mySwiper"
         breakpoints={{
           640: {
             slidesPerView: 2,
@@ -35,13 +34,15 @@ const Slide = (props: ISlideProps) => {
           },
           768: {
             slidesPerView: 4,
-            spaceBetween: 40,
+            spaceBetween: 30,
           },
           1024: {
             slidesPerView: 5,
-            spaceBetween: 50,
+            spaceBetween: 40,
           },
         }}
+        modules={[Pagination, Navigation]}
+        className="mySwiper"
       >
         {topMakers?.map((e: ITopMaker) => (
           <SwiperSlide key={e.id}>
