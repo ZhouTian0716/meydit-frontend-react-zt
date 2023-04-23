@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styles from "./Auth.module.scss";
 import scissors from "../../../src/assets/img/resource/scissors.jpg";
 import InputV1 from "../../components/Lib/Inputs/InputV1/InputV1";
-import { createAccount } from "../../api/register/register";
+import { createAccount } from "../../api/auth";
 import SelectV1 from "../../components/Lib/Select/SelectV1/SelectV1";
 
 const Roles = [
