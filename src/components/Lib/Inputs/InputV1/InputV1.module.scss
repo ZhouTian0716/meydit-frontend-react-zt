@@ -1,0 +1,28 @@
+$transition: all .25s ease-in-out;
+
+.skeleton {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  cursor: auto;
+  border-radius: 6px;
+  font-size: 15px;
+  color: rgb(79, 83, 102);
+  border: 2px solid #e9e9e9;
+  transition: $transition;
+  background: #e9e9e9;
+  text-align: left;
+  line-height: 20px;
+  height: 37px;
+  padding: 0;
+  animation: skeleton-loading 1s linear infinite alternate;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    opacity: (1);
+  }
+  100% {
+    opacity: (0.5);
+  }
+}

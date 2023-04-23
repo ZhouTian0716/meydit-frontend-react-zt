@@ -8,6 +8,7 @@ import BuyerDesign from "./pages/BuyerDesign/BuyerDesign";
 import Account from "./pages/Account/Account";
 import Messages from "./pages/Messages/Messages";
 import MakerAtelier from "./pages/MakerAtelier/MakerAtelier";
+import Auth from "./pages/Auth/Auth";
 
 function App() {
   const Layout = () => {
@@ -28,6 +29,10 @@ function App() {
         {
           path: "/",
           element: <Home />,
+        },
+        {
+          path: "/auth",
+          element: <Auth />,
         },
         {
           path: "/account",

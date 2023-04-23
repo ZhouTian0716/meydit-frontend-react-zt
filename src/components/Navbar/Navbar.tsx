@@ -3,12 +3,13 @@ import { HiMenuAlt1 } from "react-icons/hi";
 import styles from "./Navbar.module.scss";
 import logo from "../../../src/assets/img/white_logo.png";
 import avatar from "../../../src/assets/img/avatar.jpg";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [active, setActive] = useState(false);
   const [open, setOpen] = useState(false);
   const { pathname } = useLocation();
+  const navigate = useNavigate();
 
   const navClass =
     active || pathname !== "/" ? `${styles.nav} ${styles.active}` : styles.nav;
@@ -27,7 +28,8 @@ const Navbar = () => {
     };
   }, []);
 
-  const currentUser = { id: 1, username: "Joe", role: "maker" };
+  // role: buyer, maker, null
+  const currentUser = { id: 1, username: "Joe", role: "null" };
 
   return (
     <div className={navClass}>
@@ -51,8 +53,16 @@ const Navbar = () => {
             Makers
           </Link>
         )}
-        {!currentUser && <button className={styles.nav__btn}>Join</button>}
-        {currentUser && (
+        {currentUser?.role === "null" && (
+          <button
+            className={styles.nav__btn}
+            type="button"
+            onClick={() => navigate("/auth")}
+          >
+            Join
+          </button>
+        )}
+        {currentUser?.role !== "null" && (
           <div className={styles.account} onClick={() => setOpen(!open)}>
             <div className={styles.accountBtn}>
               <img src={avatar} alt="avatar" className={styles.avatar} />
