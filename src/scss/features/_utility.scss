@@ -23,3 +23,7 @@
     background: $theme-main-hover;
   }
 }
+
+.disabled{
+  cursor: not-allowed !important;
+}

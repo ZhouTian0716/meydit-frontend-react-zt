@@ -7,9 +7,14 @@ import "./scss/index.scss";
 import { store } from "./redux/store";
 import { Provider } from "react-redux";
 
+// React-toastify
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <Provider store={store}>
+      <ToastContainer style={{ width: "400px" }} />
       <App />
     </Provider>
   </React.StrictMode>

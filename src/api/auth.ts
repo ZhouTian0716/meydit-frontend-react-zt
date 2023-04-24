@@ -1,15 +1,20 @@
 import axios from "axios";
-import config from "../config/config";
+import { configOptions } from "../config/config";
 import { ICreateAccount, ILoginData } from "../types";
 
-export function registerApi(data: ICreateAccount) {
-  return axios.post(`${config.apiAddress}/api/accounts`, data);
-}
+const { apiAddress } = configOptions;
 
-export function loginApi(data: ILoginData) {
-  return axios.post(`${config.apiAddress}/api/auth/login`, data);
-}
+export const registerApi = async (data: ICreateAccount) => {
+  const res = await axios.post(`${apiAddress}/api/accounts`, data);
+  return res;
+};
 
-export function logoutApi(accessToken: string) {
-  return axios.post(`${config.apiAddress}/api/auth/logout`, accessToken);
-}
+export const loginApi = (data: ILoginData) => {
+  return axios.post(`${apiAddress}/api/auth/login`, data);
+};
+
+export const logoutApi = (accessToken: string) => {
+  return axios.post(`${apiAddress}/api/auth/logout`, null, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+};

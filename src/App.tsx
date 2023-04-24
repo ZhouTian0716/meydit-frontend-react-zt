@@ -10,6 +10,7 @@ import Messages from "./pages/Messages/Messages";
 import MakerAtelier from "./pages/MakerAtelier/MakerAtelier";
 import Auth from "./pages/Auth/Auth";
 
+
 function App() {
   const Layout = () => {
     return (
@@ -54,7 +55,6 @@ function App() {
           path: "/messages",
           element: <Messages />,
         },
-        
       ],
     },
   ]);

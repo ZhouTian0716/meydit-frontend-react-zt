@@ -19,5 +19,4 @@ export interface ICreateAccount {
 export interface ILoginData {
   email: string;
   password: string;
-  password_confirmation: string;
 }

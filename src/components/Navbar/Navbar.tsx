@@ -5,6 +5,14 @@ import logo from "../../../src/assets/img/white_logo.png";
 import avatar from "../../../src/assets/img/avatar.jpg";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
+// Redux
+import {
+  getLoginAccount,
+  resetAuth,
+  getAuthError,
+} from "../../redux/reducers/authSlice";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+
 const Navbar = () => {
   const [active, setActive] = useState(false);
   const [open, setOpen] = useState(false);
@@ -29,7 +37,11 @@ const Navbar = () => {
   }, []);
 
   // role: buyer, maker, null
-  const currentUser = { id: 1, username: "Joe", role: "null" };
+  const currentUser = useAppSelector(getLoginAccount);
+
+  const onLogout = () => {
+    console.log("logout");
+  };
 
   return (
     <div className={navClass}>
@@ -48,12 +60,12 @@ const Navbar = () => {
             Buyers
           </Link>
         )}
-        {currentUser?.role === "buyer" && (
+        {currentUser?.role === "client" && (
           <Link to="#" className={styles.nav__link}>
             Makers
           </Link>
         )}
-        {currentUser?.role === "null" && (
+        {!currentUser?.role && (
           <button
             className={styles.nav__btn}
             type="button"
@@ -62,15 +74,17 @@ const Navbar = () => {
             Join
           </button>
         )}
-        {currentUser?.role !== "null" && (
+        {currentUser.role && (
           <div className={styles.account} onClick={() => setOpen(!open)}>
             <div className={styles.accountBtn}>
               <img src={avatar} alt="avatar" className={styles.avatar} />
-              <span>{currentUser.username}</span>
+              <span>
+                {currentUser.first_name || currentUser.email?.split("@")[0]}
+              </span>
             </div>
 
             <div className={optionsClass}>
-              {currentUser?.role === "buyer" && (
+              {currentUser?.role === "client" && (
                 <>
                   <Link to="/buyer-designs" className={styles.option}>
                     My Designs
@@ -86,9 +100,9 @@ const Navbar = () => {
               <Link to="/account" className={styles.option}>
                 Settings
               </Link>
-              <Link to="/logout" className={styles.option}>
+              <button className={styles.option} onClick={onLogout}>
                 Logout
-              </Link>
+              </button>
             </div>
           </div>
         )}

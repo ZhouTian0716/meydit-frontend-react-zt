@@ -1,9 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./Auth.module.scss";
 import scissors from "../../../src/assets/img/resource/scissors.jpg";
 import InputV1 from "../../components/Lib/Inputs/InputV1/InputV1";
-import { createAccount } from "../../api/auth";
 import SelectV1 from "../../components/Lib/Select/SelectV1/SelectV1";
+import { ICreateAccount } from "../../types";
+
+import { toast } from "react-toastify";
+
+// Redux
+import {
+  register,
+  login,
+  getAuthStatus,
+  getAuthError,
+} from "../../redux/reducers/authSlice";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 
 const Roles = [
   { value: "client", label: "Client" },
@@ -13,11 +25,31 @@ const Roles = [
 
 const Auth = () => {
   const [hasAccount, setHasAccount] = useState(false);
-  const [email, setEmail] = useState<string | null>(null);
-  const [pwd, setPwd] = useState<string | null>(null);
-  const [role, setRole] = useState<string>(Roles[0].value);
-  const [pwdConfirm, setPwdConfirm] = useState<string | null>(null);
+  const [email, setEmail] = useState("");
+  const [pwd, setPwd] = useState("");
+  const [role, setRole] = useState(Roles[0].value);
+  const [pwdConfirm, setPwdConfirm] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const status = useAppSelector(getAuthStatus);
+  const error = useAppSelector(getAuthError);
+  const dispatch = useAppDispatch();
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (status !== "pending") {
+      setLoading(false);
+    } else {
+      setLoading(true);
+    }
+  }, [status]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error("failed to register");
+    } 
+  }, [error]);
 
   const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -34,25 +66,53 @@ const Auth = () => {
 
   const onLogin = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const authPayload = {
-      email,
-      password: pwd,
-    };
-    console.log(authPayload);
-    // const result = await createAccount({ email: "sample", password: "pwd123" });
+    setLoading(true);
+    try {
+      const authPayload = {
+        email,
+        password: pwd,
+      };
+      await dispatch(login(authPayload));
+
+      // toast.success(`Login with ${email}`);
+      navigate("/account");
+    } catch (err) {
+      console.log(err);
+      toast.error("failed to loginyy");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const onRegister = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const authPayload = {
-      email,
-      password: pwd,
-      password_confirmation: pwdConfirm,
-      role,
-    };
-    console.log(authPayload);
-    // const result = await createAccount({ email: "sample", password: "pwd123" });
+    setLoading(true);
+    try {
+      // TODO: register payload validation
+      if (pwd !== pwdConfirm) {
+        toast.error("Password and confirmation do not match");
+        return;
+      }
+      const authPayload: ICreateAccount = {
+        email,
+        password: pwd,
+        password_confirmation: pwdConfirm,
+        role,
+      };
+
+      dispatch(register(authPayload));
+
+      toast.success(`Account created with ${email}`);
+    } catch (err) {
+      toast.error("failed to register");
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const submitBtnClass = loading
+    ? `${styles.btn} formBtn disabled loading`
+    : `${styles.btn} formBtn`;
 
   return (
     <div className={styles.auth}>
@@ -68,7 +128,6 @@ const Auth = () => {
         )}
       </div>
       <form
-        action=""
         className={styles.authForm}
         onSubmit={hasAccount ? onLogin : onRegister}
       >
@@ -76,12 +135,14 @@ const Auth = () => {
           testId="email"
           type="email"
           label="Email:"
+          placeHolder="address@example.com"
           onParentStateChange={onChangeEmail}
         />
         <InputV1
           testId="pwd"
           type="password"
           label="Password:"
+          placeHolder="password"
           onParentStateChange={onChangePwd}
         />
         {!hasAccount && (
@@ -90,6 +151,7 @@ const Auth = () => {
               testId="pwdConfirm"
               type="password"
               label="Confirm Password:"
+              placeHolder="password"
               onParentStateChange={onChangePwdConfirm}
             />
             <SelectV1
@@ -127,12 +189,8 @@ const Auth = () => {
             Sign with existing account ?
           </button>
         )}
-        <button
-          type="submit"
-          className={`${styles.btn} formBtn`}
-          disabled={loading}
-        >
-          {hasAccount ? "Login" : "Register"}
+        <button type="submit" className={submitBtnClass} disabled={loading}>
+          {loading ? "Sending..." : hasAccount ? "Login" : "Register"}
         </button>
       </form>
     </div>
