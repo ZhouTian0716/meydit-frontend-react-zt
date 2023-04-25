@@ -4,13 +4,15 @@ import styles from "./Auth.module.scss";
 import scissors from "../../../src/assets/img/resource/scissors.jpg";
 import InputV1 from "../../components/Lib/Inputs/InputV1/InputV1";
 import SelectV1 from "../../components/Lib/Select/SelectV1/SelectV1";
-import { ICreateAccount } from "../../types";
+import { IAdonisValidationError, ICreateAccount } from "../../types";
 
 import { toast } from "react-toastify";
 
+// API call
+import { registerApi } from "../../api/auth";
+
 // Redux
 import {
-  register,
   login,
   getAuthStatus,
   getAuthError,
@@ -36,20 +38,6 @@ const Auth = () => {
   const dispatch = useAppDispatch();
 
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (status !== "pending") {
-      setLoading(false);
-    } else {
-      setLoading(true);
-    }
-  }, [status]);
-
-  useEffect(() => {
-    if (error) {
-      toast.error("failed to register");
-    } 
-  }, [error]);
 
   const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -100,11 +88,15 @@ const Auth = () => {
         role,
       };
 
-      dispatch(register(authPayload));
-
-      toast.success(`Account created with ${email}`);
-    } catch (err) {
-      toast.error("failed to register");
+      const res = await registerApi(authPayload);
+      toast.success(`Account created with ${res.email} as ${res.role}`);
+      setHasAccount(true);
+    } catch (err: any) {
+      // console.log(err);
+      const errors = err.response.map(
+        (error: IAdonisValidationError) => error.message
+      );
+      errors.forEach((error: string) => toast.error(error));
     } finally {
       setLoading(false);
     }

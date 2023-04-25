@@ -7,7 +7,9 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 
 // Redux
 import {
+  logout,
   getLoginAccount,
+  getTokenObj,
   resetAuth,
   getAuthError,
 } from "../../redux/reducers/authSlice";
@@ -18,6 +20,11 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
   const { pathname } = useLocation();
   const navigate = useNavigate();
+
+  // Redux
+  const currentUser = useAppSelector(getLoginAccount);
+  const { token } = useAppSelector(getTokenObj);
+  const dispatch = useAppDispatch();
 
   const navClass =
     active || pathname !== "/" ? `${styles.nav} ${styles.active}` : styles.nav;
@@ -36,10 +43,9 @@ const Navbar = () => {
     };
   }, []);
 
-  // role: buyer, maker, null
-  const currentUser = useAppSelector(getLoginAccount);
-
   const onLogout = () => {
+    dispatch(logout(token));
+    dispatch(resetAuth());
     console.log("logout");
   };
 

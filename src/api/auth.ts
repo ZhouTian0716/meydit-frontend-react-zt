@@ -6,7 +6,7 @@ const { apiAddress } = configOptions;
 
 export const registerApi = async (data: ICreateAccount) => {
   const res = await axios.post(`${apiAddress}/api/accounts`, data);
-  return res;
+  return res.data;
 };
 
 export const loginApi = (data: ILoginData) => {

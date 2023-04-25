@@ -20,3 +20,14 @@ export interface ILoginData {
   email: string;
   password: string;
 }
+
+export interface IAdonisValidationError {
+  rule: string;
+  field: string;
+  message: string;
+  args?: {
+    minLength?: number;
+    maxLength?: number;
+  };
+}
+
