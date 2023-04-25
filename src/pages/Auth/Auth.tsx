@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Auth.module.scss";
 import scissors from "../../../src/assets/img/resource/scissors.jpg";
@@ -9,15 +9,11 @@ import { IAdonisValidationError, ICreateAccount } from "../../types";
 import { toast } from "react-toastify";
 
 // API call
-import { registerApi } from "../../api/auth";
+import { loginApi, registerApi } from "../../api/auth";
 
 // Redux
-import {
-  login,
-  getAuthStatus,
-  getAuthError,
-} from "../../redux/reducers/authSlice";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { logUserIn } from "../../redux/reducers/authSlice";
+import { useAppDispatch } from "../../redux/hooks";
 
 const Roles = [
   { value: "client", label: "Client" },
@@ -33,10 +29,7 @@ const Auth = () => {
   const [pwdConfirm, setPwdConfirm] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const status = useAppSelector(getAuthStatus);
-  const error = useAppSelector(getAuthError);
   const dispatch = useAppDispatch();
-
   const navigate = useNavigate();
 
   const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,13 +53,13 @@ const Auth = () => {
         email,
         password: pwd,
       };
-      await dispatch(login(authPayload));
 
-      // toast.success(`Login with ${email}`);
+      const res = await loginApi(authPayload);
+      dispatch(logUserIn(res));
       navigate("/account");
-    } catch (err) {
-      console.log(err);
-      toast.error("failed to loginyy");
+    } catch (err: any) {
+      const errorMsg = err?.response?.data?.message;
+      toast.error(errorMsg);
     } finally {
       setLoading(false);
     }

@@ -4,14 +4,16 @@ import styles from "./Navbar.module.scss";
 import logo from "../../../src/assets/img/white_logo.png";
 import avatar from "../../../src/assets/img/avatar.jpg";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+
+// API call
+import { logoutApi } from "../../api/auth";
 
 // Redux
 import {
-  logout,
-  getLoginAccount,
-  getTokenObj,
-  resetAuth,
-  getAuthError,
+  logUserOut,
+  getAccount,
+  getToken,
 } from "../../redux/reducers/authSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 
@@ -22,8 +24,8 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   // Redux
-  const currentUser = useAppSelector(getLoginAccount);
-  const { token } = useAppSelector(getTokenObj);
+  const loginUser = useAppSelector(getAccount);
+  const { token } = useAppSelector(getToken);
   const dispatch = useAppDispatch();
 
   const navClass =
@@ -43,10 +45,11 @@ const Navbar = () => {
     };
   }, []);
 
-  const onLogout = () => {
-    dispatch(logout(token));
-    dispatch(resetAuth());
-    console.log("logout");
+  const onLogout = async () => {
+    const res = await logoutApi(token);
+    dispatch(logUserOut());
+    toast.success(res.message);
+    navigate("/auth");
   };
 
   return (
@@ -61,17 +64,17 @@ const Navbar = () => {
         <Link to="https://meyd.it" className={styles.nav__link}>
           Explore
         </Link>
-        {currentUser?.role === "maker" && (
+        {loginUser?.role === "maker" && (
           <Link to="#" className={styles.nav__link}>
             Buyers
           </Link>
         )}
-        {currentUser?.role === "client" && (
+        {loginUser?.role === "client" && (
           <Link to="#" className={styles.nav__link}>
             Makers
           </Link>
         )}
-        {!currentUser?.role && (
+        {!loginUser?.role && (
           <button
             className={styles.nav__btn}
             type="button"
@@ -80,17 +83,17 @@ const Navbar = () => {
             Join
           </button>
         )}
-        {currentUser.role && (
+        {loginUser.role && (
           <div className={styles.account} onClick={() => setOpen(!open)}>
             <div className={styles.accountBtn}>
               <img src={avatar} alt="avatar" className={styles.avatar} />
               <span>
-                {currentUser.first_name || currentUser.email?.split("@")[0]}
+                {loginUser.first_name || loginUser.email?.split("@")[0]}
               </span>
             </div>
 
             <div className={optionsClass}>
-              {currentUser?.role === "client" && (
+              {loginUser?.role === "client" && (
                 <>
                   <Link to="/buyer-designs" className={styles.option}>
                     My Designs

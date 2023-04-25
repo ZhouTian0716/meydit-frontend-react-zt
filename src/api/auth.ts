@@ -9,12 +9,14 @@ export const registerApi = async (data: ICreateAccount) => {
   return res.data;
 };
 
-export const loginApi = (data: ILoginData) => {
-  return axios.post(`${apiAddress}/api/auth/login`, data);
+export const loginApi = async (data: ILoginData) => {
+  const res = await axios.post(`${apiAddress}/api/auth/login`, data);
+  return res.data;
 };
 
-export const logoutApi = (accessToken: string) => {
-  return axios.post(`${apiAddress}/api/auth/logout`, null, {
+export const logoutApi = async (accessToken: string) => {
+  const res = await axios.post(`${apiAddress}/api/auth/logout`, null, {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
+  return res.data;
 };

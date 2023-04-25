@@ -17,3 +17,8 @@ export interface IAuthState {
   status: "idle" | "pending" | "fulfilled" | "rejected";
   error: null | string;
 }
+
+export interface ILoginData {
+  account: IAuthStateAccount;
+  token: IAuthStateToken;
+}
