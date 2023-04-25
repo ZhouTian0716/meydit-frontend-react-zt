@@ -1,4 +1,33 @@
-$transition: all .25s ease-in-out;
+@use "../../../../scss/variables" as *;
+
+$transition: all 0.25s ease-in-out;
+
+
+.inputWrapper {
+  position: relative;
+  margin-top: 0.5em;
+  .input {
+    border: 1px solid $border;
+    border-radius: 5px;
+    height: calc(1.5em + .75rem + 2px);
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    width: 100%;
+    &:focus {
+      border: 1px solid $theme-main;
+      box-shadow: 0 0 0 1px $theme-main;
+    }
+  }
+  .pwdIcon {
+    position: absolute;
+    right: 1em;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+}
 
 .skeleton {
   position: relative;

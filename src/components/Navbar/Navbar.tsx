@@ -4,12 +4,29 @@ import styles from "./Navbar.module.scss";
 import logo from "../../../src/assets/img/white_logo.png";
 import avatar from "../../../src/assets/img/avatar.jpg";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+
+// API call
+import { logoutApi } from "../../api/auth";
+
+// Redux
+import {
+  logUserOut,
+  getAccount,
+  getToken,
+} from "../../redux/reducers/authSlice";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 
 const Navbar = () => {
   const [active, setActive] = useState(false);
   const [open, setOpen] = useState(false);
   const { pathname } = useLocation();
   const navigate = useNavigate();
+
+  // Redux
+  const loginUser = useAppSelector(getAccount);
+  const { token } = useAppSelector(getToken);
+  const dispatch = useAppDispatch();
 
   const navClass =
     active || pathname !== "/" ? `${styles.nav} ${styles.active}` : styles.nav;
@@ -28,8 +45,12 @@ const Navbar = () => {
     };
   }, []);
 
-  // role: buyer, maker, null
-  const currentUser = { id: 1, username: "Joe", role: "null" };
+  const onLogout = async () => {
+    const res = await logoutApi(token);
+    dispatch(logUserOut());
+    toast.success(res.message);
+    navigate("/auth");
+  };
 
   return (
     <div className={navClass}>
@@ -43,17 +64,17 @@ const Navbar = () => {
         <Link to="https://meyd.it" className={styles.nav__link}>
           Explore
         </Link>
-        {currentUser?.role === "maker" && (
+        {loginUser?.role === "maker" && (
           <Link to="#" className={styles.nav__link}>
             Buyers
           </Link>
         )}
-        {currentUser?.role === "buyer" && (
+        {loginUser?.role === "client" && (
           <Link to="#" className={styles.nav__link}>
             Makers
           </Link>
         )}
-        {currentUser?.role === "null" && (
+        {!loginUser?.role && (
           <button
             className={styles.nav__btn}
             type="button"
@@ -62,15 +83,17 @@ const Navbar = () => {
             Join
           </button>
         )}
-        {currentUser?.role !== "null" && (
+        {loginUser.role && (
           <div className={styles.account} onClick={() => setOpen(!open)}>
             <div className={styles.accountBtn}>
               <img src={avatar} alt="avatar" className={styles.avatar} />
-              <span>{currentUser.username}</span>
+              <span>
+                {loginUser.first_name || loginUser.email?.split("@")[0]}
+              </span>
             </div>
 
             <div className={optionsClass}>
-              {currentUser?.role === "buyer" && (
+              {loginUser?.role === "client" && (
                 <>
                   <Link to="/buyer-designs" className={styles.option}>
                     My Designs
@@ -86,9 +109,9 @@ const Navbar = () => {
               <Link to="/account" className={styles.option}>
                 Settings
               </Link>
-              <Link to="/logout" className={styles.option}>
+              <button className={styles.option} onClick={onLogout}>
                 Logout
-              </Link>
+              </button>
             </div>
           </div>
         )}

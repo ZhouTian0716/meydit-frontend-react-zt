@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { MdOutlineVisibility, MdVisibility } from "react-icons/md";
+import { MdVisibilityOff, MdVisibility } from "react-icons/md";
 import styles from "./InputV1.module.scss";
 
 interface IInputV1 {
@@ -25,11 +25,10 @@ const InputV1 = (props: IInputV1) => {
     classes,
   } = props;
 
-  const [val, setVal] = useState('');
+  const [val, setVal] = useState("");
   const [error, setError] = useState<null | string>(null);
   const [pwdHidden, setPwdHidden] = useState(true);
-
-  
+  const [inputType, setInputType] = useState(type);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setVal(e.target.value);
@@ -43,15 +42,19 @@ const InputV1 = (props: IInputV1) => {
   }
 
   const passwordIconBtn = pwdHidden ? (
-    <MdOutlineVisibility
+    <MdVisibilityOff
+      className={styles.pwdIcon}
       onClick={() => {
         setPwdHidden((prev) => !prev);
+        setInputType("text");
       }}
     />
   ) : (
     <MdVisibility
+      className={styles.pwdIcon}
       onClick={() => {
         setPwdHidden((prev) => !prev);
+        setInputType("password");
       }}
     />
   );
@@ -59,26 +62,22 @@ const InputV1 = (props: IInputV1) => {
   return (
     <div
       className={[
-        "relative",
         styles.inputContainer,
         error ? styles.borderRed : "",
         classes,
       ].join(" ")}
     >
       <label
-        className={[
-          styles.label,
-          error ? styles.errorRed : "",
-        ].join(" ")}
+        className={[styles.label, error ? styles.errorRed : ""].join(" ")}
         htmlFor={testId}
       >
         {label}
         {required ? <span className={styles.errorRed}>*</span> : ""}
       </label>
-      <div className={styles.xxx}>
+      <div className={styles.inputWrapper}>
         <input
           className={[styles.input].join(" ")}
-          type={type}
+          type={inputType}
           value={val}
           name={testId}
           onChange={onChange}

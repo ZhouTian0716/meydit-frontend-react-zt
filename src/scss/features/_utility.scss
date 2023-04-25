@@ -10,3 +10,20 @@
   gap: var(--gap, 1rem);
 }
 
+.formBtn{
+  background: $theme-main;
+  height: 48px;
+  min-width: 185px;
+  color: #ffffff;
+  font-weight: 500;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+  &:hover{
+    background: $theme-main-hover;
+  }
+}
+
+.disabled{
+  cursor: not-allowed !important;
+}
