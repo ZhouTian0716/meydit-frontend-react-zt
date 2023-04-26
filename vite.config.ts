@@ -10,5 +10,13 @@ export default defineConfig({
   server: {
     port: 5173,
     host: "localhost",
+    // proxy: {
+    //   "dev": {
+    //     target: process.env.VITE_LOCAL_DEV,
+    //   },
+    //   "prod": {
+    //     target: process.env.VITE_AWS_EC2,
+    //   }
+    // }
   },
 });
