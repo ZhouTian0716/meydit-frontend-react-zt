@@ -12,8 +12,6 @@ import {
   getToken,
 } from "../../redux/reducers/authSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { isShowBottomNav, toggleBottomNav } from "../../redux/reducers/uiSlice";
-
 interface IProps {
   showOnMobile?: boolean;
 }
@@ -27,7 +25,6 @@ const NavLinks = (props: IProps) => {
   // Redux
   const loginUser = useAppSelector(getAccount);
   const { token } = useAppSelector(getToken);
-  const bottomNav = useAppSelector(isShowBottomNav);
   const dispatch = useAppDispatch();
 
   const optionsClass = open
@@ -76,7 +73,7 @@ const NavLinks = (props: IProps) => {
         <div className={styles.account} onClick={() => setOpen(!open)}>
           <div className={styles.accountBtn}>
             <img src={avatar} alt="avatar" className={styles.avatar} />
-            <span>
+            <span className={styles.accountName}>
               {loginUser.first_name || loginUser.email?.split("@")[0]}
             </span>
           </div>

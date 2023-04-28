@@ -29,6 +29,9 @@
       border: 1px solid $border;
       border-radius: 5px;
       color: $text-main;
+      @include media-tablet-sm {
+        left: 0;
+      }
       &.active {
         display: flex;
         flex-direction: column;
@@ -62,7 +65,7 @@
   color: white;
   .account {
     .options {
-       top: calc(-200% - 0.5em);
+      top: calc(-200% - 0.5em);
     }
   }
 }
@@ -95,4 +98,9 @@
   align-items: center;
   gap: 0.5rem;
   cursor: pointer;
+  .accountName {
+    @include media-tablet-sm {
+      display: none;
+    }
+  }
 }

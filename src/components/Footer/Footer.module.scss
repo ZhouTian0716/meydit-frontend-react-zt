@@ -8,6 +8,12 @@
   justify-content: center;
   padding: 1rem;
   color: $text-main;
+  .logo {
+    @include media-mobile-lg {
+      aspect-ratio: 1.2;
+      width: 100px;
+    }
+  }
   .icons {
     display: flex;
     gap: 1rem;
@@ -24,10 +30,10 @@
   }
 }
 
-.link{
-    padding:0.3em 0.5em;
+.link {
+  padding: 0.3em 0.5em;
 }
 
-.borderRt{
-    border-right: 2px solid black;
+.borderRt {
+  border-right: 2px solid black;
 }
