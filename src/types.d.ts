@@ -1,9 +1,21 @@
+// Data fetched from API
 export interface ITopMaker {
   id: string;
   name: string;
   bio: string;
   profile: string;
   avatar: string;
+}
+
+export interface IAccount {
+  id: string;
+  first_name?: string;
+  last_name?: string;
+  email?: string;
+  role: string;
+  remember_me_token?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 // Validation usage for CRUD operations
@@ -30,4 +42,3 @@ export interface IAdonisValidationError {
     maxLength?: number;
   };
 }
-
