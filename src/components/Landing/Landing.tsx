@@ -5,35 +5,47 @@ import phoneImg from "../../../src/assets/img/top-img.png";
 import demoVideo from "../../../src/assets/video/video-light-meydit.mp4";
 import { accountsIndex } from "../../api/accounts";
 import { IAccount } from "../../types";
+import { projectsIndex } from "../../api/projects";
 
 const Landing = () => {
   const firstMount = useRef(true);
   const [accounts, setAccounts] = useState([]);
+  const [projects, setProjects] = useState([]);
   const clientNum = accounts.filter(
     (account: IAccount) => account.role === "client"
   ).length;
   const makerNum = accounts.filter(
     (account: IAccount) => account.role === "maker"
   ).length;
-  const loadAccounts = async () => {
-    const res = await accountsIndex();
-    setAccounts(res);
+  const loadDatas = async () => {
+    const accountsData = await accountsIndex();
+    const res = await projectsIndex();
+    const projectsData = res.data;
+    setAccounts(accountsData);
+    setProjects(projectsData);
   };
   useEffect(() => {
     if (firstMount.current) {
-      loadAccounts();
+      loadDatas();
     }
     return () => {
       firstMount.current = false;
     };
   }, []);
+
+  const handleSearch = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    // TODO: search projects feature
+  };
+
   return (
     <div className={styles.landing}>
       <div className={styles.intro}>
         <p>Registed Users: {accounts.length}</p>
         <p>
-          <span className='fz-9 mr-1'>Clients: {clientNum}</span>
-          <span className='fz-9'>Makers: {makerNum}</span>
+          <span className="fz-9 mr-1">Clients: {clientNum}</span>
+          <span className="fz-9 mr-1">Makers: {makerNum}</span>
+          <span className="fz-9">Projects: {projects.length}</span>
         </p>
         <h1>Fashion made especially for you.</h1>
         <p>
@@ -49,7 +61,9 @@ const Landing = () => {
             placeholder="Search Trends"
             className={styles.searchInput}
           />
-          <button type="submit">Search</button>
+          <button type="submit" onClick={handleSearch}>
+            Search
+          </button>
         </form>
         <div className={styles.searchTabs}>
           <span>Popular:</span>
