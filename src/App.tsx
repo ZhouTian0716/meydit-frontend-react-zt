@@ -9,16 +9,22 @@ import Account from "./pages/Account/Account";
 import Messages from "./pages/Messages/Messages";
 import MakerAtelier from "./pages/MakerAtelier/MakerAtelier";
 import Auth from "./pages/Auth/Auth";
+import NavLinks from "./components/NavLinks/NavLinks";
+import { useAppSelector } from "./redux/hooks";
+import { isShowBottomNav } from "./redux/reducers/uiSlice";
 
 
 function App() {
   const Layout = () => {
+    const bottomNav = useAppSelector(isShowBottomNav);
     return (
-      <>
+      <div className="layoutContainer">
         <Navbar />
         <Outlet />
         <Footer />
-      </>
+        {/* {bottomNav && <Footer />} */}
+        {bottomNav && <NavLinks showOnMobile={true}/>}
+      </div>
     );
   };
 

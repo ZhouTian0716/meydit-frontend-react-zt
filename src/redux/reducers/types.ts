@@ -22,3 +22,9 @@ export interface ILoginData {
   account: IAuthStateAccount;
   token: IAuthStateToken;
 }
+
+// uiSlice.ts
+export interface IUiState {
+  bottomNav: boolean;
+  theme: string;
+}

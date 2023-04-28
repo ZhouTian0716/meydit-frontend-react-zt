@@ -85,8 +85,8 @@ const Auth = () => {
       toast.success(`Account created with ${res.email} as ${res.role}`);
       setHasAccount(true);
     } catch (err: any) {
-      // console.log(err);
-      const errors = err.response.map(
+      console.log(err);
+      const errors = err.response?.data?.map(
         (error: IAdonisValidationError) => error.message
       );
       errors.forEach((error: string) => toast.error(error));
