@@ -5,7 +5,7 @@ import Home from "./pages/Home/Home";
 import Footer from "./components/Footer/Footer";
 import BuyerDesigns from "./pages/BuyerDesigns/BuyerDesigns";
 import BuyerDesign from "./pages/BuyerDesign/BuyerDesign";
-import Account from "./pages/Account/Account";
+import Dashboard from "./pages/Dashboard/Dashboard";
 import Messages from "./pages/Messages/Messages";
 import MakerAtelier from "./pages/MakerAtelier/MakerAtelier";
 import Auth from "./pages/Auth/Auth";
@@ -42,8 +42,8 @@ function App() {
           element: <Auth />,
         },
         {
-          path: "/account",
-          element: <Account />,
+          path: "/dashboard",
+          element: <Dashboard />,
         },
         {
           path: "/buyer-designs",

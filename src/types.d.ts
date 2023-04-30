@@ -28,6 +28,25 @@ export interface ICreateAccount {
   last_name?: string;
 }
 
+export interface ICreateProject {
+  id: number;
+  slug: string;
+  title: string;
+  description: string;
+  images: IImage[];
+}
+
+interface IImage {
+  id: number;
+  url: string;
+  project_id?: string;
+  bid_id?: string;
+  comment_id?: string;
+  message_id?: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface ILoginData {
   email: string;
   password: string;
