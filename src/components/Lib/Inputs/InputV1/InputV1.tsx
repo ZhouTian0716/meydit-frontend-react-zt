@@ -9,6 +9,7 @@ interface IInputV1 {
   type?: string;
   required?: boolean;
   placeHolder?: string;
+  defaultValue?: string | null;
   loading?: boolean;
   classes?: string | string[];
 }
@@ -17,6 +18,7 @@ const InputV1 = (props: IInputV1) => {
   const {
     testId,
     label,
+    defaultValue,
     placeHolder,
     type,
     required,
@@ -25,7 +27,7 @@ const InputV1 = (props: IInputV1) => {
     classes,
   } = props;
 
-  const [val, setVal] = useState("");
+  const [val, setVal] = useState(defaultValue);
   const [error, setError] = useState<null | string>(null);
   const [pwdHidden, setPwdHidden] = useState(true);
   const [inputType, setInputType] = useState(type);
@@ -96,6 +98,7 @@ export default InputV1;
 
 InputV1.defaultProps = {
   required: false,
+  defaultValue: null,
   placeHolder: "",
   type: "text",
   loading: false,

@@ -56,7 +56,7 @@ const Auth = () => {
 
       const res = await loginApi(authPayload);
       dispatch(logUserIn(res));
-      navigate("/account");
+      navigate("/dashboard");
     } catch (err: any) {
       const errorMsg = err?.response?.data?.message;
       toast.error(errorMsg);

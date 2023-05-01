@@ -19,22 +19,39 @@ export interface IAccount {
 }
 
 // Validation usage for CRUD operations
+// ZT-NOTE: 如果我这里设立了，在组件里引用的时候就能避免typo的问题
 export interface ICreateAccount {
   email: string;
   password: string;
   password_confirmation: string;
   role: string;
   firstName?: string;
-  lastName?: string;
+  lastName?: string;  
 }
 
 export interface ICreateProject {
-  id: number;
-  slug: string;
   title: string;
-  description: string;
-  images: IImage[];
+  description?: string;
+  images?: IImage[];
 }
+
+export interface IProjectsStoreRes {
+  id: number;
+  slug?: string;
+  status?: string;
+  title?: string;
+  description?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface ICreateImage {
+  url: string;
+  fileName: string;
+  projectId: number;
+}
+
+
 
 interface IImage {
   id: number;
