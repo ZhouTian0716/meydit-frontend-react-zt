@@ -9,13 +9,13 @@ export interface ITopMaker {
 
 export interface IAccount {
   id: string;
-  first_name?: string;
-  last_name?: string;
+  firstName?: string;
+  lastName?: string;
   email?: string;
   role: string;
   remember_me_token?: string;
-  created_at?: string;
-  updated_at?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 // Validation usage for CRUD operations
@@ -24,8 +24,8 @@ export interface ICreateAccount {
   password: string;
   password_confirmation: string;
   role: string;
-  first_name?: string;
-  last_name?: string;
+  firstName?: string;
+  lastName?: string;
 }
 
 export interface ICreateProject {
@@ -39,12 +39,11 @@ export interface ICreateProject {
 interface IImage {
   id: number;
   url: string;
-  project_id?: string;
-  bid_id?: string;
-  comment_id?: string;
-  message_id?: string;
-  created_at: string;
-  updated_at: string;
+  projectId?: string;
+  bidId?: string;
+  commentId?: string;
+  messageId?: string;
+  createdAt: string;
 }
 
 export interface ILoginData {

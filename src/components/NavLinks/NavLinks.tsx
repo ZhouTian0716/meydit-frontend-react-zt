@@ -74,7 +74,7 @@ const NavLinks = (props: IProps) => {
           <div className={styles.accountBtn}>
             <img src={avatar} alt="avatar" className={styles.avatar} />
             <span className={styles.accountName}>
-              {loginUser.first_name || loginUser.email?.split("@")[0]}
+              {loginUser.firstName || loginUser.email?.split("@")[0]}
             </span>
           </div>
 

@@ -6,8 +6,8 @@ const initialState: IAuthState = {
   account: {
     email: "",
     role: "",
-    first_name: null,
-    last_name: null,
+    firstName: null,
+    lastName: null,
   },
   token: {
     type: "",

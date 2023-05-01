@@ -1,8 +1,8 @@
 export interface IAuthStateAccount {
   email: string;
   role: string;
-  first_name?: string | null;
-  last_name?: string | null;
+  firstName?: string | null;
+  lastName?: string | null;
 }
 
 export interface IAuthStateToken {

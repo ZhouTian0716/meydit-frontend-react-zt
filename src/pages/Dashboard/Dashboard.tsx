@@ -6,8 +6,13 @@ import axios from "axios";
 import { getAccount, getToken } from "../../redux/reducers/authSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 
-import { s3SecureUrl } from "../../api/aws";
+import { s3SecureUrlForUpload, s3SecureUrlForDelete } from "../../api/aws";
 import { validateFilesize } from "../../utils/helpers";
+
+interface IUploadReqReturn {
+  uploadUrl: string;
+  fileName: string;
+}
 
 const uploadToS3 = async (e: React.ChangeEvent<HTMLFormElement>) => {
   const formData = new FormData(e.target);
@@ -17,9 +22,10 @@ const uploadToS3 = async (e: React.ChangeEvent<HTMLFormElement>) => {
     return null;
   }
   // @ts-ignore
-  const fileType =encodeURIComponent(file.name).split('.')[1];
-  const url = await s3SecureUrl(fileType);
-  await axios.put(url, file);
+  const fileType = encodeURIComponent(file.name).split(".")[1];
+  const res : IUploadReqReturn = await s3SecureUrlForUpload(fileType);
+  await axios.put(res.uploadUrl, file);
+  return res;
 };
 
 const Dashboard = () => {
@@ -29,8 +35,10 @@ const Dashboard = () => {
 
   const createProject = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await uploadToS3(e);
-    // post request to server to store project
+    const res = await uploadToS3(e);
+    console.log(res);
+    // TODO:
+    // 1. Get the image url, image file name from s3
   };
 
   const onAddImage = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,16 +51,18 @@ const Dashboard = () => {
     setSelectedFile(file);
   };
 
+  // This is prepared for the furture delete at project delete
+  const handleDelete = async () => {
+    const url = await s3SecureUrlForDelete("project-images/20229d328213.jpg");
+    await axios.delete(url);
+  };
+
   return (
     <div className={styles.dashboard}>
-      <h1>Hello {loginUser.first_name || loginUser.email?.split("@")[0]}</h1>
+      <h1>Hello {loginUser.firstName || loginUser.email?.split("@")[0]}</h1>
       <p>Wanna post a new project today?</p>
       <form className={styles.authForm} onSubmit={createProject}>
-        <input
-          type="file"
-          onChange={onAddImage}
-          name="projectImg"
-        />
+        <input type="file" onChange={onAddImage} name="projectImg" />
         {selectedFile && (
           <div className={styles.imgContainer}>
             <img
@@ -63,6 +73,9 @@ const Dashboard = () => {
         )}
         <button type="submit">Post</button>
       </form>
+      <button type="button" onClick={handleDelete}>
+        test delete
+      </button>
     </div>
   );
 };
