@@ -9,7 +9,7 @@ interface IInputV1 {
   type?: string;
   required?: boolean;
   placeHolder?: string;
-  defaultValue?: string | null;
+  defaultValue?: string;
   loading?: boolean;
   classes?: string | string[];
 }
@@ -71,7 +71,7 @@ const InputV1 = (props: IInputV1) => {
     >
       <label
         className={[styles.label, error ? styles.errorRed : ""].join(" ")}
-        htmlFor={testId}
+        htmlFor={label}
       >
         {label}
         {required ? <span className={styles.errorRed}>*</span> : ""}
@@ -81,7 +81,8 @@ const InputV1 = (props: IInputV1) => {
           className={[styles.input].join(" ")}
           type={inputType}
           value={val}
-          name={testId}
+          id={label}
+          name={label}
           onChange={onChange}
           placeholder={placeHolder}
           data-cy={testId}
@@ -98,7 +99,7 @@ export default InputV1;
 
 InputV1.defaultProps = {
   required: false,
-  defaultValue: null,
+  defaultValue: "",
   placeHolder: "",
   type: "text",
   loading: false,
