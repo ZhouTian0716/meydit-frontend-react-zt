@@ -1,157 +1,235 @@
 import React, { useState } from "react";
 import styles from "./Dashboard.module.scss";
-import axios from "axios";
-
+import { TiDelete } from "react-icons/ti";
+import InputV1 from "../../components/Lib/Inputs/InputV1/InputV1";
+import TextAreaV1 from "../../components/Lib/TextArea/TextAreaV1";
+import SelectV1 from "../../components/Lib/Select/SelectV1/SelectV1";
+import { projectsStore } from "../../api/projects";
+import { imagesStore } from "../../api/images";
+import { ICreateImage, ICreateProject, IProjectsStoreRes } from "../../types";
+import { uploadToS3 } from "../../utils/aws";
+import { validateFilesize } from "../../utils/helpers";
+import { toast } from "react-toastify";
+import { Categories, Tags, toastErrorMessages } from "../../data/constants";
 // Redux
 import { getAccount, getToken } from "../../redux/reducers/authSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 
-import { s3SecureUrlForUpload, s3SecureUrlForDelete } from "../../api/aws";
-import { validateFilesize } from "../../utils/helpers";
-import { toast } from "react-toastify";
-import InputV1 from "../../components/Lib/Inputs/InputV1/InputV1";
-import { projectsStore } from "../../api/projects";
-import { ICreateImage, ICreateProject, IProjectsStoreRes } from "../../types";
-import { imagesStore } from "../../api/images";
-import TextAreaV1 from "../../components/Lib/TextArea/TextAreaV1";
-
-interface IS3UploadPermissionRes {
-  uploadUrl: string;
-  urlOnS3: string;
-  fileName: string;
-}
-
-const toastErrorMessages = {
-  emptyFile:
-    "At least one image is required to post a project, please try again.",
-  tokenLost: "Project create fail due to login status lost.",
-  uploadIssue: "File upload failed, contact technical support.",
-  titleRequired: "Don't forget to add a title to your project!",
-};
-
-const uploadToS3 = async (e: React.ChangeEvent<HTMLFormElement>) => {
-  const formData = new FormData(e.target);
-  // ZT-NOTE:👻The input attribute name "projectImg" is used here
-  const file = formData.get("projectImg");
-  if (!file) {
-    return null;
-  }
-  // @ts-ignore
-  const fileType = encodeURIComponent(file.name).split(".")[1];
-  const res: IS3UploadPermissionRes = await s3SecureUrlForUpload(fileType);
-  // ZT-NOTE:👻这里拿到for upload的presigned url之后，axios的返回结果为空，但是图片已经上传到s3了
-  const { statusText } = await axios.put(res.uploadUrl, file);
-  if (statusText !== "OK") {
-    toast.error(toastErrorMessages.uploadIssue);
-  } else {
-    return res;
-  }
-};
-
 const Dashboard = () => {
-  const [title, setTitle] = useState("test");
-  const [selectedFile, setSelectedFile] = useState<File>();
+  const projectInitialState: ICreateProject = {
+    title: "dfdfs",
+    description: "dfdf",
+    category: Categories[0].value,
+    tags: [],
+  };
+  const [projectPayload, setProjectPayload] = useState(projectInitialState);
+  const { title, description, category, tags } = projectPayload;
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [fileLimit, setFileLimit] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const MAX_FILE_COUNT = 9;
   // Redux
   const loginUser = useAppSelector(getAccount);
   const { token } = useAppSelector(getToken);
 
-  // ZT-NOTE: 创建project的过程步骤要之后做好文档，因为涉及到了s3的上传，以及image入档db的顺序
+  // ZT-NOTE: 创建project的过程步骤要之后做好记录，因为涉及到了s3的上传，以及image入档db的顺序
   const createProject = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
     try {
-      if (!selectedFile) return toast.error(toastErrorMessages.emptyFile);
+      if (!uploadedFiles.length)
+        return toast.error(toastErrorMessages.emptyFile);
       if (!token) return toast.error(toastErrorMessages.tokenLost);
-      const res = await uploadToS3(e);
-      if (!res) return toast.error(toastErrorMessages.uploadIssue);
+      console.log("checking breack point");
+
+      // ZT-NOTE: 多个图片发送多个请求
+      const resArray = await uploadToS3(uploadedFiles);
+      if (!resArray) return toast.error(toastErrorMessages.uploadIssue);
       if (!title) return toast.error(toastErrorMessages.titleRequired);
-      const projectPayload: ICreateProject = {
-        title: title,
-        description: "test",
-      };
+
       // ZT-NOTE: 注意创建project要有用户权限，所以这之前要检查登录状态
       const projectsStoreRes: IProjectsStoreRes = await projectsStore(
         projectPayload,
         token
       );
 
-      const imagePayload: ICreateImage = {
-        url: res.urlOnS3,
-        fileName: res.fileName,
-        // ZT-NOTE: 这里有用到projectId，所以要先创建project，再创建image
-        projectId: projectsStoreRes.id,
-      };
-      const imageStoreRes = await imagesStore(imagePayload);
-      console.log(imageStoreRes);
+      const imagePayloadArray: ICreateImage[] = resArray.map((res) => {
+        return {
+          url: res.urlOnS3,
+          fileName: res.fileName,
+          projectId: projectsStoreRes.id,
+        };
+      });
+
+      // ZT-NOTE: imagePayloadArray here prepared for going into DB
+      imagePayloadArray.forEach(async (imagePayload) => {
+        const imageStoreRes = await imagesStore(imagePayload);
+        console.log(imageStoreRes);
+      });
       toast.success("Project created!");
     } catch (err) {
       toast.error("Project create fail due to unknown error.");
       // console.log(err);
+    } finally {
+      setLoading(false);
     }
   };
 
   const onAddImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // We prevent massive images from being uploaded
-    if (!e.target.files) return;
-    const file = e.target.files[0];
+    let limitExceeded = false;
     const maxMB = 15;
-    const sizeOK = validateFilesize(file.size, maxMB);
-    if (!sizeOK) return;
-    setSelectedFile(file);
+    const fileList = e.target.files;
+    if (!fileList) return;
+    const chosenFiles = Array.prototype.slice.call(fileList);
+    const uploaded = [...uploadedFiles];
+
+    chosenFiles.some((file) => {
+      const sizeOK = validateFilesize(file.size, maxMB, file.name);
+      if (!sizeOK) return;
+      if (uploaded.findIndex((f) => f.name === file.name) !== -1) return;
+      uploaded.push(file);
+      if (uploaded.length === MAX_FILE_COUNT) {
+        setFileLimit(true);
+      }
+      if (uploaded.length > MAX_FILE_COUNT) {
+        alert(`${MAX_FILE_COUNT} images allowed in total.`);
+        setFileLimit(false);
+        limitExceeded = true;
+        return true;
+      }
+    });
+    if (!limitExceeded) setUploadedFiles(uploaded);
+    // console.log(uploadedFiles);
   };
 
-  // This is prepared for the furture delete at project delete
-  const handleDelete = async () => {
-    const url = await s3SecureUrlForDelete("project-images/30221432cb17.jpg");
-    await axios.delete(url);
+  const onCancelImage = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const target = e.target as HTMLElement;
+    // console.log(target.dataset.filename);
+    const filteredFiles = uploadedFiles.filter(
+      (file) => file.name !== target.dataset.filename
+    );
+    setUploadedFiles(filteredFiles);
+
+    if (uploadedFiles.length <= MAX_FILE_COUNT) {
+      setFileLimit(false);
+    }
   };
 
-  const onChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value);
+  const onProjectPayloadChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    setProjectPayload({ ...projectPayload, [e.target.name]: e.target.value });
   };
+
+  const submitBtnClass = loading
+    ? `${styles.btn} formBtn disabled loading`
+    : `${styles.btn} formBtn`;
 
   return (
     <div className={styles.dashboard}>
       <h1>Hello {loginUser.firstName || loginUser.email?.split("@")[0]}</h1>
-      <p>Wanna post a new project today?</p>
+      <p
+        onClick={() => {
+          console.log(uploadedFiles);
+        }}
+      >
+        Wanna post a new project today?
+      </p>
       <form className={styles.projectForm} onSubmit={createProject}>
         <InputV1
           testId="projectTitle"
           type="text"
           label="Title:"
+          name="title"
           placeHolder="Project Title"
-          onParentStateChange={onChangeTitle}
-          classes={'width-100'}
+          defaultValue={title}
+          onParentStateChange={onProjectPayloadChange}
+          classes={"width-100"}
+          required={true}
         />
         <div className={styles.imageGrid}>
-          {selectedFile && (
-            <div className={styles.imgContainer}>
-              <img
-                className={styles.uploadImg}
-                src={URL.createObjectURL(selectedFile)}
-              />
-            </div>
+          {!!uploadedFiles &&
+            uploadedFiles.map((e) => (
+              <div
+                className={styles.imgContainer}
+                key={`${e.size}+${e.lastModified}+${e.name}`}
+              >
+                <img
+                  className={styles.uploadImg}
+                  src={URL.createObjectURL(e)}
+                />
+                <button
+                  type="button"
+                  className={styles.deleteBtn}
+                  data-filename={e.name}
+                  onClick={onCancelImage}
+                >
+                  <TiDelete
+                    fontSize={"20px"}
+                    pointerEvents="none"
+                    color="pink"
+                  />
+                </button>
+              </div>
+            ))}
+          {!fileLimit && (
+            <label htmlFor="uploadBtn" className={styles.addFileBtn}>
+              +
+            </label>
           )}
           <input
             type="file"
             id="uploadBtn"
             className={styles.fileInputEl}
             onChange={onAddImage}
-            name="projectImg"
+            name="uploadedFiles"
+            multiple
+            accept="image/*"
           />
-          <label htmlFor="uploadBtn" className={styles.addFileBtn}>
-            +
-          </label>
         </div>
 
-        <TextAreaV1 />
+        <SelectV1
+          testId="category"
+          label="Pick a category:"
+          name="category"
+          defaultValue={category}
+          options={Categories}
+          required={true}
+          classes={"width-100"}
+          onParentStateChange={onProjectPayloadChange}
+        />
 
-        <button type="submit" className={`${styles.btn} formBtn`}>
-          Post
+        <SelectV1
+          testId="category"
+          label="Pick some tags:"
+          name="tags"
+          defaultValue={tags}
+          options={Tags}
+          required={true}
+          classes={"width-100"}
+          multiple={true}
+          onParentStateChange={onProjectPayloadChange}
+        />
+
+        <TextAreaV1
+          testId="projectDesc"
+          type="text"
+          label="Description:"
+          name="description"
+          rows={6}
+          placeHolder="Project Description"
+          defaultValue={description}
+          onParentStateChange={onProjectPayloadChange}
+          classes={"width-100"}
+          required={true}
+        />
+
+        <button type="submit" className={submitBtnClass} disabled={loading}>
+          {loading ? "Sending..." : "Post"}
         </button>
       </form>
-      {/* <button type="button" onClick={handleDelete}>
-        test delete
-      </button> */}
     </div>
   );
 };

@@ -2,15 +2,14 @@
 
 $transition: all 0.25s ease-in-out;
 
-
 .inputWrapper {
   position: relative;
   margin-top: 0.5em;
   .input {
     border: 1px solid $border;
     border-radius: 5px;
-    height: calc(1.5em + .75rem + 2px);
-    padding: .375rem .75rem;
+    height: calc(1.5em + 0.75rem + 2px);
+    padding: 0.375rem 0.75rem;
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.5;
@@ -53,4 +52,9 @@ $transition: all 0.25s ease-in-out;
   100% {
     opacity: (0.5);
   }
+}
+
+.errorRed {
+  color: red;
+  margin-right: 5px;
 }

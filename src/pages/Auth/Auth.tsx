@@ -5,7 +5,7 @@ import scissors from "../../../src/assets/img/resource/scissors.jpg";
 import InputV1 from "../../components/Lib/Inputs/InputV1/InputV1";
 import SelectV1 from "../../components/Lib/Select/SelectV1/SelectV1";
 import { IAdonisValidationError, ICreateAccount } from "../../types";
-
+import { Roles } from "../../data/constants";
 import { toast } from "react-toastify";
 
 // API call
@@ -15,11 +15,6 @@ import { loginApi, registerApi } from "../../api/auth";
 import { logUserIn } from "../../redux/reducers/authSlice";
 import { useAppDispatch } from "../../redux/hooks";
 
-const Roles = [
-  { value: "client", label: "Client" },
-  { value: "maker", label: "Maker" },
-  // { value: "admin", label: "Admin" },
-];
 
 const Auth = () => {
   const [hasAccount, setHasAccount] = useState(false);
@@ -120,15 +115,19 @@ const Auth = () => {
           testId="email"
           type="email"
           label="Email:"
+          name="email"
           placeHolder="address@example.com"
           onParentStateChange={onChangeEmail}
+          required={true}
         />
         <InputV1
           testId="pwd"
           type="password"
           label="Password:"
+          name="password"
           placeHolder="password"
           onParentStateChange={onChangePwd}
+          required={true}
         />
         {!hasAccount && (
           <>
@@ -136,15 +135,19 @@ const Auth = () => {
               testId="pwdConfirm"
               type="password"
               label="Confirm Password:"
+              name="passwordConfirm"
               placeHolder="password"
               onParentStateChange={onChangePwdConfirm}
+              required={true}
             />
             <SelectV1
               testId="role"
               label="Register as a:"
+              name="role"
               defaultValue={role}
               options={Roles}
               onParentStateChange={onChangeRole}
+              required={true}
             />
           </>
         )}

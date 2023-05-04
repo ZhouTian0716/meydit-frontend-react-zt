@@ -32,7 +32,8 @@ export interface ICreateAccount {
 export interface ICreateProject {
   title: string;
   description?: string;
-  images?: IImage[];
+  category?: string;
+  tags?: string[];
 }
 
 export interface IProjectsStoreRes {
