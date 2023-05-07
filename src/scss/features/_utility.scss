@@ -10,6 +10,20 @@
   gap: var(--gap, 1rem);
 }
 
+.navBtn{
+  background: $theme-main;
+  padding: 0.2em 0.5em;
+  color: #ffffff;
+  font-weight: 500;
+  border-radius: 999px;
+  cursor: pointer;
+  margin-right: 1rem;
+  transition: background 0.2s ease-in-out;
+  &:hover{
+    background: $theme-main-hover;
+  }
+}
+
 .formBtn{
   background: $theme-main;
   height: 48px;

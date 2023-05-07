@@ -8,18 +8,11 @@ import { BsCurrencyDollar } from "react-icons/bs";
 import { AiOutlineAppstore } from "react-icons/ai";
 import { Link } from "react-router-dom";
 
-const testDescription = `Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus
-sequi fugiat aliquam veniam vitae quam a culpa omnis porro sunt! Itaque
-tempore ea minus harum dignissimos animi autem inventore repellendus
-voluptate, possimus eligendi, ipsum obcaecati dicta illo saepe nihil
-dolores maiores vitae unde expedita distinctio ab! Distinctio aspernatur
-id autem!`;
-
 const ProjectCard = (props: IProjectCardProps) => {
   const { id, title, images, createdAt, tags, description, category } = props;
 
-  const formattedDesc = testDescription
-    ? `${testDescription.slice(0, 230)}...`
+  const formattedDesc = description
+    ? `${description.slice(0, 230)}...`
     : "Description pending...";
 
   return (

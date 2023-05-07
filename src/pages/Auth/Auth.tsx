@@ -15,7 +15,6 @@ import { loginApi, registerApi } from "../../api/auth";
 import { logUserIn } from "../../redux/reducers/authSlice";
 import { useAppDispatch } from "../../redux/hooks";
 
-
 const Auth = () => {
   const [hasAccount, setHasAccount] = useState(false);
   const [email, setEmail] = useState("");
@@ -50,7 +49,24 @@ const Auth = () => {
       };
 
       const res = await loginApi(authPayload);
-      dispatch(logUserIn(res));
+      const actionPayload = {
+        account: {
+          email: res.account.email,
+          firstName: res.account.firstName,
+          lastName: res.account.lastName,
+          role: {
+            id: res.account.role.id,
+            name: res.account.role.name,
+          },
+          profile: {
+            id: res.account.profile.id,
+            avatar: res.account.profile.avatar,
+            bio: res.account.profile.bio,
+          },
+        },
+        token: res.token,
+      };
+      dispatch(logUserIn(actionPayload));
       navigate("/dashboard");
     } catch (err: any) {
       const errorMsg = err?.response?.data?.message;

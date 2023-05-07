@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styles from "./NavLinks.module.scss";
-import avatar from "../../../src/assets/img/avatar.jpg";
+import defaultAvatar from "../../../src/assets/img/defaultAvatar.png";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 // API call
@@ -24,6 +24,7 @@ const NavLinks = (props: IProps) => {
 
   // Redux
   const loginUser = useAppSelector(getAccount);
+  const { role, profile } = loginUser;
   const { token } = useAppSelector(getToken);
   const dispatch = useAppDispatch();
 
@@ -50,36 +51,35 @@ const NavLinks = (props: IProps) => {
       <Link to="https://meyd.it" className={styles.nav__link}>
         Explore
       </Link>
-      {loginUser?.role === "maker" && (
+      {role.name === "Maker" && (
         <Link to="#" className={styles.nav__link}>
           Buyers
         </Link>
       )}
-      {loginUser?.role === "client" && (
+      {role.name === "Client" && (
         <Link to="#" className={styles.nav__link}>
           Makers
         </Link>
       )}
-      {!loginUser?.role && (
-        <button
-          className={styles.nav__btn}
-          type="button"
-          onClick={() => navigate("/auth")}
-        >
-          Join
-        </button>
-      )}
-      {loginUser.role && (
+
+      {token ? (
         <div className={styles.account} onClick={() => setOpen(!open)}>
           <div className={styles.accountBtn}>
-            <img src={avatar} alt="avatar" className={styles.avatar} />
+            <div className={styles.avatarContainer}>
+              <img
+                src={profile.avatar ? profile.avatar : defaultAvatar}
+                alt="UserIcon"
+                className={styles.avatar}
+              />
+            </div>
+
             <span className={styles.accountName}>
               {loginUser.firstName || loginUser.email?.split("@")[0]}
             </span>
           </div>
 
           <div className={optionsClass}>
-            {loginUser?.role === "client" && (
+            {role.name === "Client" && (
               <>
                 <Link to="/buyer-designs" className={styles.option}>
                   My Designs
@@ -100,6 +100,14 @@ const NavLinks = (props: IProps) => {
             </button>
           </div>
         </div>
+      ) : (
+        <button
+          className={styles.nav__btn}
+          type="button"
+          onClick={() => navigate("/auth")}
+        >
+          Join
+        </button>
       )}
     </div>
   );

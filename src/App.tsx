@@ -14,6 +14,7 @@ import { useAppSelector } from "./redux/hooks";
 import { isShowBottomNav } from "./redux/reducers/uiSlice";
 import Projects from "./pages/Projects/Projects";
 import Project from "./pages/Project/Project";
+import Makers from "./pages/Makers/Makers";
 
 function App() {
   const Layout = () => {
@@ -45,6 +46,10 @@ function App() {
         {
           path: "/projects/:id",
           element: <Project />,
+        },
+        {
+          path: "/makers",
+          element: <Makers />,
         },
         {
           path: "/auth",

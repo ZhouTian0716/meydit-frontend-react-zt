@@ -6,6 +6,7 @@ import demoVideo from "../../../src/assets/video/video-light-meydit.mp4";
 import { accountsIndex } from "../../api/accounts";
 import { IAccount } from "../../types";
 import { projectsIndex } from "../../api/projects";
+import { Link } from "react-router-dom";
 
 const Landing = () => {
   const firstMount = useRef(true);
@@ -53,7 +54,10 @@ const Landing = () => {
           Meyd.it helps source and manage slow fashion, that is made to measure
           and on demand.
         </p>
-        <h2>Find the best maker with the skills you need</h2>
+        <div>
+          <Link to="/projects" className="navBtn">Projects</Link>
+          <Link to="/makers" className="navBtn">Makers</Link>
+        </div>
         <form className={styles.searchBar}>
           <img src={searchIcon} alt="searchIcon" />
           <input
