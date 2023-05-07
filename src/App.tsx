@@ -12,7 +12,8 @@ import Auth from "./pages/Auth/Auth";
 import NavLinks from "./components/NavLinks/NavLinks";
 import { useAppSelector } from "./redux/hooks";
 import { isShowBottomNav } from "./redux/reducers/uiSlice";
-
+import Projects from "./pages/Projects/Projects";
+import Project from "./pages/Project/Project";
 
 function App() {
   const Layout = () => {
@@ -23,7 +24,7 @@ function App() {
         <Outlet />
         <Footer />
         {/* {bottomNav && <Footer />} */}
-        {bottomNav && <NavLinks showOnMobile={true}/>}
+        {bottomNav && <NavLinks showOnMobile={true} />}
       </div>
     );
   };
@@ -36,6 +37,14 @@ function App() {
         {
           path: "/",
           element: <Home />,
+        },
+        {
+          path: "/projects",
+          element: <Projects />,
+        },
+        {
+          path: "/projects/:id",
+          element: <Project />,
         },
         {
           path: "/auth",

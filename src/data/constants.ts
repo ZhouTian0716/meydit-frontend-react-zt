@@ -22,7 +22,7 @@ export const Categories = [
   { value: "Jumpsuit", label: "Jumpsuit" },
   { value: "Smart casual", label: "Smart casual" },
   { value: "Accessories", label: "Accessories" },
-  { value: "Other", label: "Other" },
+  { value: "Others", label: "Others" },
 ];
 
 export const Tags = [

@@ -42,17 +42,18 @@ const Dashboard = () => {
       if (!token) return toast.error(toastErrorMessages.tokenLost);
       console.log("checking breack point");
 
-      // ZT-NOTE: 多个图片发送多个请求
-      const resArray = await uploadToS3(uploadedFiles);
-      if (!resArray) return toast.error(toastErrorMessages.uploadIssue);
-      if (!title) return toast.error(toastErrorMessages.titleRequired);
-
       // ZT-NOTE: 注意创建project要有用户权限，所以这之前要检查登录状态
       const projectsStoreRes: IProjectsStoreRes = await projectsStore(
         projectPayload,
         token
       );
 
+      // ZT-NOTE: 多个图片发送多个请求
+      const resArray = await uploadToS3(uploadedFiles, (projectsStoreRes.id).toString(), 'project');
+      if (!resArray) return toast.error(toastErrorMessages.uploadIssue);
+      if (!title) return toast.error(toastErrorMessages.titleRequired);
+
+      // ZT-NOTE: imagePayloadArray here prepared for going into DB
       const imagePayloadArray: ICreateImage[] = resArray.map((res) => {
         return {
           url: res.urlOnS3,
@@ -60,8 +61,6 @@ const Dashboard = () => {
           projectId: projectsStoreRes.id,
         };
       });
-
-      // ZT-NOTE: imagePayloadArray here prepared for going into DB
       imagePayloadArray.forEach(async (imagePayload) => {
         const imageStoreRes = await imagesStore(imagePayload);
         console.log(imageStoreRes);
