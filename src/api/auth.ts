@@ -1,6 +1,7 @@
 import axios from "axios";
 import { configOptions } from "../config/config";
 import { ICreateAccount, ILoginData } from "../types";
+import { ILoginRes } from "./resTypes";
 
 const { apiAddress } = configOptions;
 
@@ -11,7 +12,8 @@ export const registerApi = async (data: ICreateAccount) => {
 
 export const loginApi = async (data: ILoginData) => {
   const res = await axios.post(`${apiAddress}/api/auth/login`, data);
-  return res.data;
+  const loginResponse: ILoginRes = res.data;
+  return loginResponse;
 };
 
 export const logoutApi = async (accessToken: string) => {

@@ -5,14 +5,17 @@ import Home from "./pages/Home/Home";
 import Footer from "./components/Footer/Footer";
 import BuyerDesigns from "./pages/BuyerDesigns/BuyerDesigns";
 import BuyerDesign from "./pages/BuyerDesign/BuyerDesign";
-import Account from "./pages/Account/Account";
+import Dashboard from "./pages/Dashboard/Dashboard";
 import Messages from "./pages/Messages/Messages";
 import MakerAtelier from "./pages/MakerAtelier/MakerAtelier";
 import Auth from "./pages/Auth/Auth";
 import NavLinks from "./components/NavLinks/NavLinks";
 import { useAppSelector } from "./redux/hooks";
 import { isShowBottomNav } from "./redux/reducers/uiSlice";
-
+import Projects from "./pages/Projects/Projects";
+import Project from "./pages/Project/Project";
+import Makers from "./pages/Makers/Makers";
+import Account from "./pages/Account/Account";
 
 function App() {
   const Layout = () => {
@@ -23,7 +26,7 @@ function App() {
         <Outlet />
         <Footer />
         {/* {bottomNav && <Footer />} */}
-        {bottomNav && <NavLinks showOnMobile={true}/>}
+        {bottomNav && <NavLinks showOnMobile={true} />}
       </div>
     );
   };
@@ -38,12 +41,28 @@ function App() {
           element: <Home />,
         },
         {
+          path: "/account/:id",
+          element: <Account />,
+        },
+        {
+          path: "/projects",
+          element: <Projects />,
+        },
+        {
+          path: "/projects/:id",
+          element: <Project />,
+        },
+        {
+          path: "/makers",
+          element: <Makers />,
+        },
+        {
           path: "/auth",
           element: <Auth />,
         },
         {
-          path: "/account",
-          element: <Account />,
+          path: "/dashboard",
+          element: <Dashboard />,
         },
         {
           path: "/buyer-designs",

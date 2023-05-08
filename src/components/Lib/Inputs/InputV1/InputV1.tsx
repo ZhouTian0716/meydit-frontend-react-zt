@@ -6,9 +6,11 @@ interface IInputV1 {
   onParentStateChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   testId: string;
   label: string;
+  name: string;
   type?: string;
   required?: boolean;
-  placeHolder?: string;
+  placeHolder?: string | undefined;
+  defaultValue?: string | undefined;
   loading?: boolean;
   classes?: string | string[];
 }
@@ -17,6 +19,8 @@ const InputV1 = (props: IInputV1) => {
   const {
     testId,
     label,
+    name,
+    defaultValue,
     placeHolder,
     type,
     required,
@@ -25,7 +29,7 @@ const InputV1 = (props: IInputV1) => {
     classes,
   } = props;
 
-  const [val, setVal] = useState("");
+  const [val, setVal] = useState(defaultValue);
   const [error, setError] = useState<null | string>(null);
   const [pwdHidden, setPwdHidden] = useState(true);
   const [inputType, setInputType] = useState(type);
@@ -69,17 +73,18 @@ const InputV1 = (props: IInputV1) => {
     >
       <label
         className={[styles.label, error ? styles.errorRed : ""].join(" ")}
-        htmlFor={testId}
+        htmlFor={label}
       >
+        {required && <span className={styles.errorRed}>*</span>}
         {label}
-        {required ? <span className={styles.errorRed}>*</span> : ""}
       </label>
       <div className={styles.inputWrapper}>
         <input
           className={[styles.input].join(" ")}
           type={inputType}
           value={val}
-          name={testId}
+          id={label}
+          name={name}
           onChange={onChange}
           placeholder={placeHolder}
           data-cy={testId}
@@ -96,6 +101,7 @@ export default InputV1;
 
 InputV1.defaultProps = {
   required: false,
+  defaultValue: "",
   placeHolder: "",
   type: "text",
   loading: false,

@@ -1,13 +1,23 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IAuthState, IAuthStateAccount, ILoginData } from "./types";
+import { IAuthState } from "./types";
 import { RootState } from "../store";
+import { ILoginRes } from "../../api/resTypes";
 
 const initialState: IAuthState = {
   account: {
+    id: null,
     email: "",
-    role: "",
-    first_name: null,
-    last_name: null,
+    firstName: "",
+    lastName: "",
+    role: {
+      id: null,
+      name: "",
+    },
+    profile: {
+      id: null,
+      bio: null,
+      avatar: null,
+    },
   },
   token: {
     type: "",
@@ -22,7 +32,8 @@ export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    logUserIn: (state, action: PayloadAction<ILoginData>) => {
+    logUserIn: (state, action: PayloadAction<ILoginRes>) => {
+      // console.log("hey hey", action.payload.account);
       state.account = action.payload.account;
       state.token = action.payload.token;
     },

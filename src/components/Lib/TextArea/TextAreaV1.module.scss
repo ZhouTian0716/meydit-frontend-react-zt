@@ -1,0 +1,21 @@
+@use "../../../scss/variables" as *;
+
+.textArea {
+  margin-top: 0.5em;
+  border: 1px solid $border;
+  border-radius: 5px;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  width: 100%;
+  resize: none;
+  &:focus {
+    border: 1px solid $theme-main;
+  }
+}
+
+.errorRed {
+  color: red;
+  margin-right: 5px;
+}

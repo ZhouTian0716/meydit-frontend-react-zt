@@ -9,23 +9,61 @@ export interface ITopMaker {
 
 export interface IAccount {
   id: string;
-  first_name?: string;
-  last_name?: string;
+  firstName?: string;
+  lastName?: string;
   email?: string;
-  role: string;
+  role: {
+    id: number;
+    name: string;
+  };
   remember_me_token?: string;
-  created_at?: string;
-  updated_at?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 // Validation usage for CRUD operations
+// ZT-NOTE: 如果我这里设立了，在组件里引用的时候就能避免typo的问题
 export interface ICreateAccount {
   email: string;
   password: string;
   password_confirmation: string;
-  role: string;
-  first_name?: string;
-  last_name?: string;
+  roleId: number;
+  firstName?: string;
+  lastName?: string;
+}
+
+export interface ICreateProject {
+  title: string | null;
+  startPrice: number | null;
+  description: string | null;
+  categoryId: number | null;
+  tagIds: number[] | null;
+}
+
+export interface IProjectsStoreRes {
+  id: number;
+  slug?: string;
+  status?: string;
+  title?: string;
+  description?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface ICreateImage {
+  url: string;
+  fileName: string;
+  projectId: number;
+}
+
+interface IImage {
+  id: number;
+  url: string;
+  projectId?: string;
+  bidId?: string;
+  commentId?: string;
+  messageId?: string;
+  createdAt: string;
 }
 
 export interface ILoginData {

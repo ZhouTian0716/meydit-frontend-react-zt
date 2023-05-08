@@ -1,0 +1,27 @@
+@use "../../scss/variables" as *;
+
+$sectionGap: 1rem;
+
+.projects {
+  padding: $sectionGap;
+  display: flex;
+  flex-direction: column;
+  gap: $sectionGap;
+  .pageTitle {
+    text-align: center;
+  }
+  .projectsGrid {
+    margin: 0 auto;
+    max-width: 1300px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    // color:$theme-main;
+    @include media-tablet-sm {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    @include media-mobile-lg {
+      grid-template-columns: 1fr;
+    }
+  }
+}
