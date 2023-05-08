@@ -66,6 +66,7 @@ const TextAreaV1 = (props: ITextAreaV1) => {
         autoCorrect="on"
         spellCheck="false"
         value={val}
+        onChange={onChange}
       />
     </div>
   );

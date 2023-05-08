@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Auth.module.scss";
 import scissors from "../../../src/assets/img/resource/scissors.jpg";
 import InputV1 from "../../components/Lib/Inputs/InputV1/InputV1";
 import SelectV1 from "../../components/Lib/Select/SelectV1/SelectV1";
 import { IAdonisValidationError, ICreateAccount } from "../../types";
-import { Roles } from "../../data/constants";
+import { rolesIndex } from "../../api/constants";
 import { toast } from "react-toastify";
 
 // API call
@@ -14,14 +14,33 @@ import { loginApi, registerApi } from "../../api/auth";
 // Redux
 import { logUserIn } from "../../redux/reducers/authSlice";
 import { useAppDispatch } from "../../redux/hooks";
+import { IRole } from "../../api/resTypes";
 
 const Auth = () => {
+  const firstMount = useRef(true);
   const [hasAccount, setHasAccount] = useState(false);
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
-  const [role, setRole] = useState(Roles[0].value);
+  const [roles, setRoles] = useState<IRole[]>([]);
+  const [roleId, setRoleId] = useState(1);
   const [pwdConfirm, setPwdConfirm] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const loadRoles = async () => {
+    const rolesData: IRole[] = await rolesIndex();
+    const allowedRoles = rolesData.filter(
+      (role) => role.name === "Maker" || role.name === "Client"
+    );
+    setRoles(allowedRoles);
+  };
+  useEffect(() => {
+    if (firstMount.current) {
+      loadRoles();
+    }
+    return () => {
+      firstMount.current = false;
+    };
+  }, []);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -36,7 +55,7 @@ const Auth = () => {
     setPwdConfirm(e.target.value);
   };
   const onChangeRole = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setRole(e.target.value);
+    setRoleId(parseInt(e.target.value));
   };
 
   const onLogin = async (e: React.SyntheticEvent<HTMLFormElement>) => {
@@ -49,23 +68,29 @@ const Auth = () => {
       };
 
       const res = await loginApi(authPayload);
+      const { id,role, profile, firstName, lastName } = res.account;
       const actionPayload = {
         account: {
+          id,
           email: res.account.email,
-          firstName: res.account.firstName,
-          lastName: res.account.lastName,
+          firstName,
+          lastName,
           role: {
-            id: res.account.role.id,
-            name: res.account.role.name,
+            id: role.id,
+            name: role.name,
           },
-          profile: {
-            id: res.account.profile.id,
-            avatar: res.account.profile.avatar,
-            bio: res.account.profile.bio,
-          },
+          profile: profile
+            ? {
+                id: profile.id,
+                avatar: profile.avatar,
+                bio: profile.bio,
+              }
+            : null,
         },
         token: res.token,
       };
+
+      // console.log("checking", actionPayload);
       dispatch(logUserIn(actionPayload));
       navigate("/dashboard");
     } catch (err: any) {
@@ -89,7 +114,7 @@ const Auth = () => {
         email,
         password: pwd,
         password_confirmation: pwdConfirm,
-        role,
+        roleId,
       };
 
       const res = await registerApi(authPayload);
@@ -160,8 +185,8 @@ const Auth = () => {
               testId="role"
               label="Register as a:"
               name="role"
-              defaultValue={role}
-              options={Roles}
+              defaultValue={roleId}
+              options={roles}
               onParentStateChange={onChangeRole}
               required={true}
             />

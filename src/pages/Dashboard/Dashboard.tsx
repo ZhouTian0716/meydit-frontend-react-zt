@@ -1,36 +1,61 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./Dashboard.module.scss";
 import { TiDelete } from "react-icons/ti";
 import InputV1 from "../../components/Lib/Inputs/InputV1/InputV1";
 import TextAreaV1 from "../../components/Lib/TextArea/TextAreaV1";
 import SelectV1 from "../../components/Lib/Select/SelectV1/SelectV1";
 import { projectsStore } from "../../api/projects";
+import { categoriesIndex, tagsIndex } from "../../api/constants";
 import { imagesStore } from "../../api/images";
 import { ICreateImage, ICreateProject, IProjectsStoreRes } from "../../types";
 import { uploadToS3 } from "../../utils/aws";
 import { validateFilesize } from "../../utils/helpers";
 import { toast } from "react-toastify";
-import { Categories, Tags, toastErrorMessages } from "../../data/constants";
+import { toastErrorMessages } from "../../data/constants";
 // Redux
 import { getAccount, getToken } from "../../redux/reducers/authSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import SelectV2 from "../../components/Lib/Select/SelectV2/SelectV2";
+import { ICategory, ITag } from "../../api/resTypes";
 
 const Dashboard = () => {
   const projectInitialState: ICreateProject = {
-    title: "dfdfs",
-    description: "dfdf",
-    category: Categories[0].value,
-    tags: [],
+    title: null,
+    startPrice: null,
+    description: null,
+    categoryId: null,
+    tagIds: [],
   };
+  const firstMount = useRef(true);
+  const [categories, setCategories] = useState<ICategory[]>();
+  const [tags, setTags] = useState<ITag[]>();
   const [projectPayload, setProjectPayload] = useState(projectInitialState);
-  const { title, description, category, tags } = projectPayload;
+  const [selectedTagIds, setSelectedTagIds] = useState<number[]>([]);
+  const { title, description, startPrice, categoryId } = projectPayload;
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [fileLimit, setFileLimit] = useState(false);
   const [loading, setLoading] = useState(false);
   const MAX_FILE_COUNT = 9;
+  const navigate = useNavigate();
   // Redux
   const loginUser = useAppSelector(getAccount);
   const { token } = useAppSelector(getToken);
+
+  const loadConstants = async () => {
+    const categoriesData: ICategory[] = await categoriesIndex();
+    const tagsData: ITag[] = await tagsIndex();
+    setCategories(categoriesData);
+    setTags(tagsData);
+  };
+  useEffect(() => {
+    if (firstMount.current) {
+      loadConstants();
+    }
+    return () => {
+      firstMount.current = false;
+    };
+  }, []);
 
   // ZT-NOTE: 创建project的过程步骤要之后做好记录，因为涉及到了s3的上传，以及image入档db的顺序
   const createProject = async (e: React.ChangeEvent<HTMLFormElement>) => {
@@ -40,8 +65,9 @@ const Dashboard = () => {
       if (!uploadedFiles.length)
         return toast.error(toastErrorMessages.emptyFile);
       if (!token) return toast.error(toastErrorMessages.tokenLost);
-      console.log("checking breack point");
-
+      // ZT-NOTE: Validate project payload
+      if (!title || !description || !startPrice || !categoryId)
+        return toast.error(toastErrorMessages.requiredFields);
       // ZT-NOTE: 注意创建project要有用户权限，所以这之前要检查登录状态
       const projectsStoreRes: IProjectsStoreRes = await projectsStore(
         projectPayload,
@@ -49,10 +75,12 @@ const Dashboard = () => {
       );
 
       // ZT-NOTE: 多个图片发送多个请求
-      const resArray = await uploadToS3(uploadedFiles, (projectsStoreRes.id).toString(), 'project');
+      const resArray = await uploadToS3(
+        uploadedFiles,
+        projectsStoreRes.id.toString(),
+        "project"
+      );
       if (!resArray) return toast.error(toastErrorMessages.uploadIssue);
-      if (!title) return toast.error(toastErrorMessages.titleRequired);
-
       // ZT-NOTE: imagePayloadArray here prepared for going into DB
       const imagePayloadArray: ICreateImage[] = resArray.map((res) => {
         return {
@@ -63,9 +91,10 @@ const Dashboard = () => {
       });
       imagePayloadArray.forEach(async (imagePayload) => {
         const imageStoreRes = await imagesStore(imagePayload);
-        console.log(imageStoreRes);
+        // console.log(imageStoreRes);
       });
       toast.success("Project created!");
+      navigate("/projects");
     } catch (err) {
       toast.error("Project create fail due to unknown error.");
       // console.log(err);
@@ -120,6 +149,8 @@ const Dashboard = () => {
     >
   ) => {
     setProjectPayload({ ...projectPayload, [e.target.name]: e.target.value });
+    // console.log(e.target.value);
+    // console.log(projectPayload);
   };
 
   const submitBtnClass = loading
@@ -129,13 +160,7 @@ const Dashboard = () => {
   return (
     <div className={styles.dashboard}>
       <h1>Hello {loginUser.firstName || loginUser.email?.split("@")[0]}</h1>
-      <p
-        onClick={() => {
-          console.log(uploadedFiles);
-        }}
-      >
-        Wanna post a new project today?
-      </p>
+      <p>Wanna post a new project today?</p>
       <form className={styles.projectForm} onSubmit={createProject}>
         <InputV1
           testId="projectTitle"
@@ -143,7 +168,6 @@ const Dashboard = () => {
           label="Title:"
           name="title"
           placeHolder="Project Title"
-          defaultValue={title}
           onParentStateChange={onProjectPayloadChange}
           classes={"width-100"}
           required={true}
@@ -192,24 +216,32 @@ const Dashboard = () => {
         <SelectV1
           testId="category"
           label="Pick a category:"
-          name="category"
-          defaultValue={category}
-          options={Categories}
+          name="categoryId"
+          defaultValue={1}
+          options={categories}
           required={true}
           classes={"width-100"}
           onParentStateChange={onProjectPayloadChange}
         />
 
-        <SelectV1
-          testId="category"
+        <SelectV2
+          testId="tags"
           label="Pick some tags:"
-          name="tags"
-          defaultValue={tags}
-          options={Tags}
-          required={true}
+          options={tags}
           classes={"width-100"}
-          multiple={true}
+          selectedTagIds={selectedTagIds}
+          setSelectedTagIds={setSelectedTagIds}
+        />
+
+        <InputV1
+          testId="projectPrice"
+          type="number"
+          label="Starter price:"
+          name="startPrice"
+          placeHolder="Set a price"
           onParentStateChange={onProjectPayloadChange}
+          classes={"width-100"}
+          required={true}
         />
 
         <TextAreaV1
@@ -219,7 +251,6 @@ const Dashboard = () => {
           name="description"
           rows={6}
           placeHolder="Project Description"
-          defaultValue={description}
           onParentStateChange={onProjectPayloadChange}
           classes={"width-100"}
           required={true}

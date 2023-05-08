@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import styles from "./SelectV1.module.scss";
 
 interface IOptionV1 {
-  value: string;
-  label: string;
+  id: number;
+  name: string;
 }
 
 interface ISelectV1 {
@@ -13,7 +13,7 @@ interface ISelectV1 {
   name: string;
   required?: boolean;
   multiple?: boolean;
-  defaultValue?: string | string[];
+  defaultValue?: number;
   classes?: string | string[];
   options?: IOptionV1[] | null;
 }
@@ -54,8 +54,8 @@ const SelectV1 = (props: ISelectV1) => {
         required={required}
       >
         {options?.map((e) => (
-          <option key={e.label} value={e.value}>
-            {e.label}
+          <option key={e.id} value={e.id}>
+            {e.name}
           </option>
         ))}
       </select>
@@ -70,7 +70,7 @@ SelectV1.defaultProps = {
   label: "label for select dropdown",
   required: false,
   multiple: false,
-  defaultValue: "",
+  defaultValue: 1,
   options: null,
   classes: null,
   onParentStateChange: () => {},

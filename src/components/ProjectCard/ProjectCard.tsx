@@ -9,7 +9,7 @@ import { AiOutlineAppstore } from "react-icons/ai";
 import { Link } from "react-router-dom";
 
 const ProjectCard = (props: IProjectCardProps) => {
-  const { id, title, images, createdAt, tags, description, category } = props;
+  const { id, title, images, createdAt, tags, description, category,startPrice } = props;
 
   const formattedDesc = description
     ? `${description.slice(0, 230)}...`
@@ -66,7 +66,7 @@ const ProjectCard = (props: IProjectCardProps) => {
         </span>
         <span className={styles.footerOptions}>
           <BsCurrencyDollar fontSize={"18px"} />
-          <small>Upfront Payment</small>
+          <small>{startPrice} Starter</small>
         </span>
       </div>
     </div>

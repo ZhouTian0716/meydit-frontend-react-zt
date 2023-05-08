@@ -4,18 +4,18 @@ export interface ILoginRes {
 }
 
 interface IAccount {
-  id?: number;
-  firstName: string;
-  lastName: string;
+  id: number | null;
+  firstName: string | null;
+  lastName: string | null;
   email: string;
   remeberMeToken?: string;
   createdAt?: Date;
   updatedAt?: Date;
   role: {
-    id: number;
+    id: number | null;
     name: string;
   };
-  profile: IProfile;
+  profile: IProfile | null;
 }
 
 interface IProfile {
@@ -30,4 +30,19 @@ interface IToken {
   type: string;
   token: string;
   expires_at: Date | string;
+}
+
+export interface IRole {
+  id: number;
+  name: string;
+}
+
+export interface ICategory {
+  id: number;
+  name: string;
+}
+
+export interface ITag {
+  id: number;
+  name: string;
 }

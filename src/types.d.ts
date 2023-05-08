@@ -24,16 +24,17 @@ export interface ICreateAccount {
   email: string;
   password: string;
   password_confirmation: string;
-  role: string;
+  roleId: number;
   firstName?: string;
   lastName?: string;  
 }
 
 export interface ICreateProject {
-  title: string;
-  description?: string;
-  category?: string;
-  tags?: string[];
+  title: string | null;
+  startPrice: number | null;
+  description: string | null;
+  categoryId: number | null;
+  tagIds: number[] | null;
 }
 
 export interface IProjectsStoreRes {

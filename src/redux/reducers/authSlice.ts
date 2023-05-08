@@ -5,11 +5,12 @@ import { ILoginRes } from "../../api/resTypes";
 
 const initialState: IAuthState = {
   account: {
+    id: null,
     email: "",
     firstName: "",
     lastName: "",
     role: {
-      id: 0,
+      id: null,
       name: "",
     },
     profile: {
@@ -32,6 +33,7 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     logUserIn: (state, action: PayloadAction<ILoginRes>) => {
+      // console.log("hey hey", action.payload.account);
       state.account = action.payload.account;
       state.token = action.payload.token;
     },

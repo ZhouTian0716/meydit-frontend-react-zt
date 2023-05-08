@@ -1,0 +1,9 @@
+@use "../../../../scss/variables" as *;
+
+.tagsBox {
+  padding-top: 0.5em;
+  display: flex;
+  gap: 0.5em;
+  flex-wrap: wrap;
+  
+}

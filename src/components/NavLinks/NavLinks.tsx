@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styles from "./NavLinks.module.scss";
-import defaultAvatar from "../../../src/assets/img/defaultAvatar.png";
+import defaultAvatar from "../../../src/assets/img/defaultAvatar.jpg";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 // API call
@@ -24,7 +24,7 @@ const NavLinks = (props: IProps) => {
 
   // Redux
   const loginUser = useAppSelector(getAccount);
-  const { role, profile } = loginUser;
+  const { id, role, profile } = loginUser;
   const { token } = useAppSelector(getToken);
   const dispatch = useAppDispatch();
 
@@ -67,7 +67,7 @@ const NavLinks = (props: IProps) => {
           <div className={styles.accountBtn}>
             <div className={styles.avatarContainer}>
               <img
-                src={profile.avatar ? profile.avatar : defaultAvatar}
+                src={profile?.avatar ? profile.avatar : defaultAvatar}
                 alt="UserIcon"
                 className={styles.avatar}
               />
@@ -92,7 +92,7 @@ const NavLinks = (props: IProps) => {
             <Link to="/messages" className={styles.option}>
               Messages
             </Link>
-            <Link to="/account" className={styles.option}>
+            <Link to={`/account/${id}`} className={styles.option}>
               Settings
             </Link>
             <button className={styles.option} onClick={onLogout}>

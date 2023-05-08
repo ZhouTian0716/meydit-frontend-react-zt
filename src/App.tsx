@@ -15,6 +15,7 @@ import { isShowBottomNav } from "./redux/reducers/uiSlice";
 import Projects from "./pages/Projects/Projects";
 import Project from "./pages/Project/Project";
 import Makers from "./pages/Makers/Makers";
+import Account from "./pages/Account/Account";
 
 function App() {
   const Layout = () => {
@@ -38,6 +39,10 @@ function App() {
         {
           path: "/",
           element: <Home />,
+        },
+        {
+          path: "/account/:id",
+          element: <Account />,
         },
         {
           path: "/projects",
