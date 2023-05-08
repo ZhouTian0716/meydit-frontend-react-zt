@@ -5,9 +5,9 @@ export const validateFilesize = (
   mbLitmit: number,
   fileName: string
 ) => {
-  if (filesize / 10240 > mbLitmit) {
+  if (filesize / 1048576 > mbLitmit) {
     toast.error(
-      `${mbLitmit}mb per file, ${fileName} size is ${(filesize / 10240).toFixed(
+      `${mbLitmit}mb per file, ${fileName} size is ${(filesize / 1048576).toFixed(
         1
       )}mb`
     );
