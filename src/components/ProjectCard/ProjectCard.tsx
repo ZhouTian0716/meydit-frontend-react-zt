@@ -29,7 +29,7 @@ const ProjectCard = (props: IProjectCardProps) => {
           <div className={`${styles.flexRow} ${styles.alignCenter}`}>
             <img
               className={styles.categoryIcon}
-              src={`/src/assets/img/category/${category}.png`}
+              src={`categories/${category}.png`}
               alt={category}
             />
             <div>
