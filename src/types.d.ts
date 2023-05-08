@@ -12,7 +12,10 @@ export interface IAccount {
   firstName?: string;
   lastName?: string;
   email?: string;
-  role: string;
+  role: {
+    id: number;
+    name: string;
+  };
   remember_me_token?: string;
   createdAt?: string;
   updatedAt?: string;
@@ -26,7 +29,7 @@ export interface ICreateAccount {
   password_confirmation: string;
   roleId: number;
   firstName?: string;
-  lastName?: string;  
+  lastName?: string;
 }
 
 export interface ICreateProject {
@@ -52,8 +55,6 @@ export interface ICreateImage {
   fileName: string;
   projectId: number;
 }
-
-
 
 interface IImage {
   id: number;

@@ -13,10 +13,10 @@ const Landing = () => {
   const [accounts, setAccounts] = useState([]);
   const [projects, setProjects] = useState([]);
   const clientNum = accounts.filter(
-    (account: IAccount) => account.role === "client"
+    (account: IAccount) => account.role.name === "Client"
   ).length;
   const makerNum = accounts.filter(
-    (account: IAccount) => account.role === "maker"
+    (account: IAccount) => account.role.name === "Maker"
   ).length;
   const loadDatas = async () => {
     const accountsData = await accountsIndex();
