@@ -81,11 +81,21 @@ const NavLinks = (props: IProps) => {
           <div className={optionsClass}>
             {role.name === "Client" && (
               <>
-                <Link to="/buyer-designs" className={styles.option}>
-                  My Designs
+                <Link to="/projects" className={styles.option}>
+                  My Projects
                 </Link>
-                <Link to="/buyer-designs/42323" className={styles.option}>
-                  New Design
+                <Link to="/dashboard" className={styles.option}>
+                  Create Project
+                </Link>
+              </>
+            )}
+            {role.name === "Maker" && (
+              <>
+                <Link to="/projects" className={styles.option}>
+                  My page
+                </Link>
+                <Link to="/dashboard" className={styles.option}>
+                  Bid a Project
                 </Link>
               </>
             )}

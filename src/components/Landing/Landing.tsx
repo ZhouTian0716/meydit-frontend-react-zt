@@ -26,9 +26,7 @@ const Landing = () => {
     setProjects(projectsData);
   };
   useEffect(() => {
-    if (firstMount.current) {
-      loadDatas();
-    }
+    firstMount.current && loadDatas();
     return () => {
       firstMount.current = false;
     };
@@ -55,8 +53,12 @@ const Landing = () => {
           and on demand.
         </p>
         <div>
-          <Link to="/projects" className="navBtn">Projects</Link>
-          <Link to="/makers" className="navBtn">Makers</Link>
+          <Link to="/projects" className="navBtn">
+            Projects
+          </Link>
+          <Link to="/makers" className="navBtn">
+            Makers
+          </Link>
         </div>
         <form className={styles.searchBar}>
           <img src={searchIcon} alt="searchIcon" />
