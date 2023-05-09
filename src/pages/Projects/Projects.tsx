@@ -1,21 +1,17 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Projects.module.scss";
 import { projectsIndex } from "../../api/projects";
 import { IProjectCardProps } from "../../types/component";
 import ProjectCard from "../../components/ProjectCard/ProjectCard";
 
 const Projects = () => {
-  let firstRender = useRef(true);
   const [projects, setProjects] = useState([]);
   const fetchProjects = async () => {
     const res = await projectsIndex();
     setProjects(res.data);
   };
   useEffect(() => {
-    firstRender.current && fetchProjects();
-    return () => {
-      firstRender.current = false;
-    };
+    fetchProjects();
   }, []);
 
   return (

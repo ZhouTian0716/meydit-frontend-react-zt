@@ -33,10 +33,9 @@ const Auth = () => {
     );
     setRoles(allowedRoles);
   };
+  
   useEffect(() => {
-    if (firstMount.current) {
-      loadRoles();
-    }
+    firstMount.current && loadRoles();
     return () => {
       firstMount.current = false;
     };
@@ -68,7 +67,7 @@ const Auth = () => {
       };
 
       const res = await loginApi(authPayload);
-      const { id,role, profile, firstName, lastName } = res.account;
+      const { id, role, profile, firstName, lastName } = res.account;
       const actionPayload = {
         account: {
           id,
@@ -118,7 +117,7 @@ const Auth = () => {
       };
 
       const res = await registerApi(authPayload);
-      toast.success(`Account created with ${res.email} as ${res.role}`);
+      toast.success(`Account registed with ${res.email}`);
       setHasAccount(true);
     } catch (err: any) {
       console.log(err);

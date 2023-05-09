@@ -49,9 +49,7 @@ const Dashboard = () => {
     setTags(tagsData);
   };
   useEffect(() => {
-    if (firstMount.current) {
-      loadConstants();
-    }
+    firstMount.current && loadConstants();
     return () => {
       firstMount.current = false;
     };
