@@ -67,8 +67,9 @@ const Dashboard = () => {
       if (!title || !description || !startPrice || !categoryId)
         return toast.error(toastErrorMessages.requiredFields);
       // ZT-NOTE: 注意创建project要有用户权限，所以这之前要检查登录状态
+      const mergedPayload = {...projectPayload, tagIds : selectedTagIds}
       const projectsStoreRes: IProjectsStoreRes = await projectsStore(
-        projectPayload,
+        mergedPayload,
         token
       );
 
@@ -88,8 +89,7 @@ const Dashboard = () => {
         };
       });
       imagePayloadArray.forEach(async (imagePayload) => {
-        const imageStoreRes = await imagesStore(imagePayload);
-        // console.log(imageStoreRes);
+        await imagesStore(imagePayload);
       });
       toast.success("Project created!");
       navigate("/projects");

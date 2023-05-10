@@ -1,5 +1,5 @@
 site:
-https://meydit-frontend-react-zt.vercel.app/
+https://www.meydit.com
 
 
 Tasks:
