@@ -7,7 +7,7 @@
   align-items: center;
   justify-content: center;
   padding: 1rem;
-  color: $text-main;
+  color: $text-secondary;
   .logo {
     @include media-mobile-lg {
       aspect-ratio: 1.2;

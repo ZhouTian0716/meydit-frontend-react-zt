@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styles from "./NavLinks.module.scss";
-import defaultAvatar from "../../../src/assets/img/defaultAvatar.jpg";
+import defaultUser from "../../../src/assets/img/defaultUser.png";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 // API call
@@ -67,7 +67,7 @@ const NavLinks = (props: IProps) => {
           <div className={styles.accountBtn}>
             <div className={styles.avatarContainer}>
               <img
-                src={profile?.avatar ? profile.avatar : defaultAvatar}
+                src={profile?.avatar ? profile.avatar : defaultUser}
                 alt="UserIcon"
                 className={styles.avatar}
               />
@@ -81,10 +81,10 @@ const NavLinks = (props: IProps) => {
           <div className={optionsClass}>
             {role.name === "Client" && (
               <>
-                <Link to="/projects" className={styles.option}>
+                <Link to={`/account/${id}/projects`} className={styles.option}>
                   My Projects
                 </Link>
-                <Link to="/dashboard" className={styles.option}>
+                <Link to="/dashboard/clients" className={styles.option}>
                   Create Project
                 </Link>
               </>
@@ -94,7 +94,7 @@ const NavLinks = (props: IProps) => {
                 <Link to="/projects" className={styles.option}>
                   My page
                 </Link>
-                <Link to="/dashboard" className={styles.option}>
+                <Link to="/dashboard/makers" className={styles.option}>
                   Bid a Project
                 </Link>
               </>

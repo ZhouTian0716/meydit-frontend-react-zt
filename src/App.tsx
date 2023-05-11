@@ -12,6 +12,8 @@ import Unauthorized from "./pages/Unauthorized/Unauthorized";
 import NotFound from "./pages/NotFound/NotFound";
 import ProtectedRoutes from "./components/ProtectedRoutes/ProtectedRoutes";
 import DashboardMakers from "./pages/DashboardMakers/DashboardMakers";
+import Messages from "./pages/Messages/Messages";
+import ClientProjects from "./pages/ClientProjects/ClientProjects";
 
 function App() {
   return (
@@ -19,12 +21,14 @@ function App() {
       <Route path="/" element={<Layout />}>
         <Route path="/" element={<Home />} />
         <Route path="projects" element={<Projects />} />
+        <Route path="account/:accountId/projects" element={<ClientProjects />} />
         <Route path="makers" element={<Makers />} />
         <Route path="auth" element={<Auth />} />
+        <Route path="messages" element={<Messages />} />
         <Route path="unauthorized" element={<Unauthorized />} />
         <Route path="*" element={<NotFound />} />
         <Route element={<ProtectedRoutes />}>
-          <Route path="account/:id" element={<Account />} />
+          <Route path="account/:accountId" element={<Account />} />
           <Route path="projects/:id" element={<Project />} />
         </Route>
         <Route element={<ProtectedRoutes allowRole={"Client"} />}>
