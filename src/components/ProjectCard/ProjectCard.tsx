@@ -9,7 +9,16 @@ import { AiOutlineAppstore } from "react-icons/ai";
 import { Link } from "react-router-dom";
 
 const ProjectCard = (props: IProjectCardProps) => {
-  const { id, title, images, createdAt, tags, description, category,startPrice } = props;
+  const {
+    id,
+    title,
+    images,
+    createdAt,
+    tags,
+    description,
+    category,
+    startPrice,
+  } = props;
 
   const formattedDesc = description
     ? `${description.slice(0, 230)}...`
@@ -29,8 +38,8 @@ const ProjectCard = (props: IProjectCardProps) => {
           <div className={`${styles.flexRow} ${styles.alignCenter}`}>
             <img
               className={styles.categoryIcon}
-              src={`categories/${category}.png`}
-              alt={category}
+              src={category.url}
+              alt={category.name}
             />
             <div>
               <h3 className={styles.title}>{title}</h3>

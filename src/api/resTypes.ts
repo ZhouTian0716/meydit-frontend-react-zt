@@ -40,6 +40,7 @@ export interface IRole {
 export interface ICategory {
   id: number;
   name: string;
+  url: string;
 }
 
 export interface ITag {
