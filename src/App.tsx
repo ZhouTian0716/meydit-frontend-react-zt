@@ -1,90 +1,45 @@
-import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import React from "react";
-import Navbar from "./components/Navbar/Navbar";
 import Home from "./pages/Home/Home";
-import Footer from "./components/Footer/Footer";
-import BuyerDesigns from "./pages/BuyerDesigns/BuyerDesigns";
-import BuyerDesign from "./pages/BuyerDesign/BuyerDesign";
 import Dashboard from "./pages/Dashboard/Dashboard";
-import Messages from "./pages/Messages/Messages";
-import MakerAtelier from "./pages/MakerAtelier/MakerAtelier";
 import Auth from "./pages/Auth/Auth";
-import NavLinks from "./components/NavLinks/NavLinks";
-import { useAppSelector } from "./redux/hooks";
-import { isShowBottomNav } from "./redux/reducers/uiSlice";
 import Projects from "./pages/Projects/Projects";
 import Project from "./pages/Project/Project";
 import Makers from "./pages/Makers/Makers";
 import Account from "./pages/Account/Account";
+import Layout from "./components/Layout/Layout";
+import Unauthorized from "./pages/Unauthorized/Unauthorized";
+import NotFound from "./pages/NotFound/NotFound";
+import ProtectedRoutes from "./components/ProtectedRoutes/ProtectedRoutes";
+import DashboardMakers from "./pages/DashboardMakers/DashboardMakers";
+import Messages from "./pages/Messages/Messages";
+import ClientProjects from "./pages/ClientProjects/ClientProjects";
 
 function App() {
-  const Layout = () => {
-    const bottomNav = useAppSelector(isShowBottomNav);
-    return (
-      <div className="layoutContainer">
-        <Navbar />
-        <Outlet />
-        <Footer />
-        {/* {bottomNav && <Footer />} */}
-        {bottomNav && <NavLinks showOnMobile={true} />}
-      </div>
-    );
-  };
-
-  const router = createBrowserRouter([
-    {
-      path: "/",
-      element: <Layout />,
-      children: [
-        {
-          path: "/",
-          element: <Home />,
-        },
-        {
-          path: "/account/:id",
-          element: <Account />,
-        },
-        {
-          path: "/projects",
-          element: <Projects />,
-        },
-        {
-          path: "/projects/:id",
-          element: <Project />,
-        },
-        {
-          path: "/makers",
-          element: <Makers />,
-        },
-        {
-          path: "/auth",
-          element: <Auth />,
-        },
-        {
-          path: "/dashboard",
-          element: <Dashboard />,
-        },
-        {
-          path: "/buyer-designs",
-          element: <BuyerDesigns />,
-        },
-        {
-          path: "/buyer-designs/:id",
-          element: <BuyerDesign />,
-        },
-        {
-          path: "/maker-atelier/:id",
-          element: <MakerAtelier />,
-        },
-        {
-          path: "/messages",
-          element: <Messages />,
-        },
-      ],
-    },
-  ]);
-
-  return <RouterProvider router={router} />;
+  return (
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route path="/" element={<Home />} />
+        <Route path="projects" element={<Projects />} />
+        <Route path="account/:accountId/projects" element={<ClientProjects />} />
+        <Route path="makers" element={<Makers />} />
+        <Route path="auth" element={<Auth />} />
+        <Route path="messages" element={<Messages />} />
+        <Route path="unauthorized" element={<Unauthorized />} />
+        <Route path="*" element={<NotFound />} />
+        <Route element={<ProtectedRoutes />}>
+          <Route path="account/:accountId" element={<Account />} />
+          <Route path="projects/:id" element={<Project />} />
+        </Route>
+        <Route element={<ProtectedRoutes allowRole={"Client"} />}>
+          <Route path="dashboard/clients" element={<Dashboard />} />
+        </Route>
+        <Route element={<ProtectedRoutes allowRole={"Maker"} />}>
+          <Route path="dashboard/makers" element={<DashboardMakers />} />
+        </Route>
+      </Route>
+    </Routes>
+  );
 }
 
 export default App;

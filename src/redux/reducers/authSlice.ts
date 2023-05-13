@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IAuthState } from "./types";
 import { RootState } from "../store";
-import { ILoginRes } from "../../api/resTypes";
+import { ILoginRes, IProfile } from "../../api/resTypes";
 
 const initialState: IAuthState = {
   account: {
-    id: null,
+    id: 1,
     email: "",
     firstName: "",
     lastName: "",
@@ -14,7 +14,7 @@ const initialState: IAuthState = {
       name: "",
     },
     profile: {
-      id: null,
+      id: 1,
       bio: null,
       avatar: null,
     },
@@ -43,11 +43,14 @@ export const authSlice = createSlice({
       state.status = initialState.status;
       state.error = initialState.error;
     },
+    updateProfile: (state, action: PayloadAction<IProfile>) => {
+      state.account.profile = action.payload;
+    },
   },
 });
 
 // ZT-NOTE: Action creators exports
-export const { logUserIn, logUserOut } = authSlice.actions;
+export const { logUserIn, logUserOut,updateProfile } = authSlice.actions;
 
 // ZT-NOTE: Selector funtions exports for multiple react components to use
 export const getAccount = (state: RootState) => state.auth.account;

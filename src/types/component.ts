@@ -1,10 +1,12 @@
+import { ICategory } from "../api/resTypes";
+
 export interface IProjectCardProps {
   id: number;
   slug: string;
   title: string;
   description?: string;
   startPrice: number;
-  category: string;
+  category: ICategory;
   client: {
     id: number;
     firstName: string;

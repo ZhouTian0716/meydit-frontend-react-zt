@@ -16,7 +16,7 @@ const Projects = () => {
 
   return (
     <div className={styles.projects}>
-      <h2 className={styles.pageTitle}>Check our projects</h2>
+      <h2 className={styles.pageTitle}>Projects Hub</h2>
       <div className={styles.projectsGrid}>
         {projects.map((project: IProjectCardProps) => (
           <ProjectCard key={project.id} {...project} />

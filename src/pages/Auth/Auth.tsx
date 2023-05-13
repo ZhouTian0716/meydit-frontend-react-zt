@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./Auth.module.scss";
 import scissors from "../../../src/assets/img/resource/scissors.jpg";
 import InputV1 from "../../components/Lib/Inputs/InputV1/InputV1";
@@ -18,13 +18,17 @@ import { IRole } from "../../api/resTypes";
 
 const Auth = () => {
   const firstMount = useRef(true);
-  const [hasAccount, setHasAccount] = useState(false);
+  const [hasAccount, setHasAccount] = useState(true);
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
   const [roles, setRoles] = useState<IRole[]>([]);
   const [roleId, setRoleId] = useState(1);
   const [pwdConfirm, setPwdConfirm] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const loadRoles = async () => {
     const rolesData: IRole[] = await rolesIndex();
@@ -33,16 +37,13 @@ const Auth = () => {
     );
     setRoles(allowedRoles);
   };
-  
+
   useEffect(() => {
     firstMount.current && loadRoles();
     return () => {
       firstMount.current = false;
     };
   }, []);
-
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -88,10 +89,10 @@ const Auth = () => {
         },
         token: res.token,
       };
-
       // console.log("checking", actionPayload);
       dispatch(logUserIn(actionPayload));
-      navigate("/dashboard");
+      const from = location.state?.from?.pathname || `/account/${id}`;
+      navigate(from, { replace: true });
     } catch (err: any) {
       const errorMsg = err?.response?.data?.message;
       toast.error(errorMsg);
