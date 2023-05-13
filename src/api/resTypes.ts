@@ -4,7 +4,7 @@ export interface ILoginRes {
 }
 
 interface IAccount {
-  id: number | null;
+  id: number;
   firstName: string | null;
   lastName: string | null;
   email: string;
@@ -15,11 +15,11 @@ interface IAccount {
     id: number | null;
     name: string;
   };
-  profile: IProfile | null;
+  profile: IProfile;
 }
 
-interface IProfile {
-  id: number | null;
+export interface IProfile {
+  id: number;
   bio: string | null;
   avatar: string | null;
   createdAt?: Date;

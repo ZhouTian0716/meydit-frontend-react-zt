@@ -39,7 +39,7 @@ const Dashboard = () => {
   const MAX_FILE_COUNT = 9;
   const navigate = useNavigate();
   // Redux
-  const loginUser = useAppSelector(getAccount);
+  const { id: accountId, firstName, email } = useAppSelector(getAccount);
   const { token } = useAppSelector(getToken);
 
   const loadConstants = async () => {
@@ -67,7 +67,7 @@ const Dashboard = () => {
       if (!title || !description || !startPrice || !categoryId)
         return toast.error(toastErrorMessages.requiredFields);
       // ZT-NOTE: 注意创建project要有用户权限，所以这之前要检查登录状态
-      const mergedPayload = {...projectPayload, tagIds : selectedTagIds}
+      const mergedPayload = { ...projectPayload, tagIds: selectedTagIds };
       const projectsStoreRes: IProjectsStoreRes = await projectsStore(
         mergedPayload,
         token
@@ -77,7 +77,9 @@ const Dashboard = () => {
       const resArray = await uploadToS3(
         uploadedFiles,
         projectsStoreRes.id.toString(),
-        "project"
+        "project",
+        accountId.toString(),
+        token
       );
       if (!resArray) return toast.error(toastErrorMessages.uploadIssue);
       // ZT-NOTE: imagePayloadArray here prepared for going into DB
@@ -147,8 +149,6 @@ const Dashboard = () => {
     >
   ) => {
     setProjectPayload({ ...projectPayload, [e.target.name]: e.target.value });
-    // console.log(e.target.value);
-    // console.log(projectPayload);
   };
 
   const submitBtnClass = loading
@@ -157,7 +157,7 @@ const Dashboard = () => {
 
   return (
     <div className={styles.dashboard}>
-      <h1>Hello {loginUser.firstName || loginUser.email?.split("@")[0]}</h1>
+      <h1>Hello {firstName || email?.split("@")[0]}</h1>
       <p>Wanna post a new project today?</p>
       <form className={styles.projectForm} onSubmit={createProject}>
         <InputV1

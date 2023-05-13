@@ -3,13 +3,19 @@ import { toastErrorMessages } from "../data/constants";
 import { s3SecureUrlForDelete, s3SecureUrlForUpload } from "../api/aws";
 import { toast } from "react-toastify";
 
-interface IS3UploadPermissionRes {
+export interface IS3UploadPermissionRes {
   uploadUrl: string;
   urlOnS3: string;
   fileName: string;
 }
 
-export const uploadToS3 = async (filesArray: File[], filesFolder: string, category: string) => {
+export const uploadToS3 = async (
+  filesArray: File[],
+  filesFolder: string,
+  category: string,
+  accountId: string,
+  token: string
+) => {
   if (!filesArray.length) return;
   let resArray: IS3UploadPermissionRes[] = [];
 
@@ -20,7 +26,9 @@ export const uploadToS3 = async (filesArray: File[], filesFolder: string, catego
       const res: IS3UploadPermissionRes = await s3SecureUrlForUpload(
         fileType,
         filesFolder,
-        category
+        category,
+        accountId,
+        token
       );
       // ZT-NOTE:👻这里拿到for upload的presigned url之后，axios的返回结果为空，但是图片已经上传到s3了
       const { statusText } = await axios.put(res.uploadUrl, file);
@@ -35,7 +43,12 @@ export const uploadToS3 = async (filesArray: File[], filesFolder: string, catego
 };
 
 // This is prepared for the furture delete at project delete
-export const handleDelete = async () => {
-  const url = await s3SecureUrlForDelete("project-images/30221432cb17.jpg");
-  await axios.delete(url);
+export const handleDelete = async (
+  fileUrl: string,
+  accountId: string,
+  token: string
+) => {
+  const fileKey = fileUrl.split("amazonaws.com/")[1];
+  const res: string = await s3SecureUrlForDelete(fileKey, accountId, token);
+  await axios.delete(res);
 };

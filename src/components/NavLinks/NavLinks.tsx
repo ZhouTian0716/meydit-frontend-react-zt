@@ -67,7 +67,7 @@ const NavLinks = (props: IProps) => {
           <div className={styles.accountBtn}>
             <div className={styles.avatarContainer}>
               <img
-                src={profile?.avatar ? profile.avatar : defaultUser}
+                src={profile.avatar ? profile.avatar : defaultUser}
                 alt="UserIcon"
                 className={styles.avatar}
               />

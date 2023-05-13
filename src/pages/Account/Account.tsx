@@ -5,6 +5,7 @@ import { useAppSelector } from "../../redux/hooks";
 import { getAccount } from "../../redux/reducers/authSlice";
 import defaultUser from "../../../src/assets/img/defaultUser.png";
 import profileDeco from "../../../src/assets/img/decorations/profile.jpg";
+import ImageUpload from "../../components/Lib/ImageUpload/ImageUpload";
 
 const Account = () => {
   // Redux
@@ -41,19 +42,7 @@ const Account = () => {
         <div className={styles.inputRow}>
           <span className={styles.labelEl}>Avatar</span>
           <span>An avatar helps personalise your account</span>
-          <label className={styles.avatarContainer} htmlFor="setAvatar">
-            <img
-              className={styles.avatar}
-              src={profile?.avatar ? profile.avatar : defaultUser}
-              alt="myAvatar"
-            />
-          </label>
-          <input
-            type="file"
-            id="setAvatar"
-            className={styles.fileInputEl}
-            accept="image/*"
-          />
+          <ImageUpload defaultSrc={defaultUser} category="account" />
         </div>
         <div className={styles.inputRow}>
           <label className={styles.labelEl} htmlFor="Name">
@@ -63,16 +52,27 @@ const Account = () => {
             className={styles.inputEl}
             type="text"
             value={firstName ? firstName : "First Name"}
+            onChange={() => {}}
           />
           <input
             className={styles.inputEl}
             type="text"
             value={lastName ? lastName : "Last Name"}
+            onChange={() => {}}
           />
         </div>
         <div className={styles.inputRow}>
           <span className={styles.labelEl}>Email</span>
           <span className={styles.inputEl}>{email}</span>
+        </div>
+        <div className={styles.inputRow}>
+          <span className={styles.labelEl}>Biography</span>
+          <input
+            className={styles.inputEl}
+            type="text"
+            value={profile.bio ? profile.bio : "A bit about yourself"}
+            onChange={() => {}}
+          />
         </div>
       </div>
 
@@ -91,7 +91,9 @@ const Account = () => {
         </div>
       </div>
 
-      <Link to={`/account/${id}/projects`} className="navBtn">Manage my projects</Link>
+      <Link to={`/account/${id}/projects`} className="navBtn">
+        Manage my projects
+      </Link>
     </div>
   );
 };

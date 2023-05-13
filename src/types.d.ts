@@ -32,6 +32,11 @@ export interface ICreateAccount {
   lastName?: string;
 }
 
+export interface IUpdateProfile {
+  avatar?: string;
+  bio?: string;
+}
+
 export interface ICreateProject {
   title: string | null;
   startPrice: number | null;
