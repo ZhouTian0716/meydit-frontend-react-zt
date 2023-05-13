@@ -79,13 +79,11 @@ const Auth = () => {
             id: role.id,
             name: role.name,
           },
-          profile: profile
-            ? {
-                id: profile.id,
-                avatar: profile.avatar,
-                bio: profile.bio,
-              }
-            : null,
+          profile: {
+            id: profile.id,
+            avatar: profile.avatar,
+            bio: profile.bio,
+          },
         },
         token: res.token,
       };
