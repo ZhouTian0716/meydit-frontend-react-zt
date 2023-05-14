@@ -84,3 +84,18 @@ export interface IImage {
   url: string;
   fileName: string;
 }
+
+export interface IBid {
+  id: number;
+  price: number;
+  comment: string;
+  maker: {
+    avatar: string;
+    firstName: string | null;
+    lastName: string | null;
+    email: string;
+    rating: number;
+    address: string;
+  };
+  createdAt: string;
+}

@@ -9,21 +9,19 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation } from "swiper";
 import { IAccount } from "../../api/resTypes";
 
-interface ISlideProps {
+interface IProps {
   topAccounts?: IAccount[];
 }
 
-const Slide = (props: ISlideProps) => {
-  const { topAccounts } = props;
-
+const Slide = ({ topAccounts }: IProps) => {
   return (
     <>
-      <h2 className={styles.slideTitle}>Top Users</h2>
       <Swiper
         grabCursor={true}
         slidesPerView={1}
         spaceBetween={10}
         pagination={{
+          el: ".swiper-users-pagination",
           clickable: true,
         }}
         navigation={true}
@@ -50,6 +48,7 @@ const Slide = (props: ISlideProps) => {
           </SwiperSlide>
         ))}
       </Swiper>
+      <div className="swiper-users-pagination" />
     </>
   );
 };

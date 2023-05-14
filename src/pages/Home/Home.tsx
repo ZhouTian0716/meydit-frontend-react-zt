@@ -5,12 +5,10 @@ import Slide from "../../components/Slide/Slide";
 import { accountsIndex } from "../../api/accounts";
 import { IAccount } from "../../api/resTypes";
 
-
-
 const Home = () => {
   const firstMount = useRef(true);
   const [accounts, setAccounts] = useState<IAccount[]>([]);
-    const loadDatas = async () => {
+  const loadDatas = async () => {
     const accountsData = await accountsIndex();
     setAccounts(accountsData);
   };
@@ -23,8 +21,9 @@ const Home = () => {
   }, []);
   return (
     <div className={styles.home}>
-      <Landing />
-      <Slide topAccounts={accounts}/>
+      <Landing accounts={accounts} />
+      <h2 className={styles.slideTitle}>Top Users</h2>
+      <Slide topAccounts={accounts} />
     </div>
   );
 };

@@ -8,6 +8,9 @@ import { timeAgo } from "../../utils/formatters";
 import LoaderV1 from "../../components/Loader/LoaderV1";
 import defaultUser from "../../../src/assets/img/defaultUser.png";
 import { HiOutlineCalendar, HiOutlineLocationMarker } from "react-icons/hi";
+import ProjectCarousel from "../../components/Lib/Carousel/ProjectCarousel";
+import { Bids } from "../../data/constants";
+import BidCard from "../../components/Bid/BidCard";
 
 const Project = () => {
   const firstMount = useRef(true);
@@ -39,7 +42,10 @@ const Project = () => {
 
   return project && ownerProfile ? (
     <div className={styles.projectPage}>
-      <h2 className={styles.title}>Posted by</h2>
+      <h2 className={styles.title}>
+        <span>{project.title}</span>
+        <span>From {project.startPrice}$</span>
+      </h2>
       <div className={`${styles.flexRow} ${styles.alignCenter}`}>
         <div className={styles.avatarContainer}>
           <img
@@ -66,6 +72,30 @@ const Project = () => {
       <h2 className={styles.title}>Description</h2>
       <p className={styles.description}>{project.description}</p>
       <h2 className={styles.textCenter}>Samples</h2>
+      <ProjectCarousel images={project.images} />
+      {project.tags.length && (
+        <>
+          <h2 className={styles.title}>Required Skills</h2>
+          <div className={styles.tags}>
+            {project.tags.map((tag) => (
+              <span key={tag.id} className={styles.tag}>
+                {tag.name}
+              </span>
+            ))}
+          </div>
+        </>
+      )}
+
+      <button className={styles.bidBtn}>SUBMIT BID</button>
+
+      {Bids.length && (
+        <>
+          <h2 className={styles.title}>Submitted Bids ({Bids.length})</h2>
+          {Bids.map((bid) => (
+            <BidCard bid={bid} />
+          ))}
+        </>
+      )}
     </div>
   ) : (
     <LoaderV1 height={"200"} width={"200"} wrapperClass="pageLoader" />

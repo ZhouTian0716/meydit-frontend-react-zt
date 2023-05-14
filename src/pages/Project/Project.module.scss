@@ -1,8 +1,5 @@
 @use "../../scss/variables" as *;
 
-// @include media-tablet-sm {
-//     display: none;
-//   }
 $gapOnMobile: 0.5rem;
 $gapOnPC: 1rem;
 
@@ -40,6 +37,8 @@ $gapOnPC: 1rem;
 
 .title {
   color: $text-secondary;
+  display: flex;
+  justify-content: space-between;
 }
 
 .flexRow {
@@ -63,7 +62,38 @@ $gapOnPC: 1rem;
   align-items: center;
 }
 
-.textCenter{
+.textCenter {
   text-align: center;
   color: $text-secondary;
+}
+
+.tags {
+  display: flex;
+  gap: 0.5rem;
+  .tag {
+    background: $theme-main;
+    padding: 0.2em 0.5em;
+    color: #ffffff;
+    font-weight: 300;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
+    &:hover {
+      background: $theme-main-hover;
+    }
+  }
+}
+
+.bidBtn{
+  background: rgb(192, 86, 104);
+  padding: 1em 2em;
+  color: #ffffff;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+  align-self: center;
+  &:hover {
+    background: rgb(226, 107, 127);
+  }
 }

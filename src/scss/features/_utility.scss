@@ -1,5 +1,7 @@
 @use "../variables/" as *;
 
+$swiper-dot-size: 10px;
+
 .flex {
   display: flex;
   gap: var(--gap, 1rem);
@@ -84,4 +86,16 @@
   align-items: center;
   justify-content: center;
   min-height: 80vh;
+}
+
+.swiper-users-pagination {
+  display: flex;
+  justify-content: center;
+  padding-top: $swiper-dot-size;
+}
+
+.swiper-pagination-bullet {
+  background-color: $theme-main;
+  width: $swiper-dot-size;
+  height: $swiper-dot-size;
 }
