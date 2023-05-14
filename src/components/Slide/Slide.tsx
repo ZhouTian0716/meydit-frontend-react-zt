@@ -1,5 +1,4 @@
 import styles from "./Slide.module.scss";
-import { ITopMaker } from "../../types";
 import SlideCard from "../SlideCard/SlideCard";
 // Import Swiper React Related
 import "swiper/css";
@@ -8,17 +7,18 @@ import "swiper/css/navigation";
 // import required modules
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation } from "swiper";
+import { IAccount } from "../../api/resTypes";
 
 interface ISlideProps {
-  topMakers?: ITopMaker[] | null;
+  topAccounts?: IAccount[];
 }
 
 const Slide = (props: ISlideProps) => {
-  const { topMakers } = props;
+  const { topAccounts } = props;
 
   return (
     <>
-      <h2 className={styles.slideTitle}>Top Makers</h2>
+      <h2 className={styles.slideTitle}>Top Users</h2>
       <Swiper
         grabCursor={true}
         slidesPerView={1}
@@ -44,9 +44,9 @@ const Slide = (props: ISlideProps) => {
         modules={[Pagination, Navigation]}
         className="mySwiper"
       >
-        {topMakers?.map((e: ITopMaker) => (
+        {topAccounts?.map((e: IAccount) => (
           <SwiperSlide key={e.id}>
-            <SlideCard item={e} />
+            <SlideCard account={e} />
           </SwiperSlide>
         ))}
       </Swiper>
@@ -57,5 +57,5 @@ const Slide = (props: ISlideProps) => {
 export default Slide;
 
 Slide.defaultProps = {
-  topMakers: null,
+  topUsers: [],
 };

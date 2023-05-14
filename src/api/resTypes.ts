@@ -3,7 +3,7 @@ export interface ILoginRes {
   token: IToken;
 }
 
-interface IAccount {
+export interface IAccount {
   id: number;
   firstName: string | null;
   lastName: string | null;
@@ -26,6 +26,32 @@ export interface IProfile {
   updatedAt?: Date;
 }
 
+export interface IProject {
+  id: number;
+  slug: string;
+  title: string;
+  description: string;
+  startPrice: number;
+  client: {
+    id: number;
+    firstName: string | null;
+    lastName: string | null;
+    email: string;
+  };
+  maker: {
+    id: number;
+    firstName: string | null;
+    lastName: string | null;
+    email: string;
+  };
+  category: ICategory;
+  status: IStatus;
+  images: IImage[];
+  tags: ITag[] | [];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 interface IToken {
   type: string;
   token: string;
@@ -46,4 +72,15 @@ export interface ICategory {
 export interface ITag {
   id: number;
   name: string;
+}
+
+export interface IStatus {
+  id: number;
+  name: string;
+}
+
+export interface IImage {
+  id: number;
+  url: string;
+  fileName: string;
 }

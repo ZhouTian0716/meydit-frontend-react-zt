@@ -1,14 +1,30 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "./Home.module.scss";
 import Landing from "../../components/Landing/Landing";
 import Slide from "../../components/Slide/Slide";
-import {topMakers} from "../../data/topMakers";
+import { accountsIndex } from "../../api/accounts";
+import { IAccount } from "../../api/resTypes";
+
+
 
 const Home = () => {
+  const firstMount = useRef(true);
+  const [accounts, setAccounts] = useState<IAccount[]>([]);
+    const loadDatas = async () => {
+    const accountsData = await accountsIndex();
+    setAccounts(accountsData);
+  };
+
+  useEffect(() => {
+    firstMount.current && loadDatas();
+    return () => {
+      firstMount.current = false;
+    };
+  }, []);
   return (
     <div className={styles.home}>
       <Landing />
-      <Slide topMakers={topMakers}/>
+      <Slide topAccounts={accounts}/>
     </div>
   );
 };

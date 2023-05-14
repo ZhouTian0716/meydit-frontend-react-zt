@@ -1,0 +1,69 @@
+@use "../../scss/variables" as *;
+
+// @include media-tablet-sm {
+//     display: none;
+//   }
+$gapOnMobile: 0.5rem;
+$gapOnPC: 1rem;
+
+.projectPage {
+  margin: $gapOnPC;
+  padding: $gapOnPC;
+  border-radius: 5px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: $gapOnPC;
+  @include media-tablet-sm {
+    margin: $gapOnMobile;
+    padding: $gapOnMobile;
+    gap: $gapOnMobile;
+  }
+}
+
+.avatarContainer {
+  width: 80px;
+  aspect-ratio: 1;
+  overflow: hidden;
+  justify-self: flex-end;
+  @include media-tablet-sm {
+    width: 60px;
+  }
+  .avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 50%;
+  }
+}
+
+.title {
+  color: $text-secondary;
+}
+
+.flexRow {
+  display: flex;
+  gap: $gapOnPC;
+  @include media-tablet-sm {
+    gap: $gapOnMobile;
+  }
+}
+
+.clientName {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.content {
+  font-size: 1.2rem;
+}
+
+.alignCenter {
+  align-items: center;
+}
+
+.textCenter{
+  text-align: center;
+  color: $text-secondary;
+}
