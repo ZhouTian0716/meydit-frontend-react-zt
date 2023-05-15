@@ -18,7 +18,7 @@ const Setting = () => {
       <p className={styles.colorSecondary}>
         Hi {firstName || email}, customise your account & profile here
       </p>
-      <div className={styles.flexRow}>
+      <div className={styles.pageHeader}>
         <div>
           <h2 className="pb-1">Your profile info in Meydit services</h2>
           <p className={styles.colorSecondary}>
@@ -81,6 +81,10 @@ const Setting = () => {
         <p className={styles.colorSecondary}>
           Save your addresses to make delivery easier
         </p>
+        <div>
+          <label htmlFor="No.">Type here for auto complete address</label>
+          <input type="text" placeholder="search"/>
+        </div>
         <div>
           <label htmlFor="No.">No.</label>
           <input type="text" />

@@ -85,7 +85,7 @@ const NavLinks = (props: IProps) => {
                   My Projects
                 </Link>
                 <Link to="/dashboard/clients" className={styles.option}>
-                  Create Project
+                  Post Project
                 </Link>
               </>
             )}
