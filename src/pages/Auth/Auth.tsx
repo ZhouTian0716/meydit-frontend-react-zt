@@ -89,7 +89,7 @@ const Auth = () => {
       };
       // console.log("checking", actionPayload);
       dispatch(logUserIn(actionPayload));
-      const from = location.state?.from?.pathname || `/account/${id}`;
+      const from = location.state?.from?.pathname || `/settings/${id}`;
       navigate(from, { replace: true });
     } catch (err: any) {
       const errorMsg = err?.response?.data?.message;
