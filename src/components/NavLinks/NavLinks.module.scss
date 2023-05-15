@@ -23,7 +23,7 @@
       position: absolute;
       right: 0;
       overflow: hidden;
-      width: 100px;
+      width: fit-content;
       background-color: white;
       border: 1px solid $border;
       border-radius: 5px;
@@ -35,10 +35,12 @@
       &.active {
         display: flex;
         flex-direction: column;
+        flex-wrap: nowrap;
       }
       .option {
         display: block;
-        font-size: 0.8em;
+        font-size: 1.1em;
+        white-space: nowrap;
         font-weight: 300;
         padding: 0.3em 0.5em;
         background-color: transparent;
@@ -83,7 +85,7 @@
 
 .avatarContainer {
   aspect-ratio: 1;
-  width: 2rem;
+  width: 3rem;
   overflow: hidden;
   border-radius: 50%;
   .avatar {

@@ -34,12 +34,19 @@
   width: 200px;
   object-fit: cover;
   object-position: center;
+  @include media-mobile-lg {
+    width: 300px;
+  }
 }
 
-.flexRow {
+.pageHeader {
   display: flex;
   gap: 2rem;
   align-items: center;
+  @include media-mobile-lg {
+    flex-direction: column;
+    gap: 1rem;
+  }
 }
 
 .inputRow {
