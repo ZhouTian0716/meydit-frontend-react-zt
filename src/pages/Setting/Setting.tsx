@@ -6,6 +6,7 @@ import { getAccount } from "../../redux/reducers/authSlice";
 import defaultUser from "../../../src/assets/img/defaultUser.png";
 import profileDeco from "../../../src/assets/img/decorations/profile.jpg";
 import ImageUpload from "../../components/Lib/ImageUpload/ImageUpload";
+import InputAddress from "../../components/Lib/Inputs/InputAddress/InputAddress";
 
 const Setting = () => {
   // Redux
@@ -83,15 +84,7 @@ const Setting = () => {
         </p>
         <div>
           <label htmlFor="No.">Type here for auto complete address</label>
-          <input type="text" placeholder="search"/>
-        </div>
-        <div>
-          <label htmlFor="No.">No.</label>
-          <input type="text" />
-        </div>
-        <div>
-          <label htmlFor="Street">Street</label>
-          <input type="text" />
+          <InputAddress />
         </div>
       </div>
 
