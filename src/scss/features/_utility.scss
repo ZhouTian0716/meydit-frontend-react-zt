@@ -2,6 +2,10 @@
 
 $swiper-dot-size: 10px;
 
+.positionWrapper {
+  position: relative;
+}
+
 .flex {
   display: flex;
   gap: var(--gap, 1rem);
@@ -88,6 +92,7 @@ $swiper-dot-size: 10px;
   min-height: 80vh;
 }
 
+// ZT-NOTE: Swiper
 .swiper-users-pagination {
   display: flex;
   justify-content: center;

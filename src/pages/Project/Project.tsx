@@ -11,12 +11,16 @@ import { HiOutlineCalendar, HiOutlineLocationMarker } from "react-icons/hi";
 import ProjectCarousel from "../../components/Lib/Carousel/ProjectCarousel";
 import { Bids } from "../../data/constants";
 import BidCard from "../../components/Bid/BidCard";
+import { toggleBidModal } from "../../redux/reducers/uiSlice";
+import { useAppDispatch } from "../../redux/hooks";
 
 const Project = () => {
   const firstMount = useRef(true);
   const { slug } = useParams();
   const [project, setProject] = useState<IProject | null>(null);
   const [ownerProfile, setOwnerProfile] = useState<IProfile | null>(null);
+
+  const dispatch = useAppDispatch();
 
   const loadProject = async () => {
     if (!slug) return;
@@ -86,13 +90,18 @@ const Project = () => {
         </>
       )}
 
-      <button className={styles.bidBtn}>SUBMIT BID</button>
+      <button
+        className={styles.bidBtn}
+        onClick={() => dispatch(toggleBidModal())}
+      >
+        SUBMIT BID
+      </button>
 
       {Bids.length && (
         <>
           <h2 className={styles.title}>Submitted Bids ({Bids.length})</h2>
           {Bids.map((bid) => (
-            <BidCard bid={bid} />
+            <BidCard bid={bid} key={bid.id} />
           ))}
         </>
       )}

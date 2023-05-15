@@ -84,7 +84,7 @@ $gapOnPC: 1rem;
   }
 }
 
-.bidBtn{
+.bidBtn {
   background: rgb(192, 86, 104);
   padding: 1em 2em;
   color: #ffffff;
@@ -96,4 +96,8 @@ $gapOnPC: 1rem;
   &:hover {
     background: rgb(226, 107, 127);
   }
+}
+
+.description {
+  text-align: justify;
 }

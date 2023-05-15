@@ -12,7 +12,7 @@
   justify-content: space-between;
   align-items: center;
   transition: all 0.3s linear;
-  z-index: 999;
+  z-index: 100;
   &.active {
     position: sticky;
     background-color: $theme-main;

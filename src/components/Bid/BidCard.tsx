@@ -1,8 +1,8 @@
 import React from "react";
 import styles from "./BidCard.module.scss";
 import { IBid } from "../../api/resTypes";
-import Ratings from "../Lib/Ratings/Ratings";
 import { HiOutlineLocationMarker } from "react-icons/hi";
+import { FaStar } from "react-icons/fa";
 
 interface IProps {
   bid: IBid;
@@ -23,15 +23,19 @@ const BidCard = ({ bid }: IProps) => {
           </div>
           <div className={styles.flexCol}>
             <p>
-              <span>{makerName}</span>
-              <Ratings rate={maker.rating} />
+              <span className="mr-1">{makerName}</span>
+              <span>
+                {[...Array(5)].map((e, i) => (
+                  <FaStar key={i} color={i < maker.rating ? "#8460c3" : "pink"} />
+                ))}
+              </span>
             </p>
             <p>
-              <span>
+              <span className="mr-1">
                 <HiOutlineLocationMarker color="#8460c3" />
                 {maker.address}
               </span>
-              <span>{createdAt}</span>
+              <small>{createdAt}</small>
             </p>
           </div>
         </div>
