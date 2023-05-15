@@ -102,7 +102,7 @@ const NavLinks = (props: IProps) => {
             <Link to="/messages" className={styles.option}>
               Messages
             </Link>
-            <Link to={`/account/${id}`} className={styles.option}>
+            <Link to={`/setting/${id}`} className={styles.option}>
               Settings
             </Link>
             <button className={styles.option} onClick={onLogout}>

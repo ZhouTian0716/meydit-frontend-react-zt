@@ -8,5 +8,6 @@ export interface IAuthState extends ILoginRes {
 // uiSlice.ts
 export interface IUiState {
   bottomNav: boolean;
+  bidModal: boolean;
   theme: string;
 }

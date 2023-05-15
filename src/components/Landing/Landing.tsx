@@ -4,33 +4,24 @@ import searchIcon from "../../../src/assets/img/search.png";
 import phoneImg from "../../../src/assets/img/top-img.png";
 import demoVideo from "../../../src/assets/video/video-light-meydit.mp4";
 import { accountsIndex } from "../../api/accounts";
-import { IAccount } from "../../types";
+
 import { projectsIndex } from "../../api/projects";
 import { Link } from "react-router-dom";
+import { IAccount } from "../../api/resTypes";
 
-const Landing = () => {
-  const firstMount = useRef(true);
-  const [accounts, setAccounts] = useState([]);
-  const [projects, setProjects] = useState([]);
+interface IProps {
+  accounts: IAccount[];
+}
+
+const Landing = ({accounts}:IProps) => {
+
   const clientNum = accounts.filter(
     (account: IAccount) => account.role.name === "Client"
   ).length;
   const makerNum = accounts.filter(
     (account: IAccount) => account.role.name === "Maker"
   ).length;
-  const loadDatas = async () => {
-    const accountsData = await accountsIndex();
-    const res = await projectsIndex();
-    const projectsData = res.data;
-    setAccounts(accountsData);
-    setProjects(projectsData);
-  };
-  useEffect(() => {
-    firstMount.current && loadDatas();
-    return () => {
-      firstMount.current = false;
-    };
-  }, []);
+
 
   const handleSearch = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -44,7 +35,6 @@ const Landing = () => {
         <p>
           <span className="fz-9 mr-1">Clients: {clientNum}</span>
           <span className="fz-9 mr-1">Makers: {makerNum}</span>
-          <span className="fz-9">Projects: {projects.length}</span>
         </p>
         <h1>Fashion made especially for you.</h1>
         <p>

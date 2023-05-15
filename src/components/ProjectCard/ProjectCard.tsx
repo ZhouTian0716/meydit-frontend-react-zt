@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 const ProjectCard = (props: IProjectCardProps) => {
   const {
     id,
+    slug,
     title,
     images,
     createdAt,
@@ -60,7 +61,7 @@ const ProjectCard = (props: IProjectCardProps) => {
       {/* <p>{description}</p> */}
       <p className={styles.description}>
         {formattedDesc}{" "}
-        <Link to={`/projects/${id}`}>
+        <Link to={`/projects/${slug}`}>
           <span className={styles.projectLink}>More →</span>
         </Link>
       </p>

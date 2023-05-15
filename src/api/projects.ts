@@ -13,6 +13,11 @@ export const projectsIndex = async (
   return res.data;
 };
 
+export const projectShow= async (slug:string) => {
+  const res = await axios.get(`${apiAddress}/api/projects/${slug}`);
+  return res.data;
+};
+
 export const projectsByAccount = async (accountId:string) => {
   const res = await axios.get(`${apiAddress}/api/accounts/${accountId}/projects`);
   return res.data;

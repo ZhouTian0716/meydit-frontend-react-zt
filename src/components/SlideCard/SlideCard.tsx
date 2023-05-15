@@ -1,20 +1,26 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styles from "./SlideCard.module.scss";
-import { ITopMaker } from "../../types";
+import { IAccount } from "../../api/resTypes";
+import defaultUser from "../../../src/assets/img/defaultUser.png";
 
-interface ISlideCardProps {
-  item: ITopMaker;
+interface IProps {
+  account: IAccount;
 }
 
-const SlideCard = ({ item }: ISlideCardProps) => {
+const SlideCard = ({ account }: IProps) => {
+  const { id, firstName, email, profile } = account;
   return (
-    <Link to={`maker-atelier/${item.id}`}>
+    <Link to={`user/${id}`}>
       <div className={styles.makerCard}>
-        <img src={item.avatar} alt={item.id} className={styles.makerImg} />
+        <img
+          src={profile.avatar ? profile.avatar : defaultUser}
+          alt={"user"}
+          className={styles.makerImg}
+        />
         <div className={styles.makerInfo}>
-          <p className={styles.makerName}>{item.name}</p>
-          <p className={styles.makerBio}>{item.bio}</p>
+          <p className={styles.makerName}>{firstName ? firstName : email}</p>
+          <p className={styles.makerBio}>{profile.bio}</p>
         </div>
       </div>
     </Link>
@@ -22,3 +28,4 @@ const SlideCard = ({ item }: ISlideCardProps) => {
 };
 
 export default SlideCard;
+

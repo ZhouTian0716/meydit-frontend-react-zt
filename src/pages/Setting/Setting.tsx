@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "./Account.module.scss";
+import styles from "./Setting.module.scss";
 import { Link } from "react-router-dom";
 import { useAppSelector } from "../../redux/hooks";
 import { getAccount } from "../../redux/reducers/authSlice";
@@ -7,13 +7,13 @@ import defaultUser from "../../../src/assets/img/defaultUser.png";
 import profileDeco from "../../../src/assets/img/decorations/profile.jpg";
 import ImageUpload from "../../components/Lib/ImageUpload/ImageUpload";
 
-const Account = () => {
+const Setting = () => {
   // Redux
   const loginUser = useAppSelector(getAccount);
   const { id, firstName, lastName, email, role, profile } = loginUser;
 
   return (
-    <div className={styles.accountPage}>
+    <div className={styles.settingPage}>
       <h2>Account settings</h2>
       <p className={styles.colorSecondary}>
         Hi {firstName || email}, customise your account & profile here
@@ -98,4 +98,4 @@ const Account = () => {
   );
 };
 
-export default Account;
+export default Setting;

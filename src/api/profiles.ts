@@ -18,3 +18,8 @@ export const profilesUpdate = async (
   );
   return res.data;
 };
+
+export const profileShow = async (accountId:string) => {
+  const res = await axios.get(`${apiAddress}/api/profiles/${accountId}`);
+  return res.data;
+};
