@@ -33,7 +33,7 @@ const BidModal = () => {
     setPrice(parseInt(e.target.value));
   };
 
-  const onCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setComment(e.target.value);
   };
 
