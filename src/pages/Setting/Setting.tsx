@@ -6,6 +6,7 @@ import { getAccount } from "../../redux/reducers/authSlice";
 import defaultUser from "../../../src/assets/img/defaultUser.png";
 import profileDeco from "../../../src/assets/img/decorations/profile.jpg";
 import ImageUpload from "../../components/Lib/ImageUpload/ImageUpload";
+import AutoAddress from "../../components/Lib/Inputs/AutoAddress/AutoAddress";
 
 const Setting = () => {
   // Redux
@@ -77,22 +78,7 @@ const Setting = () => {
       </div>
 
       <div className={styles.section}>
-        <h2>Addresses (WIP)</h2>
-        <p className={styles.colorSecondary}>
-          Save your addresses to make delivery easier
-        </p>
-        <div>
-          <label htmlFor="No.">Type here for auto complete address</label>
-          <input type="text" placeholder="search"/>
-        </div>
-        <div>
-          <label htmlFor="No.">No.</label>
-          <input type="text" />
-        </div>
-        <div>
-          <label htmlFor="Street">Street</label>
-          <input type="text" />
-        </div>
+        <AutoAddress />
       </div>
 
       <Link to={`/account/${id}/projects`} className="navBtn">

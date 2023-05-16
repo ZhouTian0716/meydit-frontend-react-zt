@@ -1,5 +1,5 @@
+import React, { useEffect, useRef } from "react";
 import { Route, Routes } from "react-router-dom";
-import React from "react";
 import Home from "./pages/Home/Home";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Auth from "./pages/Auth/Auth";
@@ -21,7 +21,10 @@ import BidModal from "./components/Lib/Modal/BidModal";
 import { useAppSelector } from "./redux/hooks";
 import { isBidModal } from "./redux/reducers/uiSlice";
 
+
+
 function App() {
+  
   const bidModalOpen = useAppSelector(isBidModal);
   return (
     <div className="positionWrapper">
@@ -40,6 +43,8 @@ function App() {
           <Route path="messages" element={<Messages />} />
           <Route path="unauthorized" element={<Unauthorized />} />
           <Route path="*" element={<NotFound />} />
+          {/* 下面这行暂时开通 */}
+          <Route path="settings/:accountId" element={<Setting />} />
           <Route element={<ProtectedRoutes />}>
             <Route path="settings/:accountId" element={<Setting />} />
           </Route>

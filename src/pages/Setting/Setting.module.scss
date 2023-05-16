@@ -10,6 +10,7 @@
   max-width: 900px;
   padding: 1rem;
   .section {
+    position: relative;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -28,7 +29,6 @@
     }
   }
 }
-
 
 .profileDeco {
   width: 200px;
@@ -64,3 +64,5 @@
 .fileInputEl {
   display: none;
 }
+
+
