@@ -102,7 +102,6 @@ const AutoAddress = () => {
         <AiFillSave />
       </button>
       <h2>Addresses</h2>
-      <p>Type here for auto complete address</p>
       <div className={styles.searchInputBox}>
         <TbMapSearch />
         <input
