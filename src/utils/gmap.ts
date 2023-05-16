@@ -20,7 +20,7 @@ export const initMapScript = () => {
   if (window.google) {
     return Promise.resolve();
   }
-  const src = `${mapApiJs}?key=${apiKey}&libraries=places&v=weekly`;
+  const src = `${mapApiJs}?key=${apiKey}&libraries=places&v=weekly&callback=Function.prototype`;
   return loadAsyncScript(src);
 };
 
