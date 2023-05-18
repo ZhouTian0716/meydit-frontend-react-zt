@@ -1,0 +1,28 @@
+@use "../../scss/variables" as *;
+
+.list {
+  list-style-type: numbers;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  li {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    font-size: 0.9em;
+    button {
+      background-color: transparent;
+    }
+    .deleteBtn {
+      margin-left: auto;
+    }
+  }
+
+  li::before {
+    content: counter(list-item) ". ";
+    counter-increment: list-item;
+    width: 1ch; /* Adjust the width as needed */
+    text-align: right;
+    margin-right: 5px; /* Adjust the margin as needed */
+  }
+}

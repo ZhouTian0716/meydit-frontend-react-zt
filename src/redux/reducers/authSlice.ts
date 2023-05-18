@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IAuthState } from "./types";
 import { RootState } from "../store";
-import { ILoginRes, IProfile } from "../../api/resTypes";
+import { IAddress, ILoginRes, IProfile } from "../../api/resTypes";
+import { IUpdateAddress } from "../../api/payloadTypes";
 
 const initialState: IAuthState = {
   account: {
@@ -18,6 +19,7 @@ const initialState: IAuthState = {
       bio: null,
       avatar: null,
     },
+    addresses: [],
   },
   token: {
     type: "",
@@ -46,14 +48,43 @@ export const authSlice = createSlice({
     updateProfile: (state, action: PayloadAction<IProfile>) => {
       state.account.profile = action.payload;
     },
+    updatePrimaryAddress: (
+      state,
+      action: PayloadAction<{ selectedId: number }>
+    ) => {
+      state.account.addresses.forEach((address) => {
+        address.id === action.payload.selectedId
+          ? (address.isPrimary = true)
+          : (address.isPrimary = false);
+      });
+    },
+    addAddressToState: (state, action: PayloadAction<IAddress>) => {
+      state.account.addresses.push(action.payload);
+    },
+    removeAddressFromState: (
+      state,
+      action: PayloadAction<{ selectedId: number }>
+    ) => {
+      state.account.addresses = state.account.addresses.filter(
+        (address) => address.id !== action.payload.selectedId
+      );
+    },
   },
 });
 
 // ZT-NOTE: Action creators exports
-export const { logUserIn, logUserOut,updateProfile } = authSlice.actions;
+export const {
+  logUserIn,
+  logUserOut,
+  updateProfile,
+  updatePrimaryAddress,
+  addAddressToState,
+  removeAddressFromState,
+} = authSlice.actions;
 
 // ZT-NOTE: Selector funtions exports for multiple react components to use
 export const getAccount = (state: RootState) => state.auth.account;
+export const getAddresses = (state: RootState) => state.auth.account.addresses;
 export const getToken = (state: RootState) => state.auth.token;
 // export const getAuthStatus = (state: RootState) => state.auth.status;
 // export const getAuthError = (state: RootState) => state.auth.error;

@@ -7,11 +7,16 @@ import defaultUser from "../../../src/assets/img/defaultUser.png";
 import profileDeco from "../../../src/assets/img/decorations/profile.jpg";
 import ImageUpload from "../../components/Lib/ImageUpload/ImageUpload";
 import AutoAddress from "../../components/Lib/Inputs/AutoAddress/AutoAddress";
+import { Roles } from "../../data/constants";
+import AddressList from "../../components/AddressList/AddressList";
 
 const Setting = () => {
   // Redux
   const loginUser = useAppSelector(getAccount);
-  const { id, firstName, lastName, email, role, profile } = loginUser;
+  const { id, firstName, lastName, email, role, profile, addresses } =
+    loginUser;
+  const isClient = role.id === Roles.CLIENT;
+  const isMaker = role.id === Roles.MAKER;
 
   return (
     <div className={styles.settingPage}>
@@ -79,11 +84,19 @@ const Setting = () => {
 
       <div className={styles.section}>
         <AutoAddress />
+        <AddressList addresses={addresses} />
       </div>
 
-      <Link to={`/account/${id}/projects`} className="navBtn">
-        Manage my projects
-      </Link>
+      {isClient && (
+        <Link to={`/account/${id}/projects`} className="navBtn">
+          Manage my projects
+        </Link>
+      )}
+      {isMaker && (
+        <Link to={`/account/${id}/projects`} className="navBtn">
+          My demo page
+        </Link>
+      )}
     </div>
   );
 };

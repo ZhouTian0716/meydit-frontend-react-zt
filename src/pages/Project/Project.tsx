@@ -1,35 +1,29 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./Project.module.scss";
 import { useParams } from "react-router-dom";
-import { IProfile, IProject } from "../../api/resTypes";
+import { IProject } from "../../api/resTypes";
 import { projectShow } from "../../api/projects";
-import { profileShow } from "../../api/profiles";
 import { timeAgo } from "../../utils/formatters";
 import LoaderV1 from "../../components/Loader/LoaderV1";
-import defaultUser from "../../../src/assets/img/defaultUser.png";
+import defaultUser from "../../assets/img/defaultUser.png";
 import { HiOutlineCalendar, HiOutlineLocationMarker } from "react-icons/hi";
 import ProjectCarousel from "../../components/Lib/Carousel/ProjectCarousel";
-import { Bids } from "../../data/constants";
 import BidCard from "../../components/Bid/BidCard";
 import { toggleBidModal } from "../../redux/reducers/uiSlice";
 import { useAppDispatch } from "../../redux/hooks";
+import { getPrimaryAddress } from "../../utils/helpers";
 
 const Project = () => {
   const firstMount = useRef(true);
   const { slug } = useParams();
   const [project, setProject] = useState<IProject | null>(null);
-  const [ownerProfile, setOwnerProfile] = useState<IProfile | null>(null);
 
   const dispatch = useAppDispatch();
 
   const loadProject = async () => {
     if (!slug) return;
-    const projectData: IProject = await projectShow(slug);
+    const projectData = await projectShow(slug);
     setProject(projectData);
-    const ownerProfileData: IProfile = await profileShow(
-      projectData.client.id.toString()
-    );
-    setOwnerProfile(ownerProfileData);
   };
 
   useEffect(() => {
@@ -44,7 +38,11 @@ const Project = () => {
     ? `${project.client.firstName} ${project.client.lastName}`
     : project?.client.email;
 
-  return project && ownerProfile ? (
+  const clientAvatarSrc = project?.client.profile.avatar
+    ? project.client.profile.avatar
+    : defaultUser;
+
+  return project ? (
     <div className={styles.projectPage}>
       <h2 className={styles.title}>
         <span>{project.title}</span>
@@ -54,7 +52,7 @@ const Project = () => {
         <div className={styles.avatarContainer}>
           <img
             className={styles.avatar}
-            src={ownerProfile.avatar ? ownerProfile.avatar : defaultUser}
+            src={clientAvatarSrc}
             alt={"ownerAvatar"}
           />
         </div>
@@ -66,7 +64,7 @@ const Project = () => {
       <h2 className={styles.title}>Location</h2>
       <p className={styles.content}>
         <HiOutlineLocationMarker color="#8460c3" />
-        Double Bay, NSW , Sydney
+        {getPrimaryAddress(project.client.addresses)}
       </p>
       <h2 className={styles.title}>Due Date</h2>
       <p className={styles.content}>
@@ -97,10 +95,10 @@ const Project = () => {
         SUBMIT BID
       </button>
 
-      {Bids.length && (
+      {project.bids.length && (
         <>
-          <h2 className={styles.title}>Submitted Bids ({Bids.length})</h2>
-          {Bids.map((bid) => (
+          <h2 className={styles.title}>Submitted Bids ({project.bids.length})</h2>
+          {project.bids.map((bid) => (
             <BidCard bid={bid} key={bid.id} />
           ))}
         </>

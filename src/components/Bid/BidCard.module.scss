@@ -26,7 +26,7 @@
 .flexCol {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 5px;
 }
 
 .flexBetween {
@@ -45,4 +45,9 @@
   font-size: 1.2rem;
   font-weight: bold;
   color: $theme-main;
+}
+
+.smallText {
+  color:$text-secondary;
+  font-size: 0.8rem;
 }
