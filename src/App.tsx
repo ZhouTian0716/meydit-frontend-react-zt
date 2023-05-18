@@ -44,7 +44,7 @@ function App() {
           <Route path="unauthorized" element={<Unauthorized />} />
           <Route path="*" element={<NotFound />} />
           {/* 下面这行暂时开通 */}
-          <Route path="settings/:accountId" element={<Setting />} />
+          {/* <Route path="settings/:accountId" element={<Setting />} /> */}
           <Route element={<ProtectedRoutes />}>
             <Route path="settings/:accountId" element={<Setting />} />
           </Route>
