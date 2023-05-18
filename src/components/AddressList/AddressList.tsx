@@ -11,6 +11,7 @@ import {
 import { addressDestroy, addressUpdate } from "../../api/addresses";
 import { ThreeCircles } from "react-loader-spinner";
 import { MdDeleteForever } from "react-icons/md";
+import useSwipe from "../../hooks/useSwipe";
 
 interface IProps {
   addresses: IAddress[];
@@ -24,6 +25,7 @@ const AddressList = ({ addresses }: IProps) => {
   const { token } = useAppSelector(getToken);
   const dispatch = useAppDispatch();
   const [isChanging, setIsChanging] = useState(false);
+  const [translate, setTranslate] = useState(false);
 
   const setPrimary = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -43,10 +45,8 @@ const AddressList = ({ addresses }: IProps) => {
   };
 
   const deleteSelected = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    console.log("what happened");
     const target = e.target as HTMLElement;
     const selectedId = target.dataset.addressId;
-    console.log(target.dataset);
     if (!selectedId) return;
     setIsChanging(true);
     try {
@@ -58,6 +58,20 @@ const AddressList = ({ addresses }: IProps) => {
       setIsChanging(false);
     }
   };
+
+  const onAddressSwipeLeft = (e: React.TouchEvent<Element>) => {
+    const targetElement = e.currentTarget;
+    // const addressId = targetElement.getAttribute("data-address-id");
+    e.currentTarget.classList.add(`${styles.moveLeft}`);
+    setTimeout(() => {
+      targetElement.classList.remove(`${styles.moveLeft}`);
+    }, 2000);
+  };
+
+  const swipeHandlers = useSwipe({
+    onSwipedLeft: onAddressSwipeLeft,
+    onSwipedRight: () => {},
+  });
 
   const content = isChanging ? (
     <ThreeCircles
@@ -71,7 +85,7 @@ const AddressList = ({ addresses }: IProps) => {
   ) : (
     <ul className={styles.list}>
       {addresses.map((address, i) => (
-        <li key={address.id}>
+        <li key={address.id} data-address-id={address.id} {...swipeHandlers}>
           <button
             type="button"
             onClick={setPrimary}
@@ -88,7 +102,7 @@ const AddressList = ({ addresses }: IProps) => {
           >
             <MdDeleteForever
               fontSize={"1.5em"}
-              color="orange"
+              color="red"
               pointerEvents="none"
             />
           </button>

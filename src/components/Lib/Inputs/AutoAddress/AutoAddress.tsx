@@ -9,11 +9,14 @@ import {
   IAutoAddress,
   extractAddress,
 } from "../../../../utils/gmap";
-import { AiFillSave } from "react-icons/ai";
+import { AiFillSave, AiOutlineClear } from "react-icons/ai";
 import { ThreeCircles } from "react-loader-spinner";
 import { isObjectEmpty } from "../../../../utils/helpers";
 import { addressStore } from "../../../../api/addresses";
-import { addAddressToState, getToken } from "../../../../redux/reducers/authSlice";
+import {
+  addAddressToState,
+  getToken,
+} from "../../../../redux/reducers/authSlice";
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
 
 const AutoAddress = () => {
@@ -99,13 +102,13 @@ const AutoAddress = () => {
 
   const onSaveAddress = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsStoring(true);
     const isAddressEmpty = isObjectEmpty(address);
     if (isAddressEmpty) return;
+    setIsStoring(true);
     try {
-      const addressPayload = {...address,isPrimary: false}
+      const addressPayload = { ...address, isPrimary: false };
       const res = await addressStore(addressPayload, token);
-      dispatch(addAddressToState(res))
+      dispatch(addAddressToState(res));
     } catch (err) {
       console.log(err);
     } finally {
@@ -137,7 +140,10 @@ const AutoAddress = () => {
 
       <h2>Addresses</h2>
       <div className={styles.searchInputBox}>
-        <TbMapSearch />
+        <BiCurrentLocation
+          className={styles.flexEnd}
+          onClick={() => findMyLocation()}
+        />
         <input
           ref={searchInputRef}
           type="text"
@@ -147,9 +153,12 @@ const AutoAddress = () => {
           onChange={onSearchChange}
           autoComplete={"off"}
         />
-        <BiCurrentLocation
+        <AiOutlineClear
           className={styles.flexEnd}
-          onClick={() => findMyLocation()}
+          onClick={() => {
+            setSearchAddress("");
+            setAddress(addressInitialState);
+          }}
         />
       </div>
       <div className={styles.addressGrid}>

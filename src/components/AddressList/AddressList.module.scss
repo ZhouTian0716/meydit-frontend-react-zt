@@ -5,17 +5,24 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  overflow: hidden;
   li {
     display: flex;
     align-items: center;
     justify-content: flex-start;
     font-size: 0.9em;
+    transition: transform 0.3s ease-in-out;
     button {
       background-color: transparent;
     }
     .deleteBtn {
       margin-left: auto;
+      transform: translateX(100%);
+      transition:0.3s ease-in-out;
     }
+  }
+  .moveLeft {
+    transform: translateX(-1.5em);
   }
 
   li::before {
