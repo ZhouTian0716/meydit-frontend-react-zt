@@ -17,3 +17,14 @@ export interface ICreateAddress {
   country?: string | null;
   isPrimary?: boolean;
 }
+
+export interface IUpdateAccount {
+  firstName: string | null;
+  lastName: string | null;
+  password?: string | null;
+}
+
+export interface IUpdateProfile {
+  avatar?: string;
+  bio?: string | null;
+}

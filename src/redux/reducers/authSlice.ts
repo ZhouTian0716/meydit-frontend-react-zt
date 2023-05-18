@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IAuthState } from "./types";
 import { RootState } from "../store";
-import { IAddress, ILoginRes, IProfile } from "../../api/resTypes";
-import { IUpdateAddress } from "../../api/payloadTypes";
+import { IAddress, ILoginRes } from "../../api/resTypes";
+import { IUpdateAccount, IUpdateProfile } from "../../api/payloadTypes";
 
 const initialState: IAuthState = {
   account: {
@@ -45,8 +45,12 @@ export const authSlice = createSlice({
       state.status = initialState.status;
       state.error = initialState.error;
     },
-    updateProfile: (state, action: PayloadAction<IProfile>) => {
-      state.account.profile = action.payload;
+    updateAccount: (state, action: PayloadAction<IUpdateAccount>) => {
+      state.account.firstName = action.payload.firstName;
+      state.account.lastName = action.payload.lastName;
+    },
+    updateProfile: (state, action: PayloadAction<IUpdateProfile>) => {
+      state.account.profile = { ...state.account.profile, ...action.payload };
     },
     updatePrimaryAddress: (
       state,
@@ -77,6 +81,7 @@ export const {
   logUserIn,
   logUserOut,
   updateProfile,
+  updateAccount,
   updatePrimaryAddress,
   addAddressToState,
   removeAddressFromState,

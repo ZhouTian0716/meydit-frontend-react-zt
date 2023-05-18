@@ -19,13 +19,30 @@
     border: 1px solid $border;
     border-radius: 8px;
     .labelEl {
-      width: 120px;
+      width: object-fit;
       font-size: 0.9em;
     }
     .inputEl {
-      min-width: 50px;
-      max-width: 200px;
-      width: auto;
+      font-size: 1em;
+      padding: 0.2em 0.5em;
+      background-color: rgb(247, 242, 242);
+    }
+    .positionDiv {
+      position: relative;
+      width: 100%;
+      .bioSaveBtn {
+        position: absolute;
+        top: 0;
+        transform: translateX(-120%)
+      }
+      .textAreaEl {
+        width: 100%;
+        height: 9em;
+        padding: 0.3em;
+        border-radius: 5px;
+        resize: none;
+        text-align: justify;
+      }
     }
   }
 }
@@ -64,5 +81,3 @@
 .fileInputEl {
   display: none;
 }
-
-
