@@ -9,13 +9,14 @@ import {
   AiFillCloseCircle,
 } from "react-icons/ai";
 import { BsImageFill } from "react-icons/bs";
+import { toast } from "react-toastify";
 
 const BidModal = () => {
   const placeHolderText =
-    "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Animi, eius cupiditate! Quos, dolorem magnam voluptatum nam natus fugit deserunt aliquid aperiam! Deserunt ab ullam id veritatis incidunt nisi, nesciunt sapiente!";
-  const currentHighPrice = 200;
-  const [price, setPrice] = useState<number>(currentHighPrice);
-  const [comment, setComment] = useState(placeHolderText);
+    "Your comment here... (e.g. I can do this project in 3 days)";
+  const startPrice = 200;
+  const [price, setPrice] = useState<number>(startPrice);
+  const [comment, setComment] = useState("");
   const dispatch = useAppDispatch();
   const closeModal = () => {
     dispatch(toggleBidModal());
@@ -26,7 +27,7 @@ const BidModal = () => {
   };
 
   const onPriceReduce = () => {
-    price ? setPrice((prev) => prev - 10) : setPrice(0);
+    price > startPrice ? setPrice((prev) => prev - 10) : setPrice(startPrice);
   };
 
   const onPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,6 +47,10 @@ const BidModal = () => {
       comment,
     };
     console.log(newBid);
+    if (price < startPrice) {
+      return toast.error(`Bid price should be at least $${startPrice}`);
+    }
+
     dispatch(toggleBidModal());
   };
 

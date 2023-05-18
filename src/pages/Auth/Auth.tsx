@@ -68,7 +68,7 @@ const Auth = () => {
       };
 
       const res = await loginApi(authPayload);
-      const { id, role, profile, firstName, lastName } = res.account;
+      const { id, role, profile, firstName, lastName,addresses } = res.account;
       const actionPayload = {
         account: {
           id,
@@ -84,6 +84,7 @@ const Auth = () => {
             avatar: profile.avatar,
             bio: profile.bio,
           },
+          addresses,
         },
         token: res.token,
       };

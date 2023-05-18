@@ -3,6 +3,9 @@ import styles from "./BidCard.module.scss";
 import { IBid } from "../../api/resTypes";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import { FaStar } from "react-icons/fa";
+import { timeAgo } from "../../utils/formatters";
+import { getPrimaryAddress } from "../../utils/helpers";
+import defaultUser from "../../assets/img/defaultUser.png";
 
 interface IProps {
   bid: IBid;
@@ -10,33 +13,37 @@ interface IProps {
 
 const BidCard = ({ bid }: IProps) => {
   const { id, price, comment, createdAt, maker } = bid;
+  const { addresses, profile } = maker;
   const makerName =
     maker.firstName && maker.lastName
       ? `${maker.firstName} ${maker.lastName}`
       : maker.email;
+
+  const makerAvatarSrc = profile.avatar ? profile.avatar : defaultUser;
   return (
     <>
       <div className={styles.flexBetween}>
         <div className={styles.flexRow}>
           <div className={styles.avatarContainer}>
-            <img src={maker.avatar} alt="ddd" className={styles.avatar} />
+            <img src={makerAvatarSrc} alt="maker" className={styles.avatar} />
           </div>
           <div className={styles.flexCol}>
             <p>
-              <span className="mr-1">{makerName}</span>
+              <span className="mr-1 bold">{makerName}</span>
               <span>
                 {[...Array(5)].map((e, i) => (
-                  <FaStar key={i} color={i < maker.rating ? "#8460c3" : "pink"} />
+                  // ZT-NOTE:
+                  // maker rating to be continued
+                  <FaStar key={i} color={i < 4 ? "#8460c3" : "pink"} />
                 ))}
               </span>
             </p>
-            <p>
-              <span className="mr-1">
-                <HiOutlineLocationMarker color="#8460c3" />
-                {maker.address}
-              </span>
-              <small>{createdAt}</small>
+
+            <p className={styles.smallText}>
+              <HiOutlineLocationMarker color="#8460c3" />
+              {getPrimaryAddress(addresses)}
             </p>
+            <p className={styles.smallText}>{timeAgo(createdAt)}</p>
           </div>
         </div>
         <span className={styles.price}>{price}$</span>

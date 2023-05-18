@@ -9,7 +9,15 @@ import {
   IAutoAddress,
   extractAddress,
 } from "../../../../utils/gmap";
-import { AiFillSave } from "react-icons/ai";
+import { AiFillSave, AiOutlineClear } from "react-icons/ai";
+import { ThreeCircles } from "react-loader-spinner";
+import { isObjectEmpty } from "../../../../utils/helpers";
+import { addressStore } from "../../../../api/addresses";
+import {
+  addAddressToState,
+  getToken,
+} from "../../../../redux/reducers/authSlice";
+import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
 
 const AutoAddress = () => {
   const addressInitialState: IAutoAddress = {
@@ -24,6 +32,9 @@ const AutoAddress = () => {
   const searchInputRef = useRef(null);
   const [searchAddress, setSearchAddress] = useState("");
   const [address, setAddress] = useState(addressInitialState);
+  const [isStoring, setIsStoring] = useState(false);
+  const { token } = useAppSelector(getToken);
+  const dispatch = useAppDispatch();
   const { number, route, city, state, zip, country } = address;
 
   const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,21 +100,50 @@ const AutoAddress = () => {
     };
   }, []);
 
-  const onSaveAddress = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSaveAddress = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(address);
+    const isAddressEmpty = isObjectEmpty(address);
+    if (isAddressEmpty) return;
+    setIsStoring(true);
+    try {
+      const addressPayload = { ...address, isPrimary: false };
+      const res = await addressStore(addressPayload, token);
+      dispatch(addAddressToState(res));
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsStoring(false);
+      setAddress(addressInitialState);
+    }
   };
 
   const defaultInputLength = "8ch";
 
   return (
     <form onSubmit={onSaveAddress}>
-      <button className={styles.saveBtn} type="submit">
-        <AiFillSave />
-      </button>
+      {isStoring ? (
+        <button className={styles.saveBtn} type="button">
+          <ThreeCircles
+            height="1rem"
+            width="1rem"
+            ariaLabel="three-circles-rotating"
+            outerCircleColor="#9b71fe"
+            innerCircleColor="#8460c3"
+            middleCircleColor="#9b71fe"
+          />
+        </button>
+      ) : (
+        <button className={styles.saveBtn} type="submit">
+          <AiFillSave />
+        </button>
+      )}
+
       <h2>Addresses</h2>
       <div className={styles.searchInputBox}>
-        <TbMapSearch />
+        <BiCurrentLocation
+          className={styles.flexEnd}
+          onClick={() => findMyLocation()}
+        />
         <input
           ref={searchInputRef}
           type="text"
@@ -113,9 +153,12 @@ const AutoAddress = () => {
           onChange={onSearchChange}
           autoComplete={"off"}
         />
-        <BiCurrentLocation
+        <AiOutlineClear
           className={styles.flexEnd}
-          onClick={() => findMyLocation()}
+          onClick={() => {
+            setSearchAddress("");
+            setAddress(addressInitialState);
+          }}
         />
       </div>
       <div className={styles.addressGrid}>
@@ -166,9 +209,7 @@ const AutoAddress = () => {
             name="city"
             className={styles.addressGrid__item__input}
             style={{
-              width: city
-                ? `${city.toString().length}ch`
-                : defaultInputLength,
+              width: city ? `${city.toString().length}ch` : defaultInputLength,
             }}
             value={city}
             onChange={onAddressPayloadChange}
@@ -185,7 +226,7 @@ const AutoAddress = () => {
             className={styles.addressGrid__item__input}
             style={{
               width: state
-                ? `${state.toString().length + 3}ch`
+                ? `${state.toString().length + 2}ch`
                 : defaultInputLength,
             }}
             value={state}
@@ -202,9 +243,7 @@ const AutoAddress = () => {
             name="zip"
             className={styles.addressGrid__item__input}
             style={{
-              width: zip
-                ? `${zip.toString().length}ch`
-                : defaultInputLength,
+              width: zip ? `${zip.toString().length}ch` : defaultInputLength,
             }}
             value={zip}
             onChange={onAddressPayloadChange}
@@ -221,7 +260,7 @@ const AutoAddress = () => {
             className={styles.addressGrid__item__input}
             style={{
               width: country
-                ? `${country.toString().length + 3}ch`
+                ? `${country.toString().length + 2}ch`
                 : defaultInputLength,
             }}
             value={country}
