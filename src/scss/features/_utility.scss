@@ -48,6 +48,10 @@ $swiper-dot-size: 10px;
   cursor: not-allowed !important;
 }
 
+.p-relative{
+  position: relative;
+}
+
 .tagBtn {
   background: $theme-main;
   padding: 0.2em 0.5em;
@@ -59,6 +63,10 @@ $swiper-dot-size: 10px;
   &:hover {
     background: $theme-main-hover;
   }
+}
+
+.bg-trans{
+  background-color: transparent;
 }
 
 .mr-1 {

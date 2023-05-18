@@ -1,10 +1,10 @@
 import axios from "axios";
 import { configOptions } from "../config/config";
-import { IUpdateProfile } from "../types";
+import { IUpdateProfile } from "./payloadTypes";
 
 const { apiAddress } = configOptions;
 
-export const profilesUpdate = async (
+export const profileUpdate = async (
   profileId: number,
   data: IUpdateProfile,
   accessToken: string

@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import styles from "./AutoAddress.module.scss";
-import { TbMapSearch } from "react-icons/tb";
 import { BiCurrentLocation } from "react-icons/bi";
 import {
   apiKey,

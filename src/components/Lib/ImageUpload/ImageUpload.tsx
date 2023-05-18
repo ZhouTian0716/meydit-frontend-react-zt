@@ -7,7 +7,7 @@ import { IS3UploadPermissionRes, handleDelete } from "../../../utils/aws";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { toastErrorMessages } from "../../../data/constants";
-import { profilesUpdate } from "../../../api/profiles";
+import { profileUpdate } from "../../../api/profiles";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import {
   getAccount,
@@ -72,7 +72,7 @@ const ImageUpload = (props: IProps) => {
         toast.error(toastErrorMessages.uploadIssue);
       } else {
         // Step 3: update user profile with new avatar url
-        await profilesUpdate(accountId, { avatar: urlOnS3 }, token);
+        await profileUpdate(accountId, { avatar: urlOnS3 }, token);
         // Step 4: update user profile avatar in redux state
         dispatch(updateProfile({ ...profile, avatar: urlOnS3 }));
       }

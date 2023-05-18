@@ -25,7 +25,6 @@ const AddressList = ({ addresses }: IProps) => {
   const { token } = useAppSelector(getToken);
   const dispatch = useAppDispatch();
   const [isChanging, setIsChanging] = useState(false);
-  const [translate, setTranslate] = useState(false);
 
   const setPrimary = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
