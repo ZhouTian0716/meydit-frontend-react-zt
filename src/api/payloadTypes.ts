@@ -29,6 +29,10 @@ export interface IUpdateProfile {
   bio?: string | null;
 }
 
+export interface IUpdateImage {
+  isProjectCover: boolean;
+}
+
 export interface IUpdateProject {
   title?: string;
   description?: string;

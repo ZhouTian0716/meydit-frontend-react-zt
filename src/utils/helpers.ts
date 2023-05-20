@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import { IAddress } from "../api/resTypes";
+import { IAddress, IImage } from "../api/resTypes";
 
 export const validateFilesize = (
   filesize: number,
@@ -44,4 +44,18 @@ export const getPrimaryAddress = (addresses: IAddress[]) => {
     primaryAddress = "Address pending.";
     return primaryAddress;
   }
+};
+
+export const getCoverImageSrc = (imageArray: IImage[], defaultImg: string) => {
+  let coverImageSrc: string;
+  if (!imageArray.length) return (coverImageSrc = defaultImg);
+  const targetIndex = imageArray.findIndex(
+    (image) => image.isProjectCover === true
+  );
+
+  if (targetIndex === -1) {
+    return (coverImageSrc = imageArray[0].url);
+  }
+  const targetImage = imageArray[targetIndex];
+  return (coverImageSrc = targetImage.url);
 };
