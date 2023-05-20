@@ -206,7 +206,7 @@ const Setting = () => {
 
       <div className={styles.section}>
         <AutoAddress />
-        <AddressList addresses={addresses} />
+        {addresses.length ? <AddressList addresses={addresses} /> : <p>Add your address above</p>}
       </div>
 
       {isClient && (
