@@ -101,7 +101,7 @@ const Project = () => {
       <h2 className={styles.title}>Location</h2>
       <p className={styles.content}>
         <HiOutlineLocationMarker color="#8460c3" />
-        {getPrimaryAddress(project.client.addresses)}
+        {project.client.addresses.length ? getPrimaryAddress(project.client.addresses) : 'Client address pending'}
       </p>
       <h2 className={styles.title}>Due Date</h2>
       <p className={styles.content}>
