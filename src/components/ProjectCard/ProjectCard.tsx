@@ -7,7 +7,6 @@ import { RiArrowUpDownLine } from "react-icons/ri";
 import { BsCurrencyDollar } from "react-icons/bs";
 import { AiOutlineAppstore } from "react-icons/ai";
 import { Link } from "react-router-dom";
-import { IImage } from "../../api/resTypes";
 import { getCoverImageSrc } from "../../utils/helpers";
 
 const ProjectCard = (props: IProjectCardProps) => {

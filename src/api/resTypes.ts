@@ -97,6 +97,7 @@ export interface IImage {
   id: number;
   url: string;
   fileName: string;
+  projectId: number;
   isProjectCover: boolean;
 }
 

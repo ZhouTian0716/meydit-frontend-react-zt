@@ -40,11 +40,6 @@ const Project = () => {
     };
   }, []);
 
-  const handleSetImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      // setImage(e.target.files[0]);
-    }
-  };
 
   // Display related:
   const clientName = client?.firstName
@@ -126,7 +121,7 @@ const Project = () => {
       )}
 
       <h2 className={styles.textCenter}>Samples</h2>
-      <ProjectCarousel images={project.images} projectId={project.id}/>
+      <ProjectCarousel images={project.images} clientId={project.client.id}/>
       {project.tags.length && (
         <>
           <h2 className={styles.title}>Required Skills</h2>

@@ -66,14 +66,7 @@ const ImageUpload = (props: IProps) => {
       };
       const newImgRes = await imagesStore(imagePayload);
       // Step 4: 修改父组件imageArray的state
-      // 有待调整优化，改后端
-      const newImageData = {
-        id: newImgRes.id,
-        url: res.urlOnS3,
-        fileName: res.fileName,
-        isProjectCover: false,
-      };
-      setParentStateFn((prev: IImage[]) => [...prev, newImageData]);
+      setParentStateFn((prev: IImage[]) => [...prev, newImgRes]);
     } catch (err) {
       toast.error("Upload fail due to unknown error.");
     } finally {
@@ -83,7 +76,7 @@ const ImageUpload = (props: IProps) => {
   };
 
   return (
-    <div className={styles.avatarContainer} style={customStyles}>
+    <div className={styles.imgContainer} style={customStyles}>
       {loading ? (
         <ThreeCircles
           height="100%"
@@ -95,22 +88,30 @@ const ImageUpload = (props: IProps) => {
         />
       ) : (
         <>
-          <img className={styles.image} src={currentSrc} alt="myAvatar" />
-          <label htmlFor="setAvatar" className={styles.editBtn}>
-            <AiOutlineEdit color="blue" />
-          </label>
-          <input
-            type="file"
-            id="setAvatar"
-            className="display-none"
-            onChange={handleSetImage}
-            accept="image/*"
-          />
-          <AiOutlineCloudUpload
-            color="blue"
-            className={styles.uploadBtn}
-            onClick={() => confirmUpload(image, filesFolder, category)}
-          />
+          <img className={styles.image} src={currentSrc} alt="selectedImg" />
+          <div className={styles.uploadOptions}>
+            <label htmlFor="setImg" className={styles.optionBtn}>
+              <AiOutlineEdit  className={styles.optionIcon} />
+            </label>
+            <input
+              type="file"
+              id="setImg"
+              className="display-none"
+              onChange={handleSetImage}
+              accept="image/*"
+            />
+            <button
+              type="button"
+              className={`${styles.optionBtn} bg-trans`}
+              onClick={() => confirmUpload(image, filesFolder, category)}
+            >
+              <AiOutlineCloudUpload
+
+                pointerEvents="none"
+                className={styles.optionIcon}
+              />
+            </button>
+          </div>
         </>
       )}
     </div>

@@ -29,6 +29,12 @@ export interface IUpdateProfile {
   bio?: string | null;
 }
 
+export interface ICreateImage {
+  url: string;
+  fileName: string;
+  projectId: number;
+}
+
 export interface IUpdateImage {
   isProjectCover: boolean;
 }

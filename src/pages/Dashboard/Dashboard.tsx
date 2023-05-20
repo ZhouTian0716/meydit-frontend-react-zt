@@ -8,7 +8,7 @@ import SelectV1 from "../../components/Lib/Select/SelectV1/SelectV1";
 import { projectsStore } from "../../api/projects";
 import { categoriesIndex, tagsIndex } from "../../api/constants";
 import { imagesStore } from "../../api/images";
-import { ICreateImage, ICreateProject, IProjectsStoreRes } from "../../types";
+import { ICreateProject, IProjectsStoreRes } from "../../types";
 import { uploadToS3 } from "../../utils/aws";
 import { validateFilesize } from "../../utils/helpers";
 import { toast } from "react-toastify";
@@ -18,6 +18,7 @@ import { getAccount, getToken } from "../../redux/reducers/authSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import SelectV2 from "../../components/Lib/Select/SelectV2/SelectV2";
 import { ICategory, ITag } from "../../api/resTypes";
+import { ICreateImage } from "../../api/payloadTypes";
 
 const Dashboard = () => {
   const projectInitialState: ICreateProject = {

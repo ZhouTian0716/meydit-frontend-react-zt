@@ -1,7 +1,8 @@
 import axios from "axios";
 import { configOptions } from "../config/config";
-import { ICreateImage } from "../types";
-import { IUpdateImage } from "./payloadTypes";
+
+import { ICreateImage, IUpdateImage } from "./payloadTypes";
+import { IImage } from "./resTypes";
 const { apiAddress } = configOptions;
 
 export const imagesIndex = async () => {
@@ -11,7 +12,8 @@ export const imagesIndex = async () => {
 
 export const imagesStore = async (data: ICreateImage) => {
   const res = await axios.post(`${apiAddress}/api/images`, data);
-  return res.data;
+  const resData : IImage = res.data
+  return resData;
 };
 
 export const imageUpdate = async (

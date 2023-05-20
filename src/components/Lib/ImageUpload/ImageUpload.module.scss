@@ -1,14 +1,37 @@
 @use "../../../scss/variables" as *;
 
-.avatarContainer {
+.imgContainer {
   position: relative;
   overflow: hidden;
-  &:hover{
-    .editBtn {
-      display: block;
+  &:hover {
+    .uploadOptions {
+      display: flex;
+      gap: 1rem;
     }
-    .uploadBtn {
-      display: block;
+  }
+  .uploadOptions {
+    display: none;
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    .optionBtn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 60px;
+      aspect-ratio: 1;
+      border: none;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+      .optionIcon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: $theme-main; /* Customize the icon color */
+        font-size: 40px; /* Customize the icon size */
+      }
     }
   }
   .image {
@@ -17,19 +40,5 @@
     object-fit: cover;
     object-position: center;
     border-radius: 15px;
-  }
-  .editBtn {
-    display:none;
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    right: 0;
-  }
-  .uploadBtn {
-    display:none;
-    position: absolute;
-    cursor: pointer;
-    bottom: 0;
-    right: 0;
   }
 }

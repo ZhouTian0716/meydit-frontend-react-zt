@@ -11,27 +11,28 @@ import { handleDelete } from "../../../utils/aws";
 import ImageUpload from "../ImageUpload/ImageUpload";
 
 interface IProps {
-  projectId: number;
+  clientId: number;
   images: IImage[];
 }
 
 const maxImages = 9;
 
-const ProjectCarousel = ({ images, projectId }: IProps) => {
+const ProjectCarousel = ({ images, clientId }: IProps) => {
   const { id: accountId } = useAppSelector(getAccount);
   const { token } = useAppSelector(getToken);
-  const [isChanging, setIsChanging] = useState(false);
+  const [loading, setLoading] = useState(false);
   // ZT-NOTE: component本地建一个state来响应图片CRUD的前端ui显示
   const [pageImages, setPageImages] = useState(images);
+  const projectId = pageImages[0].projectId;
 
   const handleSetCover = async (imageId: string) => {
-    setIsChanging(true);
+    setLoading(true);
     try {
       await imageUpdate(imageId, { isProjectCover: true }, token);
     } catch (err) {
       console.log(err);
     } finally {
-      setIsChanging(false);
+      setLoading(false);
     }
   };
 
@@ -42,7 +43,7 @@ const ProjectCarousel = ({ images, projectId }: IProps) => {
     token: string
   ) => {
     // console.log(imageId, imageUrl, accountId, token);
-    setIsChanging(true);
+    setLoading(true);
     try {
       // Step 1: delete image from RDS
       await imageDelete(imageId, token);
@@ -55,51 +56,57 @@ const ProjectCarousel = ({ images, projectId }: IProps) => {
     } catch (err) {
       console.log(err);
     } finally {
-      setIsChanging(false);
+      setLoading(false);
     }
   };
 
   return (
     <div className={styles.container}>
-      {pageImages.length < maxImages && (
-        <ImageUpload category="project" filesFolder={projectId.toString()} setParentStateFn = {setPageImages}/>
+      {pageImages.length < maxImages && clientId === accountId && (
+        <ImageUpload
+          category="project"
+          filesFolder={projectId.toString()}
+          setParentStateFn={setPageImages}
+        />
       )}
       {pageImages.map((image) => (
         <div key={image.id} className={styles.imageContainer}>
           <img src={image.url} className={styles.image} />
-          <div className={styles.optionsHeader}>
-            {isChanging ? (
-              <>
-                <LoaderV1 width={"1.5em"} height={"1.5em"} />
-                <LoaderV1 width={"1.5em"} height={"1.5em"} />
-              </>
-            ) : (
-              <>
-                <button
-                  type="button"
-                  data-image-id={image.id}
-                  onClick={() => handleSetCover(image.id.toString())}
-                  className={`${styles.btn} bg-trans`}
-                >
-                  <BsFillHouseCheckFill pointerEvents="none" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() =>
-                    onSelectedImgDelete(
-                      image.id.toString(),
-                      image.url,
-                      accountId.toString(),
-                      token
-                    )
-                  }
-                  className={`${styles.btn} bg-trans`}
-                >
-                  <RiDeleteBin2Fill color="red" pointerEvents="none" />
-                </button>
-              </>
-            )}
-          </div>
+          {clientId === accountId && (
+            <div className={styles.optionsHeader}>
+              {loading ? (
+                <>
+                  <LoaderV1 width={"1.5em"} height={"1.5em"} />
+                  <LoaderV1 width={"1.5em"} height={"1.5em"} />
+                </>
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    data-image-id={image.id}
+                    onClick={() => handleSetCover(image.id.toString())}
+                    className={`${styles.btn} bg-trans`}
+                  >
+                    <BsFillHouseCheckFill pointerEvents="none" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      onSelectedImgDelete(
+                        image.id.toString(),
+                        image.url,
+                        accountId.toString(),
+                        token
+                      )
+                    }
+                    className={`${styles.btn} bg-trans`}
+                  >
+                    <RiDeleteBin2Fill color="red" pointerEvents="none" />
+                  </button>
+                </>
+              )}
+            </div>
+          )}
         </div>
       ))}
     </div>
