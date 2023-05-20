@@ -28,3 +28,12 @@ export interface IUpdateProfile {
   avatar?: string;
   bio?: string | null;
 }
+
+export interface IUpdateProject {
+  title?: string;
+  description?: string;
+  startPrice?: number;
+  makerId?: number;
+  categoryId?: number;
+  statusId?: number;
+}

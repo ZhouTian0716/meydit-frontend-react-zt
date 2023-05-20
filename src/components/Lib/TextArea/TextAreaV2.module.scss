@@ -1,0 +1,27 @@
+@use "../../../scss/variables" as *;
+
+.container {
+  position: relative;
+  .textArea {
+    margin-top: 0.5em;
+    border: 1px solid $border;
+    border-radius: 5px;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    width: 100%;
+    resize: none;
+    text-align: justify;
+    &:focus {
+      border: 1px solid $theme-main;
+    }
+  }
+}
+
+.btn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  transform: translate(-30%, -30%);
+}
