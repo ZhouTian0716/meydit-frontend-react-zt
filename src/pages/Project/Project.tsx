@@ -40,10 +40,10 @@ const Project = () => {
     };
   }, []);
 
-  const onProjectPayloadChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    project && setProject({ ...project, [e.target.name]: e.target.value });
+  const handleSetImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      // setImage(e.target.files[0]);
+    }
   };
 
   // Display related:
@@ -126,7 +126,7 @@ const Project = () => {
       )}
 
       <h2 className={styles.textCenter}>Samples</h2>
-      <ProjectCarousel images={project.images} />
+      <ProjectCarousel images={project.images} projectId={project.id}/>
       {project.tags.length && (
         <>
           <h2 className={styles.title}>Required Skills</h2>

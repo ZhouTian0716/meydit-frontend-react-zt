@@ -3,6 +3,7 @@
 .avatarContainer {
   position: relative;
   overflow: hidden;
+  justify-self: flex-end;
   &:hover{
     .editBtn {
       display: block;
@@ -33,3 +34,5 @@
     right: 0;
   }
 }
+
+

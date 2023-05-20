@@ -28,3 +28,16 @@ export const imageUpdate = async (
   );
   return res.data;
 };
+
+export const imageDelete = async (
+  imageId: string,
+  accessToken: string
+) => {
+  const res = await axios.delete(
+    `${apiAddress}/api/images/${imageId}`,
+    {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    }
+  );
+  return res;
+};

@@ -9,7 +9,7 @@ const ClientProjects = () => {
   const firstMount = useRef(true);
   const { accountId } = useParams();
   const [projects, setProjects] = useState([]);
-  console.log(projects);
+  // console.log(projects);
   const fetchProjects = async () => {
     if (!accountId) return;
     const res = await projectsByAccount(accountId);

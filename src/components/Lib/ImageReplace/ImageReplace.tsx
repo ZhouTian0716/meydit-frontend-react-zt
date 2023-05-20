@@ -1,37 +1,45 @@
 import React, { useState } from "react";
-import styles from "./ImageUpload.module.scss";
-import addFile from "../../../assets/img/addFile.png";
-import { ThreeCircles } from "react-loader-spinner";
-import { useAppSelector } from "../../../redux/hooks";
-import { getAccount, getToken } from "../../../redux/reducers/authSlice";
+import styles from "./ImageReplace.module.scss";
 import { AiOutlineCloudUpload, AiOutlineEdit } from "react-icons/ai";
-import { IS3UploadPermissionRes } from "../../../utils/aws";
-import { s3SecureUrlForUpload } from "../../../api/aws";
+import { ThreeCircles } from "react-loader-spinner";
+import { s3SecureUrlForDelete, s3SecureUrlForUpload } from "../../../api/aws";
+import { IS3UploadPermissionRes, handleDelete } from "../../../utils/aws";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { imagesStore } from "../../../api/images";
-import { IImage } from "../../../api/resTypes";
+import { toastErrorMessages } from "../../../data/constants";
+import { profileUpdate } from "../../../api/profiles";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import {
+  getAccount,
+  getToken,
+  updateProfile,
+} from "../../../redux/reducers/authSlice";
 
 interface IProps {
+  defaultSrc: string;
   category: string;
-  filesFolder: string;
   customStyles?: {
     width: string;
     aspectRatio: number;
   };
-  setParentStateFn: React.Dispatch<React.SetStateAction<IImage[]>>;
 }
 
-const ImageUpload = (props: IProps) => {
-  const { filesFolder, category, customStyles, setParentStateFn } = props;
+const ImageReplace = (props: IProps) => {
+  const { defaultSrc, category, customStyles } = props;
+
   // Redux
   const { token } = useAppSelector(getToken);
-  const { id: accountId } = useAppSelector(getAccount);
+  const { id: accountId, profile } = useAppSelector(getAccount);
+  const dispatch = useAppDispatch();
 
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState<File | null>(null);
-
-  let currentSrc = image ? URL.createObjectURL(image) : addFile;
+  const { avatar } = profile;
+  let currentSrc = image
+    ? URL.createObjectURL(image)
+    : avatar
+    ? avatar
+    : defaultSrc;
 
   const handleSetImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -39,13 +47,18 @@ const ImageUpload = (props: IProps) => {
     }
   };
 
+  const handleConfirm = async () => {
+    if (!image) return;
+    setLoading(true);
+    if (avatar) handleDelete(avatar, accountId.toString(), token);
+    confirmUpload(image, accountId.toString(), category);
+  };
   const confirmUpload = async (
     file: File | null,
     filesFolder: string,
     category: string
   ) => {
     if (!file) return;
-    setLoading(true);
     try {
       // Step 1: get s3 presigned url for upload
       const fileType = encodeURIComponent(file.name).split(".")[1];
@@ -56,29 +69,21 @@ const ImageUpload = (props: IProps) => {
         accountId.toString(),
         token
       );
+      const { urlOnS3 } = res;
       // Step 2: upload file to s3
-      await axios.put(res.uploadUrl, file);
-      // Step 3: save new image data to database
-      const imagePayload = {
-        url: res.urlOnS3,
-        fileName: res.fileName,
-        projectId: parseInt(filesFolder),
-      };
-      const newImgRes = await imagesStore(imagePayload);
-      // Step 4: 修改父组件imageArray的state
-      // 有待调整优化，改后端
-      const newImageData = {
-        id: newImgRes.id,
-        url: res.urlOnS3,
-        fileName: res.fileName,
-        isProjectCover: false,
-      };
-      setParentStateFn((prev: IImage[]) => [...prev, newImageData]);
+      const { statusText } = await axios.put(res.uploadUrl, file);
+      if (statusText !== "OK") {
+        toast.error(toastErrorMessages.uploadIssue);
+      } else {
+        // Step 3: update user profile with new avatar url
+        await profileUpdate(accountId, { avatar: urlOnS3 }, token);
+        // Step 4: update user profile avatar in redux state
+        dispatch(updateProfile({ ...profile, avatar: urlOnS3 }));
+      }
     } catch (err) {
-      toast.error("Upload fail due to unknown error.");
+      toast.error("Avatar update fail due to unknown error.");
     } finally {
       setLoading(false);
-      setImage(null);
     }
   };
 
@@ -109,7 +114,7 @@ const ImageUpload = (props: IProps) => {
           <AiOutlineCloudUpload
             color="blue"
             className={styles.uploadBtn}
-            onClick={() => confirmUpload(image, filesFolder, category)}
+            onClick={handleConfirm}
           />
         </>
       )}
@@ -117,11 +122,11 @@ const ImageUpload = (props: IProps) => {
   );
 };
 
-export default ImageUpload;
+export default ImageReplace;
 
-ImageUpload.defaultProps = {
+ImageReplace.defaultProps = {
   customStyles: {
-    width: "300px",
-    aspectRatio: 0.8,
+    width: "80px",
+    aspectRatio: 1,
   },
 };
