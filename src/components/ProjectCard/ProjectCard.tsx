@@ -7,6 +7,7 @@ import { RiArrowUpDownLine } from "react-icons/ri";
 import { BsCurrencyDollar } from "react-icons/bs";
 import { AiOutlineAppstore } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import { getCoverImageSrc } from "../../utils/helpers";
 
 const ProjectCard = (props: IProjectCardProps) => {
   const {
@@ -31,7 +32,7 @@ const ProjectCard = (props: IProjectCardProps) => {
         <div className={styles.imgContainer}>
           <img
             className={styles.coverImg}
-            src={images[0] ? images[0].url : defaultImg}
+            src={getCoverImageSrc(images, defaultImg)}
             alt={images[0] ? images[0].fileName : "defaultImg"}
           />
         </div>

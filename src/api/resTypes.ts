@@ -38,7 +38,7 @@ export interface IAddress {
   isPrimary: boolean;
 }
 
-export interface IProject {
+export interface IProjectData {
   id: number;
   slug: string;
   title: string;
@@ -53,6 +53,17 @@ export interface IProject {
   bids: IBid[] | [];
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface IProject {
+  id: number;
+  slug: string;
+  title: string;
+  description: string;
+  startPrice: number;
+  createdAt: Date;
+  updatedAt: Date;
+  [key: string]: any; // Index signature
 }
 
 interface IToken {
@@ -86,6 +97,7 @@ export interface IImage {
   id: number;
   url: string;
   fileName: string;
+  projectId: number;
   isProjectCover: boolean;
 }
 

@@ -1,11 +1,5 @@
 // Data fetched from API
-export interface ITopMaker {
-  id: string;
-  name: string;
-  bio: string;
-  profile: string;
-  avatar: string;
-}
+
 
 export interface IAccount {
   id: string;
@@ -52,21 +46,6 @@ export interface IProjectsStoreRes {
   updatedAt?: string;
 }
 
-export interface ICreateImage {
-  url: string;
-  fileName: string;
-  projectId: number;
-}
-
-interface IImage {
-  id: number;
-  url: string;
-  projectId?: string;
-  bidId?: string;
-  commentId?: string;
-  messageId?: string;
-  createdAt: string;
-}
 
 export interface ILoginData {
   email: string;

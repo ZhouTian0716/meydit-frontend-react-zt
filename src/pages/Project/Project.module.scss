@@ -36,9 +36,17 @@ $gapOnPC: 1rem;
 }
 
 .title {
-  color: $text-secondary;
-  display: flex;
-  justify-content: space-between;
+  color: $theme-main;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1rem;
+  width: 100%;
+  > :first-child {
+    justify-self: start; 
+  }
+  > :last-child {
+    justify-self: end;
+  }
 }
 
 .flexRow {
@@ -100,4 +108,10 @@ $gapOnPC: 1rem;
 
 .description {
   text-align: justify;
+}
+
+.inputEditable {
+  font-size: 1em;
+  padding: 0.2em 0.5em;
+  background-color: rgb(247, 242, 242);
 }

@@ -6,7 +6,7 @@ import { IUpdateAccount, IUpdateProfile } from "../../api/payloadTypes";
 
 const initialState: IAuthState = {
   account: {
-    id: 1,
+    id: -1,
     email: "",
     firstName: "",
     lastName: "",
@@ -15,7 +15,7 @@ const initialState: IAuthState = {
       name: "",
     },
     profile: {
-      id: 1,
+      id: -1,
       bio: null,
       avatar: null,
     },

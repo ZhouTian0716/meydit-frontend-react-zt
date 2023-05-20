@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./Project.module.scss";
 import { useParams } from "react-router-dom";
-import { IProject } from "../../api/resTypes";
-import { projectShow } from "../../api/projects";
+import { IProjectData } from "../../api/resTypes";
+import { projectShow, projectUpdate } from "../../api/projects";
 import { timeAgo } from "../../utils/formatters";
 import LoaderV1 from "../../components/Loader/LoaderV1";
 import defaultUser from "../../assets/img/defaultUser.png";
@@ -10,15 +10,22 @@ import { HiOutlineCalendar, HiOutlineLocationMarker } from "react-icons/hi";
 import ProjectCarousel from "../../components/Lib/Carousel/ProjectCarousel";
 import BidCard from "../../components/Bid/BidCard";
 import { toggleBidModal } from "../../redux/reducers/uiSlice";
-import { useAppDispatch } from "../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { getPrimaryAddress } from "../../utils/helpers";
+import { getAccount } from "../../redux/reducers/authSlice";
+import InputV2 from "../../components/Lib/Inputs/InputV2/InputV2";
+import TextAreaV2 from "../../components/Lib/TextArea/TextAreaV2";
 
 const Project = () => {
   const firstMount = useRef(true);
   const { slug } = useParams();
-  const [project, setProject] = useState<IProject | null>(null);
-
+  // Redux
   const dispatch = useAppDispatch();
+  const loginUser = useAppSelector(getAccount);
+  const { id: loginUserId } = loginUser;
+  // UseStates
+  const [project, setProject] = useState<IProjectData | null>(null);
+  const { client, title, description, startPrice, tags, bids } = project ?? {};
 
   const loadProject = async () => {
     if (!slug) return;
@@ -33,20 +40,50 @@ const Project = () => {
     };
   }, []);
 
-  // Display related:
-  const clientName = project?.client.firstName
-    ? `${project.client.firstName} ${project.client.lastName}`
-    : project?.client.email;
 
-  const clientAvatarSrc = project?.client.profile.avatar
-    ? project.client.profile.avatar
+  // Display related:
+  const clientName = client?.firstName
+    ? `${client.firstName} ${client.lastName}`
+    : client?.email;
+
+  const clientAvatarSrc = client?.profile.avatar
+    ? client.profile.avatar
     : defaultUser;
 
   return project ? (
     <div className={styles.projectPage}>
       <h2 className={styles.title}>
-        <span>{project.title}</span>
-        <span>From {project.startPrice}$</span>
+        {client?.id === loginUserId ? (
+          <>
+            <InputV2
+              name="title"
+              defaultValue={title ?? ""}
+              projectSlug={slug}
+              projectUpdate={projectUpdate}
+              regex={/^.{7,}$/}
+              maxWidth={"300px"}
+            />
+            <span className="flexRow">
+              <small>$</small>
+              <InputV2
+                name="startPrice"
+                type="number"
+                defaultValue={startPrice ?? 0}
+                maxWidth={"100px"}
+                projectSlug={slug}
+                projectUpdate={projectUpdate}
+              />
+            </span>
+          </>
+        ) : (
+          <>
+            <span>{title}</span>
+            <span>
+              <small>$</small>
+              {startPrice}
+            </span>
+          </>
+        )}
       </h2>
       <div className={`${styles.flexRow} ${styles.alignCenter}`}>
         <div className={styles.avatarContainer}>
@@ -72,14 +109,24 @@ const Project = () => {
         22 Aug 2023
       </p>
       <h2 className={styles.title}>Description</h2>
-      <p className={styles.description}>{project.description}</p>
+      {client?.id === loginUserId ? (
+        <TextAreaV2
+          name="description"
+          defaultValue={description}
+          projectSlug={slug}
+          projectUpdate={projectUpdate}
+        />
+      ) : (
+        <p className={styles.description}>{description}</p>
+      )}
+
       <h2 className={styles.textCenter}>Samples</h2>
-      <ProjectCarousel images={project.images} />
+      <ProjectCarousel images={project.images} clientId={project.client.id}/>
       {project.tags.length && (
         <>
           <h2 className={styles.title}>Required Skills</h2>
           <div className={styles.tags}>
-            {project.tags.map((tag) => (
+            {tags?.map((tag) => (
               <span key={tag.id} className={styles.tag}>
                 {tag.name}
               </span>
@@ -95,9 +142,9 @@ const Project = () => {
         SUBMIT BID
       </button>
 
-      {project.bids.length && (
+      {bids?.length && (
         <>
-          <h2 className={styles.title}>Submitted Bids ({project.bids.length})</h2>
+          <h2 className={styles.title}>Submitted Bids ({bids.length})</h2>
           {project.bids.map((bid) => (
             <BidCard bid={bid} key={bid.id} />
           ))}

@@ -10,7 +10,7 @@ import {
 } from "../../redux/reducers/authSlice";
 import defaultUser from "../../../src/assets/img/defaultUser.png";
 import profileDeco from "../../../src/assets/img/decorations/profile.jpg";
-import ImageUpload from "../../components/Lib/ImageUpload/ImageUpload";
+import ImageReplace from "../../components/Lib/ImageReplace/ImageReplace";
 import AutoAddress from "../../components/Lib/Inputs/AutoAddress/AutoAddress";
 import { Roles } from "../../data/constants";
 import AddressList from "../../components/AddressList/AddressList";
@@ -110,7 +110,7 @@ const Setting = () => {
         <div className={styles.inputRow}>
           <span className={styles.labelEl}>Avatar</span>
           <span>An avatar helps personalise your account</span>
-          <ImageUpload defaultSrc={defaultUser} category="account" />
+          <ImageReplace defaultSrc={defaultUser} category="account" />
         </div>
         <div className={styles.inputRow}>
           <label className={styles.labelEl} htmlFor="Name">

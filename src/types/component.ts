@@ -1,4 +1,4 @@
-import { ICategory } from "../api/resTypes";
+import { ICategory, IImage } from "../api/resTypes";
 
 export interface IProjectCardProps {
   id: number;
@@ -26,10 +26,6 @@ export interface IProjectCardProps {
   updatedAt: Date;
 }
 
-interface IImage {
-  url: string;
-  fileName: string;
-}
 
 interface ITag {
   id: number;

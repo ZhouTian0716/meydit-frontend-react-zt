@@ -11,6 +11,16 @@ $swiper-dot-size: 10px;
   gap: var(--gap, 1rem);
 }
 
+.flexRow {
+  display: flex;
+  align-items: center;
+}
+
+.flexCol {
+  display: flex;
+  flex-direction: column;
+}
+
 .grid {
   display: grid;
   gap: var(--gap, 1rem);
@@ -48,8 +58,12 @@ $swiper-dot-size: 10px;
   cursor: not-allowed !important;
 }
 
-.p-relative{
+.p-relative {
   position: relative;
+}
+
+.display-none{
+  display: none;
 }
 
 .tagBtn {
@@ -65,7 +79,7 @@ $swiper-dot-size: 10px;
   }
 }
 
-.bg-trans{
+.bg-trans {
   background-color: transparent;
 }
 
