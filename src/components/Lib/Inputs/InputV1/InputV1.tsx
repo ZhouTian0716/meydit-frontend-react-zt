@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { MdVisibilityOff, MdVisibility } from "react-icons/md";
 import styles from "./InputV1.module.scss";
 
@@ -9,10 +9,12 @@ interface IInputV1 {
   name: string;
   type?: string;
   required?: boolean;
-  placeHolder?: string | undefined;
-  defaultValue?: string | undefined;
+  placeHolder?: string ;
+  defaultValue?: string ;
   loading?: boolean;
   classes?: string | string[];
+  regex?: RegExp | null;
+  errorMsg?: string | null;
 }
 
 const InputV1 = (props: IInputV1) => {
@@ -27,10 +29,12 @@ const InputV1 = (props: IInputV1) => {
     onParentStateChange,
     loading = false,
     classes,
+    regex,
+    errorMsg,
   } = props;
 
   const [val, setVal] = useState(defaultValue);
-  const [error, setError] = useState<null | string>(null);
+  const [error, setError] = useState(false);
   const [pwdHidden, setPwdHidden] = useState(true);
   const [inputType, setInputType] = useState(type);
 
@@ -63,14 +67,15 @@ const InputV1 = (props: IInputV1) => {
     />
   );
 
+  useEffect(() => {
+    if (typeof val === "string" && regex ) {
+      if (val.length && !regex.test(val)) setError(true);
+      else setError(false);
+    }
+  }, [val]);
+
   return (
-    <div
-      className={[
-        styles.inputContainer,
-        error ? styles.borderRed : "",
-        classes,
-      ].join(" ")}
-    >
+    <div className={[styles.inputContainer, classes].join(" ")}>
       <label
         className={[styles.label, error ? styles.errorRed : ""].join(" ")}
         htmlFor={label}
@@ -78,6 +83,7 @@ const InputV1 = (props: IInputV1) => {
         {required && <span className={styles.errorRed}>*</span>}
         {label}
       </label>
+      {error && <small className={styles.errorMessage}>{errorMsg}</small>}
       <div className={styles.inputWrapper}>
         <input
           className={[styles.input].join(" ")}
@@ -91,8 +97,6 @@ const InputV1 = (props: IInputV1) => {
         />
         {type !== "password" ? null : passwordIconBtn}
       </div>
-
-      {error && <p className={styles.errorMessage}>{error}</p>}
     </div>
   );
 };
@@ -106,5 +110,7 @@ InputV1.defaultProps = {
   type: "text",
   loading: false,
   classes: null,
+  regex: null,
+  errorMsg: null,
   onParentStateChange: () => {},
 };
