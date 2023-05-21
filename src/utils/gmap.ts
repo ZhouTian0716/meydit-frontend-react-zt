@@ -32,6 +32,7 @@ export interface IAutoAddress {
   state: string;
   zip: string;
   country: string;
+  [key: string]: any; // Index signature
 }
 
 interface IAddresssComponent {

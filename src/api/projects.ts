@@ -1,8 +1,7 @@
 import axios from "axios";
 import { configOptions } from "../config/config";
-import { ICreateProject } from "../types";
 import { IProject, IProjectData } from "./resTypes";
-import { IUpdateProject } from "./payloadTypes";
+import { ICreateProject, IUpdateProject } from "./payloadTypes";
 const { apiAddress } = configOptions;
 
 export const projectsIndex = async (

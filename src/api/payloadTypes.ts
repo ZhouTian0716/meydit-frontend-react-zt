@@ -39,6 +39,14 @@ export interface IUpdateImage {
   isProjectCover: boolean;
 }
 
+export interface ICreateProject {
+  title: string ;
+  startPrice: number;
+  description: string | null;
+  categoryId: number;
+  tagIds: number[] | null;
+}
+
 export interface IUpdateProject {
   title?: string;
   description?: string;

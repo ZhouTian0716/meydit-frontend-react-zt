@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from "react";
-import { MdVisibilityOff, MdVisibility } from "react-icons/md";
 import styles from "./InputV2.module.scss";
 import { IUpdateProject } from "../../../../api/payloadTypes";
 import { getToken } from "../../../../redux/reducers/authSlice";
@@ -17,7 +16,7 @@ interface IInputV2 {
   testId?: string;
   name: string;
   type?: string;
-  maxWidth: string;
+  maxWidth?: string;
   required?: boolean;
   placeHolder?: string;
   defaultValue: string | number;
@@ -35,8 +34,8 @@ const InputV2 = (props: IInputV2) => {
     type,
     projectUpdate,
     projectSlug,
+    maxWidth,
     regex,
-    maxWidth
   } = props;
 
   const syncVal = useRef(defaultValue);
@@ -110,7 +109,7 @@ const InputV2 = (props: IInputV2) => {
           onKeyDown={sendRequest}
           style={{
             width: responsiveWidth,
-            maxWidth: "200px",
+            maxWidth: maxWidth,
             minWidth: "4ch",
           }}
           data-cy={testId}

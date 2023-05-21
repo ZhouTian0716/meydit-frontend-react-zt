@@ -10,7 +10,7 @@ import {
 } from "../../../../utils/gmap";
 import { AiFillSave, AiOutlineClear } from "react-icons/ai";
 import { ThreeCircles } from "react-loader-spinner";
-import { isObjectEmpty } from "../../../../utils/helpers";
+import { isAddressEmpty } from "../../../../utils/helpers";
 import { addressStore } from "../../../../api/addresses";
 import {
   addAddressToState,
@@ -101,8 +101,7 @@ const AutoAddress = () => {
 
   const onSaveAddress = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const isAddressEmpty = isObjectEmpty(address);
-    if (isAddressEmpty) return;
+    if (isAddressEmpty(address)) return;
     setIsStoring(true);
     try {
       const addressPayload = { ...address, isPrimary: false };
