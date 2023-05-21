@@ -28,13 +28,7 @@ export interface ICreateAccount {
 
 
 
-export interface ICreateProject {
-  title: string | null;
-  startPrice: number | null;
-  description: string | null;
-  categoryId: number | null;
-  tagIds: number[] | null;
-}
+
 
 export interface IProjectsStoreRes {
   id: number;

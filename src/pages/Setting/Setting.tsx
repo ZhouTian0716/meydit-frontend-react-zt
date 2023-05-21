@@ -196,7 +196,8 @@ const Setting = () => {
             ) : (
               <textarea
                 className={styles.textAreaEl}
-                value={biography ? biography : "A bit about yourself"}
+                value={biography ? biography : ""}
+                placeholder="Tell the community a bit about yourself"
                 onChange={onBioChange}
               />
             )}
@@ -206,7 +207,11 @@ const Setting = () => {
 
       <div className={styles.section}>
         <AutoAddress />
-        {addresses.length ? <AddressList addresses={addresses} /> : <p>Add your address above</p>}
+        {addresses.length ? (
+          <AddressList addresses={addresses} />
+        ) : (
+          <p>Add your address above</p>
+        )}
       </div>
 
       {isClient && (

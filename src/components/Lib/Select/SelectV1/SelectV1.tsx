@@ -7,13 +7,13 @@ interface IOptionV1 {
 }
 
 interface ISelectV1 {
+  initialValueFromParent?: string | number;
   onParentStateChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   testId?: string;
   label?: string;
   name: string;
   required?: boolean;
   multiple?: boolean;
-  defaultValue?: number;
   classes?: string | string[];
   options?: IOptionV1[] | null;
 }
@@ -23,15 +23,18 @@ const SelectV1 = (props: ISelectV1) => {
     testId,
     label,
     name,
-    defaultValue,
     required,
     multiple,
     options,
+    initialValueFromParent,
     onParentStateChange,
     classes,
   } = props;
 
+  const [selectedVal, setSelectedVal] = useState(initialValueFromParent);
+
   const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedVal(e.target.value);
     if (onParentStateChange) {
       onParentStateChange(e);
     }
@@ -46,7 +49,7 @@ const SelectV1 = (props: ISelectV1) => {
       <select
         name={name}
         id={name}
-        defaultValue={defaultValue}
+        value={selectedVal}
         className={styles.selectContainer}
         onChange={onChange}
         data-cy={testId}
@@ -70,8 +73,8 @@ SelectV1.defaultProps = {
   label: "label for select dropdown",
   required: false,
   multiple: false,
-  defaultValue: 1,
   options: null,
   classes: null,
+  initialValueFromParent:1,
   onParentStateChange: () => {},
 };

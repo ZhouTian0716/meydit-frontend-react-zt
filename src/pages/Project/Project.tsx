@@ -60,7 +60,7 @@ const Project = () => {
               defaultValue={title ?? ""}
               projectSlug={slug}
               projectUpdate={projectUpdate}
-              regex={/^.{7,}$/}
+              regex={/^.{5,}$/}
               maxWidth={"300px"}
             />
             <span className="flexRow">
@@ -142,14 +142,14 @@ const Project = () => {
         SUBMIT BID
       </button>
 
-      {bids?.length && (
+      {bids?.length ? (
         <>
           <h2 className={styles.title}>Submitted Bids ({bids.length})</h2>
           {project.bids.map((bid) => (
             <BidCard bid={bid} key={bid.id} />
           ))}
         </>
-      )}
+      ) : <p>Update your project details to attract best bids</p>}
     </div>
   ) : (
     <LoaderV1 height={"200"} width={"200"} wrapperClass="pageLoader" />

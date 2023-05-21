@@ -1,5 +1,6 @@
 import { toast } from "react-toastify";
 import { IAddress, IImage } from "../api/resTypes";
+import { IAutoAddress } from "./gmap";
 
 export const validateFilesize = (
   filesize: number,
@@ -17,9 +18,9 @@ export const validateFilesize = (
   return true;
 };
 
-export const isObjectEmpty = (obj: any) => {
-  for (let key in obj) {
-    if (obj[key] !== "") {
+export const isAddressEmpty = (address: IAddress | IAutoAddress) => {
+  for (let key in address) {
+    if (key !== "id" && address[key] !== null && address[key] !== false) {
       return false;
     }
   }

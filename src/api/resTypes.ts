@@ -36,6 +36,7 @@ export interface IAddress {
   zip: string | null;
   country: string | null;
   isPrimary: boolean;
+  [key: string]: any; // Index signature
 }
 
 export interface IProjectData {

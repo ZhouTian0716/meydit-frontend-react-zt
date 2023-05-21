@@ -12,6 +12,7 @@ import { addressDestroy, addressUpdate } from "../../api/addresses";
 import { ThreeCircles } from "react-loader-spinner";
 import { MdDeleteForever } from "react-icons/md";
 import useSwipe from "../../hooks/useSwipe";
+import { isAddressEmpty } from "../../utils/helpers";
 
 interface IProps {
   addresses: IAddress[];
@@ -83,30 +84,39 @@ const AddressList = ({ addresses }: IProps) => {
     />
   ) : (
     <ul className={styles.list}>
-      {addresses.map((address, i) => (
-        <li key={address.id} data-address-id={address.id} {...swipeHandlers}>
-          <button
-            type="button"
-            onClick={setPrimary}
-            data-address-id={address.id}
-          >
-            {formatAddress(address)}
-          </button>
-          {address.isPrimary && <FaHome color="#8460c3" fontSize={"1.5em"} />}
-          <button
-            type="button"
-            onClick={deleteSelected}
-            data-address-id={address.id}
-            className={styles.deleteBtn}
-          >
-            <MdDeleteForever
-              fontSize={"1.5em"}
-              color="red"
-              pointerEvents="none"
-            />
-          </button>
-        </li>
-      ))}
+      {addresses.map(
+        (address, i) =>
+          !isAddressEmpty(address) && (
+            <li
+              key={address.id}
+              data-address-id={address.id}
+              {...swipeHandlers}
+            >
+              <button
+                type="button"
+                onClick={setPrimary}
+                data-address-id={address.id}
+              >
+                {formatAddress(address)}
+              </button>
+              {address.isPrimary && (
+                <FaHome color="#8460c3" fontSize={"1.5em"} />
+              )}
+              <button
+                type="button"
+                onClick={deleteSelected}
+                data-address-id={address.id}
+                className={styles.deleteBtn}
+              >
+                <MdDeleteForever
+                  fontSize={"1.5em"}
+                  color="red"
+                  pointerEvents="none"
+                />
+              </button>
+            </li>
+          )
+      )}
     </ul>
   );
 

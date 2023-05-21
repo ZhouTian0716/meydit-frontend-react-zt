@@ -8,7 +8,7 @@ import SelectV1 from "../../components/Lib/Select/SelectV1/SelectV1";
 import { projectsStore } from "../../api/projects";
 import { categoriesIndex, tagsIndex } from "../../api/constants";
 import { imagesStore } from "../../api/images";
-import { ICreateProject, IProjectsStoreRes } from "../../types";
+import { IProjectsStoreRes } from "../../types";
 import { uploadToS3 } from "../../utils/aws";
 import { validateFilesize } from "../../utils/helpers";
 import { toast } from "react-toastify";
@@ -18,20 +18,30 @@ import { getAccount, getToken } from "../../redux/reducers/authSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import SelectV2 from "../../components/Lib/Select/SelectV2/SelectV2";
 import { ICategory, ITag } from "../../api/resTypes";
-import { ICreateImage } from "../../api/payloadTypes";
+import { ICreateImage, ICreateProject } from "../../api/payloadTypes";
+
+interface IProjectInitialState {
+  title: null;
+  startPrice: null;
+  description: null;
+  categoryId: number;
+  tagIds: never[];
+}
 
 const Dashboard = () => {
-  const projectInitialState: ICreateProject = {
+  const projectInitialState = {
     title: null,
     startPrice: null,
     description: null,
-    categoryId: null,
+    categoryId: 1,
     tagIds: [],
   };
   const firstMount = useRef(true);
   const [categories, setCategories] = useState<ICategory[]>();
   const [tags, setTags] = useState<ITag[]>();
-  const [projectPayload, setProjectPayload] = useState(projectInitialState);
+  const [projectPayload, setProjectPayload] = useState<
+    ICreateProject | IProjectInitialState
+  >(projectInitialState);
   const [selectedTagIds, setSelectedTagIds] = useState<number[]>([]);
   const { title, description, startPrice, categoryId } = projectPayload;
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
@@ -216,10 +226,10 @@ const Dashboard = () => {
           testId="category"
           label="Pick a category:"
           name="categoryId"
-          defaultValue={1}
           options={categories}
           required={true}
           classes={"width-100"}
+          initialValueFromParent={categoryId}
           onParentStateChange={onProjectPayloadChange}
         />
 
