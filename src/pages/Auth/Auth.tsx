@@ -68,7 +68,7 @@ const Auth = () => {
       };
 
       const res = await loginApi(authPayload);
-      const { id, role, profile, firstName, lastName,addresses } = res.account;
+      const { id, role, profile, firstName, lastName, addresses } = res.account;
       const actionPayload = {
         account: {
           id,
@@ -160,15 +160,32 @@ const Auth = () => {
           onParentStateChange={onChangeEmail}
           required={true}
         />
-        <InputV1
-          testId="pwd"
-          type="password"
-          label="Password:"
-          name="password"
-          placeHolder="password"
-          onParentStateChange={onChangePwd}
-          required={true}
-        />
+        {!hasAccount ? (
+          <InputV1
+            testId="pwd"
+            type="password"
+            label="Password:"
+            name="password"
+            placeHolder="password"
+            onParentStateChange={onChangePwd}
+            required={true}
+            regex={/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9\s]).+$/}
+            errorMsg={
+              "8-20 characters, 1 uppercase, 1 lowercase, 1 special char"
+            }
+          />
+        ) : (
+          <InputV1
+            testId="pwd"
+            type="password"
+            label="Password:"
+            name="password"
+            placeHolder="password"
+            onParentStateChange={onChangePwd}
+            required={true}
+          />
+        )}
+
         {!hasAccount && (
           <>
             <InputV1
@@ -184,7 +201,7 @@ const Auth = () => {
               testId="role"
               label="Register as a:"
               name="role"
-              defaultValue={roleId}
+              initialValueFromParent={roleId}
               options={roles}
               onParentStateChange={onChangeRole}
               required={true}
