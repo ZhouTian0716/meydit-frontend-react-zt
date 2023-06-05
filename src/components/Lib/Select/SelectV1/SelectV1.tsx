@@ -18,18 +18,8 @@ interface ISelectV1 {
   options?: IOptionV1[] | null;
 }
 
-const SelectV1 = (props: ISelectV1) => {
-  const {
-    testId,
-    label,
-    name,
-    required,
-    multiple,
-    options,
-    initialValueFromParent,
-    onParentStateChange,
-    classes,
-  } = props;
+function SelectV1(props: ISelectV1) {
+  const { testId, label, name, required, multiple, options, initialValueFromParent, onParentStateChange, classes } = props;
 
   const [selectedVal, setSelectedVal] = useState(initialValueFromParent);
 
@@ -64,7 +54,7 @@ const SelectV1 = (props: ISelectV1) => {
       </select>
     </div>
   );
-};
+}
 
 export default SelectV1;
 
@@ -75,6 +65,6 @@ SelectV1.defaultProps = {
   multiple: false,
   options: null,
   classes: null,
-  initialValueFromParent:1,
+  initialValueFromParent: 1,
   onParentStateChange: () => {},
 };

@@ -1,8 +1,8 @@
 import React from "react";
-import styles from "./BidCard.module.scss";
-import { IBid } from "../../api/resTypes";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import { FaStar } from "react-icons/fa";
+import styles from "./BidCard.module.scss";
+import { IBid } from "../../api/resTypes";
 import { timeAgo } from "../../utils/formatters";
 import { getPrimaryAddress } from "../../utils/helpers";
 import defaultUser from "../../assets/img/defaultUser.png";
@@ -11,13 +11,10 @@ interface IProps {
   bid: IBid;
 }
 
-const BidCard = ({ bid }: IProps) => {
+function BidCard({ bid }: IProps) {
   const { id, price, comment, createdAt, maker } = bid;
   const { addresses, profile } = maker;
-  const makerName =
-    maker.firstName && maker.lastName
-      ? `${maker.firstName} ${maker.lastName}`
-      : maker.email;
+  const makerName = maker.firstName && maker.lastName ? `${maker.firstName} ${maker.lastName}` : maker.email;
 
   const makerAvatarSrc = profile.avatar ? profile.avatar : defaultUser;
   return (
@@ -51,6 +48,6 @@ const BidCard = ({ bid }: IProps) => {
       <p className={styles.comment}>{comment}</p>
     </>
   );
-};
+}
 
 export default BidCard;

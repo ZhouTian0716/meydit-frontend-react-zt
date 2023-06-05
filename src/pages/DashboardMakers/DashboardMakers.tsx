@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
-const DashboardMakers = () => {
-  return (
-    <div>DashboardMakers</div>
-  )
+function DashboardMakers() {
+  return <div>DashboardMakers</div>;
 }
 
-export default DashboardMakers
+export default DashboardMakers;

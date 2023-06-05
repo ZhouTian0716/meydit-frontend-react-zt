@@ -6,14 +6,14 @@ interface IProps {
   rate: number;
 }
 
-const Ratings = ({ rate }: IProps) => {
+function Ratings({ rate }: IProps) {
   return (
     <span>
       {[...Array(5)].map((e, i) => (
-        <FaStar color={i < rate ? "#8460c3" : "pink"} />
+        <FaStar key={e} color={i < rate ? "#8460c3" : "pink"} />
       ))}
     </span>
   );
-};
+}
 
 export default Ratings;

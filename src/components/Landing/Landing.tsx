@@ -1,27 +1,18 @@
-import React, { useState, useEffect, useRef } from "react";
-import styles from "./Landing.module.scss";
-import searchIcon from "../../../src/assets/img/search.png";
-import phoneImg from "../../../src/assets/img/top-img.png";
-import demoVideo from "../../../src/assets/video/video-light-meydit.mp4";
-import { accountsIndex } from "../../api/accounts";
-
-import { projectsIndex } from "../../api/projects";
+import React from "react";
 import { Link } from "react-router-dom";
+import styles from "./Landing.module.scss";
+import searchIcon from "../../assets/img/search.png";
+import phoneImg from "../../assets/img/top-img.png";
+import demoVideo from "../../assets/video/video-light-meydit.mp4";
 import { IAccount } from "../../api/resTypes";
 
 interface IProps {
   accounts: IAccount[];
 }
 
-const Landing = ({accounts}:IProps) => {
-
-  const clientNum = accounts.filter(
-    (account: IAccount) => account.role.name === "Client"
-  ).length;
-  const makerNum = accounts.filter(
-    (account: IAccount) => account.role.name === "Maker"
-  ).length;
-
+function Landing({ accounts }: IProps) {
+  const clientNum = accounts.filter((account: IAccount) => account.role.name === "Client").length;
+  const makerNum = accounts.filter((account: IAccount) => account.role.name === "Maker").length;
 
   const handleSearch = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -38,9 +29,8 @@ const Landing = ({accounts}:IProps) => {
         </p>
         <h1>Fashion made especially for you.</h1>
         <p>
-          Authentic, sustainable and stylish outfits require awesome creatives.
-          Meyd.it helps source and manage slow fashion, that is made to measure
-          and on demand.
+          Authentic, sustainable and stylish outfits require awesome creatives. Meyd.it helps source and manage slow fashion, that is made to measure and on
+          demand.
         </p>
         <div>
           <Link to="/projects" className="navBtn">
@@ -52,38 +42,36 @@ const Landing = ({accounts}:IProps) => {
         </div>
         <form className={styles.searchBar}>
           <img src={searchIcon} alt="searchIcon" />
-          <input
-            type="text"
-            placeholder="Search Trends"
-            className={styles.searchInput}
-          />
+          <input type="text" placeholder="Search Trends" className={styles.searchInput} />
           <button type="submit" onClick={handleSearch}>
             Search
           </button>
         </form>
         <div className={styles.searchTabs}>
           <span>Popular:</span>
-          <button className={styles.tab}>Classic</button>
-          <button className={styles.tab}>Streetwear</button>
-          <button className={styles.tab}>Retro</button>
-          <button className={styles.tab}>Chic</button>
-          <button className={styles.tab}>Preppy</button>
+          <button type="button" className={styles.tab}>
+            Classic
+          </button>
+          <button type="button" className={styles.tab}>
+            Streetwear
+          </button>
+          <button type="button" className={styles.tab}>
+            Retro
+          </button>
+          <button type="button" className={styles.tab}>
+            Chic
+          </button>
+          <button type="button" className={styles.tab}>
+            Preppy
+          </button>
         </div>
       </div>
       <div className={styles.demo}>
         <img src={phoneImg} alt="phoneImg" className={styles.phoneImg} />
-        <video
-          src={demoVideo}
-          className={styles.video}
-          autoPlay
-          loop
-          muted
-          playsInline
-          controls
-        />
+        <video src={demoVideo} className={styles.video} autoPlay loop muted playsInline controls />
       </div>
     </div>
   );
-};
+}
 
 export default Landing;

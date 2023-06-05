@@ -32,6 +32,7 @@ export interface IAutoAddress {
   state: string;
   zip: string;
   country: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any; // Index signature
 }
 
@@ -50,11 +51,11 @@ export const extractAddress = (place: google.maps.places.PlaceResult) => {
     zip: "",
     country: "",
     plain() {
-      const number = this.number ? this.number + ", " : "";
-      const route = this.route ? this.route + ", " : "";
-      const city = this.city ? this.city + ", " : "";
-      const zip = this.zip ? this.zip + ", " : "";
-      const state = this.state ? this.state + ", " : "";
+      const number = this.number ? `${this.number}, ` : "";
+      const route = this.route ? `${this.route}, ` : "";
+      const city = this.city ? `${this.city}, ` : "";
+      const zip = this.zip ? `${this.zip}, ` : "";
+      const state = this.state ? `${this.state}, ` : "";
       return number + route + city + zip + state + this.country;
     },
   };
@@ -64,7 +65,7 @@ export const extractAddress = (place: google.maps.places.PlaceResult) => {
   }
 
   place.address_components.forEach((component: IAddresssComponent) => {
-    const types = component.types;
+    const { types } = component;
     // const value = component.long_name;
     const value = component.short_name;
 

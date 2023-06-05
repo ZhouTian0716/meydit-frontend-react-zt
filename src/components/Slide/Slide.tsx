@@ -1,30 +1,30 @@
-import styles from "./Slide.module.scss";
+import React from "react";
+// import required modules
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination, Navigation } from "swiper";
 import SlideCard from "../SlideCard/SlideCard";
 // Import Swiper React Related
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-// import required modules
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Navigation } from "swiper";
 import { IAccount } from "../../api/resTypes";
 
 interface IProps {
   topAccounts?: IAccount[];
 }
 
-const Slide = ({ topAccounts }: IProps) => {
+function Slide({ topAccounts }: IProps) {
   return (
     <>
       <Swiper
-        grabCursor={true}
+        grabCursor
         slidesPerView={1}
         spaceBetween={10}
         pagination={{
           el: ".swiper-users-pagination",
           clickable: true,
         }}
-        navigation={true}
+        navigation
         breakpoints={{
           640: {
             slidesPerView: 2,
@@ -51,10 +51,10 @@ const Slide = ({ topAccounts }: IProps) => {
       <div className="swiper-users-pagination" />
     </>
   );
-};
+}
 
 export default Slide;
 
 Slide.defaultProps = {
-  topUsers: [],
+  topAccounts: [],
 };

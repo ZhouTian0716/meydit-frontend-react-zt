@@ -7,14 +7,15 @@ export const timeAgo = (createdAt: Date) => {
   const msPerDay = msPerHour * 24;
   if (elapsed < msPerMin) {
     return "just now";
-  } else if (elapsed < msPerHour) {
+  }
+  if (elapsed < msPerHour) {
     const minutes = Math.round(elapsed / msPerMin);
     return `${minutes} ${minutes === 1 ? "minute" : "minutes"} ago`;
-  } else if (elapsed < msPerDay) {
+  }
+  if (elapsed < msPerDay) {
     const hours = Math.round(elapsed / msPerHour);
     return `${hours} ${hours === 1 ? "hour" : "hours"} ago`;
-  } else {
-    const days = Math.round(elapsed / msPerDay);
-    return `${days} ${days === 1 ? "day" : "days"} ago`;
   }
+  const days = Math.round(elapsed / msPerDay);
+  return `${days} ${days === 1 ? "day" : "days"} ago`;
 };

@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import styles from "./Dashboard.module.scss";
 import { TiDelete } from "react-icons/ti";
+import { toast } from "react-toastify";
+import styles from "./Dashboard.module.scss";
 import InputV1 from "../../components/Lib/Inputs/InputV1/InputV1";
 import TextAreaV1 from "../../components/Lib/TextArea/TextAreaV1";
 import SelectV1 from "../../components/Lib/Select/SelectV1/SelectV1";
@@ -11,11 +12,10 @@ import { imagesStore } from "../../api/images";
 import { IProjectsStoreRes } from "../../types";
 import { uploadToS3 } from "../../utils/aws";
 import { validateFilesize } from "../../utils/helpers";
-import { toast } from "react-toastify";
 import { toastErrorMessages } from "../../data/constants";
 // Redux
 import { getAccount, getToken } from "../../redux/reducers/authSlice";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { useAppSelector } from "../../redux/hooks";
 import SelectV2 from "../../components/Lib/Select/SelectV2/SelectV2";
 import { ICategory, ITag } from "../../api/resTypes";
 import { ICreateImage, ICreateProject } from "../../api/payloadTypes";
@@ -28,7 +28,7 @@ interface IProjectInitialState {
   tagIds: never[];
 }
 
-const Dashboard = () => {
+function Dashboard() {
   const projectInitialState = {
     title: null,
     startPrice: null,
@@ -39,9 +39,7 @@ const Dashboard = () => {
   const firstMount = useRef(true);
   const [categories, setCategories] = useState<ICategory[]>();
   const [tags, setTags] = useState<ITag[]>();
-  const [projectPayload, setProjectPayload] = useState<
-    ICreateProject | IProjectInitialState
-  >(projectInitialState);
+  const [projectPayload, setProjectPayload] = useState<ICreateProject | IProjectInitialState>(projectInitialState);
   const [selectedTagIds, setSelectedTagIds] = useState<number[]>([]);
   const { title, description, startPrice, categoryId } = projectPayload;
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
@@ -60,7 +58,7 @@ const Dashboard = () => {
     setTags(tagsData);
   };
   useEffect(() => {
-    firstMount.current && loadConstants();
+    if (firstMount.current) loadConstants();
     return () => {
       firstMount.current = false;
     };
@@ -71,27 +69,16 @@ const Dashboard = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      if (!uploadedFiles.length)
-        return toast.error(toastErrorMessages.emptyFile);
+      if (!uploadedFiles.length) return toast.error(toastErrorMessages.emptyFile);
       if (!token) return toast.error(toastErrorMessages.tokenLost);
       // ZT-NOTE: Validate project payload
-      if (!title || !description || !startPrice || !categoryId)
-        return toast.error(toastErrorMessages.requiredFields);
+      if (!title || !description || !startPrice || !categoryId) return toast.error(toastErrorMessages.requiredFields);
       // ZT-NOTE: 注意创建project要有用户权限，所以这之前要检查登录状态
       const mergedPayload = { ...projectPayload, tagIds: selectedTagIds };
-      const projectsStoreRes: IProjectsStoreRes = await projectsStore(
-        mergedPayload,
-        token
-      );
+      const projectsStoreRes: IProjectsStoreRes = await projectsStore(mergedPayload, token);
 
       // ZT-NOTE: 多个图片发送多个请求
-      const resArray = await uploadToS3(
-        uploadedFiles,
-        projectsStoreRes.id.toString(),
-        "project",
-        accountId.toString(),
-        token
-      );
+      const resArray = await uploadToS3(uploadedFiles, projectsStoreRes.id.toString(), "project", accountId.toString(), token);
       if (!resArray) return toast.error(toastErrorMessages.uploadIssue);
       // ZT-NOTE: imagePayloadArray here prepared for going into DB
       const imagePayloadArray: ICreateImage[] = resArray.map((res) => {
@@ -122,6 +109,7 @@ const Dashboard = () => {
     const chosenFiles = Array.prototype.slice.call(fileList);
     const uploaded = [...uploadedFiles];
 
+    // eslint-disable-next-line array-callback-return
     chosenFiles.some((file) => {
       const sizeOK = validateFilesize(file.size, maxMB, file.name);
       if (!sizeOK) return;
@@ -131,9 +119,11 @@ const Dashboard = () => {
         setFileLimit(true);
       }
       if (uploaded.length > MAX_FILE_COUNT) {
+        // eslint-disable-next-line no-alert
         alert(`${MAX_FILE_COUNT} images allowed in total.`);
         setFileLimit(false);
         limitExceeded = true;
+        // eslint-disable-next-line consistent-return
         return true;
       }
     });
@@ -144,9 +134,7 @@ const Dashboard = () => {
   const onCancelImage = (e: React.MouseEvent<HTMLButtonElement>) => {
     const target = e.target as HTMLElement;
     // console.log(target.dataset.filename);
-    const filteredFiles = uploadedFiles.filter(
-      (file) => file.name !== target.dataset.filename
-    );
+    const filteredFiles = uploadedFiles.filter((file) => file.name !== target.dataset.filename);
     setUploadedFiles(filteredFiles);
 
     if (uploadedFiles.length <= MAX_FILE_COUNT) {
@@ -154,17 +142,11 @@ const Dashboard = () => {
     }
   };
 
-  const onProjectPayloadChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
+  const onProjectPayloadChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setProjectPayload({ ...projectPayload, [e.target.name]: e.target.value });
   };
 
-  const submitBtnClass = loading
-    ? `${styles.btn} formBtn disabled loading`
-    : `${styles.btn} formBtn`;
+  const submitBtnClass = loading ? `${styles.btn} formBtn disabled loading` : `${styles.btn} formBtn`;
 
   return (
     <div className={styles.dashboard}>
@@ -178,48 +160,26 @@ const Dashboard = () => {
           name="title"
           placeHolder="Project Title"
           onParentStateChange={onProjectPayloadChange}
-          classes={"width-100"}
-          required={true}
+          classes="width-100"
+          required
         />
         <div className={styles.imageGrid}>
           {!!uploadedFiles &&
             uploadedFiles.map((e) => (
-              <div
-                className={styles.imgContainer}
-                key={`${e.size}+${e.lastModified}+${e.name}`}
-              >
-                <img
-                  className={styles.uploadImg}
-                  src={URL.createObjectURL(e)}
-                />
-                <button
-                  type="button"
-                  className={styles.deleteBtn}
-                  data-filename={e.name}
-                  onClick={onCancelImage}
-                >
-                  <TiDelete
-                    fontSize={"20px"}
-                    pointerEvents="none"
-                    color="pink"
-                  />
+              <div className={styles.imgContainer} key={`${e.size}+${e.lastModified}+${e.name}`}>
+                <img className={styles.uploadImg} src={URL.createObjectURL(e)} alt={e.name} />
+                <button type="button" className={styles.deleteBtn} data-filename={e.name} onClick={onCancelImage}>
+                  <TiDelete fontSize="20px" pointerEvents="none" color="pink" />
                 </button>
               </div>
             ))}
           {!fileLimit && (
+            // eslint-disable-next-line jsx-a11y/label-has-associated-control
             <label htmlFor="uploadBtn" className={styles.addFileBtn}>
               +
             </label>
           )}
-          <input
-            type="file"
-            id="uploadBtn"
-            className={styles.fileInputEl}
-            onChange={onAddImage}
-            name="uploadedFiles"
-            multiple
-            accept="image/*"
-          />
+          <input type="file" id="uploadBtn" className={styles.fileInputEl} onChange={onAddImage} name="uploadedFiles" multiple accept="image/*" />
         </div>
 
         <SelectV1
@@ -227,8 +187,8 @@ const Dashboard = () => {
           label="Pick a category:"
           name="categoryId"
           options={categories}
-          required={true}
-          classes={"width-100"}
+          required
+          classes="width-100"
           initialValueFromParent={categoryId}
           onParentStateChange={onProjectPayloadChange}
         />
@@ -237,7 +197,7 @@ const Dashboard = () => {
           testId="tags"
           label="Pick some tags:"
           options={tags}
-          classes={"width-100"}
+          classes="width-100"
           selectedTagIds={selectedTagIds}
           setSelectedTagIds={setSelectedTagIds}
         />
@@ -249,8 +209,8 @@ const Dashboard = () => {
           name="startPrice"
           placeHolder="Set a price"
           onParentStateChange={onProjectPayloadChange}
-          classes={"width-100"}
-          required={true}
+          classes="width-100"
+          required
         />
 
         <TextAreaV1
@@ -261,8 +221,8 @@ const Dashboard = () => {
           rows={6}
           placeHolder="Project Description"
           onParentStateChange={onProjectPayloadChange}
-          classes={"width-100"}
-          required={true}
+          classes="width-100"
+          required
         />
 
         <button type="submit" className={submitBtnClass} disabled={loading}>
@@ -271,6 +231,6 @@ const Dashboard = () => {
       </form>
     </div>
   );
-};
+}
 
 export default Dashboard;

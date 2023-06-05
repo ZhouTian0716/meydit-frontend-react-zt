@@ -9,29 +9,16 @@ interface IInputV1 {
   name: string;
   type?: string;
   required?: boolean;
-  placeHolder?: string ;
-  defaultValue?: string ;
+  placeHolder?: string;
+  defaultValue?: string;
   loading?: boolean;
   classes?: string | string[];
   regex?: RegExp | null;
   errorMsg?: string | null;
 }
 
-const InputV1 = (props: IInputV1) => {
-  const {
-    testId,
-    label,
-    name,
-    defaultValue,
-    placeHolder,
-    type,
-    required,
-    onParentStateChange,
-    loading = false,
-    classes,
-    regex,
-    errorMsg,
-  } = props;
+function InputV1(props: IInputV1) {
+  const { testId, label, name, defaultValue, placeHolder, type, required, onParentStateChange, loading = false, classes, regex, errorMsg } = props;
 
   const [val, setVal] = useState(defaultValue);
   const [error, setError] = useState(false);
@@ -68,7 +55,7 @@ const InputV1 = (props: IInputV1) => {
   );
 
   useEffect(() => {
-    if (typeof val === "string" && regex ) {
+    if (typeof val === "string" && regex) {
       if (val.length && !regex.test(val)) setError(true);
       else setError(false);
     }
@@ -76,10 +63,7 @@ const InputV1 = (props: IInputV1) => {
 
   return (
     <div className={[styles.inputContainer, classes].join(" ")}>
-      <label
-        className={[styles.label, error ? styles.errorRed : ""].join(" ")}
-        htmlFor={label}
-      >
+      <label className={[styles.label, error ? styles.errorRed : ""].join(" ")} htmlFor={label}>
         {required && <span className={styles.errorRed}>*</span>}
         {label}
       </label>
@@ -99,7 +83,7 @@ const InputV1 = (props: IInputV1) => {
       </div>
     </div>
   );
-};
+}
 
 export default InputV1;
 

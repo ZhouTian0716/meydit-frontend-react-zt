@@ -1,18 +1,14 @@
 import React, { useEffect, useState, useRef } from "react";
+import { RotatingLines } from "react-loader-spinner";
 import styles from "./InputV2.module.scss";
 import { IUpdateProject } from "../../../../api/payloadTypes";
 import { getToken } from "../../../../redux/reducers/authSlice";
 import { useAppSelector } from "../../../../redux/hooks";
-import { RotatingLines } from "react-loader-spinner";
 import { IProject } from "../../../../api/resTypes";
 
 interface IInputV2 {
   projectSlug?: string;
-  projectUpdate?: (
-    projectSlug: string,
-    data: IUpdateProject,
-    accessToken: string
-  ) => Promise<IProject>;
+  projectUpdate?: (projectSlug: string, data: IUpdateProject, accessToken: string) => Promise<IProject>;
   testId?: string;
   name: string;
   type?: string;
@@ -24,19 +20,9 @@ interface IInputV2 {
   classes?: string | string[];
 }
 
-const InputV2 = (props: IInputV2) => {
+function InputV2(props: IInputV2) {
   const { token } = useAppSelector(getToken);
-  const {
-    testId,
-    name,
-    defaultValue,
-    placeHolder,
-    type,
-    projectUpdate,
-    projectSlug,
-    maxWidth,
-    regex,
-  } = props;
+  const { testId, name, defaultValue, placeHolder, type, projectUpdate, projectSlug, maxWidth, regex } = props;
 
   const syncVal = useRef(defaultValue);
   const [val, setVal] = useState(syncVal.current);
@@ -81,21 +67,12 @@ const InputV2 = (props: IInputV2) => {
 
   const errorClassName = error && styles.inputError;
 
-  let responsiveWidth =
-    typeof val === "string"
-      ? `${val.length}ch`
-      : `${val.toString().length}ch`;
+  const responsiveWidth = typeof val === "string" ? `${val.length}ch` : `${val.toString().length}ch`;
 
   return (
     <div className={styles.wrapper}>
       {loading ? (
-        <RotatingLines
-          strokeColor="#8460c3"
-          strokeWidth="5"
-          animationDuration="1"
-          width="1em"
-          visible={true}
-        />
+        <RotatingLines strokeColor="#8460c3" strokeWidth="5" animationDuration="1" width="1em" visible />
       ) : (
         <input
           className={`${styles.input} ${activeClassName} ${errorClassName}`}
@@ -109,7 +86,7 @@ const InputV2 = (props: IInputV2) => {
           onKeyDown={sendRequest}
           style={{
             width: responsiveWidth,
-            maxWidth: maxWidth,
+            maxWidth,
             minWidth: "4ch",
           }}
           data-cy={testId}
@@ -117,7 +94,7 @@ const InputV2 = (props: IInputV2) => {
       )}
     </div>
   );
-};
+}
 
 export default InputV2;
 

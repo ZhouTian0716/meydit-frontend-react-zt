@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useRef } from "react";
-import styles from "./ClientProjects.module.scss";
 import { useParams } from "react-router-dom";
+import styles from "./ClientProjects.module.scss";
 import { projectsByAccount } from "../../api/projects";
 import ProjectCard from "../../components/ProjectCard/ProjectCard";
 import { IProjectCardProps } from "../../types/component";
 
-const ClientProjects = () => {
+function ClientProjects() {
   const firstMount = useRef(true);
   const { accountId } = useParams();
   const [projects, setProjects] = useState([]);
@@ -24,13 +24,9 @@ const ClientProjects = () => {
   return (
     <div className={styles.projects}>
       <h2 className={styles.pageTitle}>Projects created by {}</h2>
-      <div className={styles.projectsGrid}>
-        {projects && projects.map((project: IProjectCardProps) => (
-          <ProjectCard key={project.id} {...project} />
-        ))}
-      </div>
+      <div className={styles.projectsGrid}>{projects && projects.map((project: IProjectCardProps) => <ProjectCard key={project.id} {...project} />)}</div>
     </div>
   );
-};
+}
 
 export default ClientProjects;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import styles from "./TextAreaV2.module.scss";
 import { AiFillSave } from "react-icons/ai";
 import { ThreeCircles } from "react-loader-spinner";
+import styles from "./TextAreaV2.module.scss";
 import { IUpdateProject } from "../../../api/payloadTypes";
 import { IProject } from "../../../api/resTypes";
 import { useAppSelector } from "../../../redux/hooks";
@@ -9,11 +9,7 @@ import { getToken } from "../../../redux/reducers/authSlice";
 
 interface ITextAreaV2 {
   projectSlug?: string;
-  projectUpdate?: (
-    projectSlug: string,
-    data: IUpdateProject,
-    accessToken: string
-  ) => Promise<IProject>;
+  projectUpdate?: (projectSlug: string, data: IUpdateProject, accessToken: string) => Promise<IProject>;
   name: string;
   type?: string;
   rows?: number;
@@ -21,7 +17,7 @@ interface ITextAreaV2 {
   defaultValue?: string;
 }
 
-const TextAreaV2 = (props: ITextAreaV2) => {
+function TextAreaV2(props: ITextAreaV2) {
   const { token } = useAppSelector(getToken);
   const { name, rows, defaultValue, projectUpdate, projectSlug } = props;
 
@@ -44,21 +40,13 @@ const TextAreaV2 = (props: ITextAreaV2) => {
     setLoading(false);
   };
 
-  let containerClassNames = `${styles.container}`;
+  const containerClassNames = `${styles.container}`;
   return (
     <div className={containerClassNames}>
-      <textarea
-        name={name}
-        className={styles.textArea}
-        rows={rows}
-        autoCorrect="on"
-        spellCheck="false"
-        value={val}
-        onChange={onChange}
-      />
+      <textarea name={name} className={styles.textArea} rows={rows} autoCorrect="on" spellCheck="false" value={val} onChange={onChange} />
       {isEditing && (
         <button onClick={handleSave} className={`${styles.btn} bg-trans`}>
-          <AiFillSave fontSize={"1.5em"} color="#8460c3" pointerEvents="none" />
+          <AiFillSave fontSize="1.5em" color="#8460c3" pointerEvents="none" />
         </button>
       )}
       {loading && (
@@ -75,7 +63,7 @@ const TextAreaV2 = (props: ITextAreaV2) => {
       )}
     </div>
   );
-};
+}
 
 export default TextAreaV2;
 

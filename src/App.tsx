@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import Dashboard from "./pages/Dashboard/Dashboard";
@@ -21,10 +21,7 @@ import BidModal from "./components/Lib/Modal/BidModal";
 import { useAppSelector } from "./redux/hooks";
 import { isBidModal } from "./redux/reducers/uiSlice";
 
-
-
 function App() {
-  
   const bidModalOpen = useAppSelector(isBidModal);
   return (
     <div className="positionWrapper">
@@ -34,10 +31,7 @@ function App() {
           <Route path="projects" element={<Projects />} />
           <Route path="projects/:slug" element={<Project />} />
           <Route path="user/:accountId" element={<User />} />
-          <Route
-            path="account/:accountId/projects"
-            element={<ClientProjects />}
-          />
+          <Route path="account/:accountId/projects" element={<ClientProjects />} />
           <Route path="makers" element={<Makers />} />
           <Route path="auth" element={<Auth />} />
           <Route path="messages" element={<Messages />} />
@@ -48,10 +42,10 @@ function App() {
           <Route element={<ProtectedRoutes />}>
             <Route path="settings/:accountId" element={<Setting />} />
           </Route>
-          <Route element={<ProtectedRoutes allowRole={"Client"} />}>
+          <Route element={<ProtectedRoutes allowRole="Client" />}>
             <Route path="dashboard/clients" element={<Dashboard />} />
           </Route>
-          <Route element={<ProtectedRoutes allowRole={"Maker"} />}>
+          <Route element={<ProtectedRoutes allowRole="Maker" />}>
             <Route path="dashboard/makers" element={<DashboardMakers />} />
           </Route>
         </Route>

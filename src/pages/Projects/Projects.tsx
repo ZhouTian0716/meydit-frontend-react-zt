@@ -4,7 +4,7 @@ import { projectsIndex } from "../../api/projects";
 import { IProjectCardProps } from "../../types/component";
 import ProjectCard from "../../components/ProjectCard/ProjectCard";
 
-const Projects = () => {
+function Projects() {
   const [projects, setProjects] = useState([]);
   const fetchProjects = async () => {
     const res = await projectsIndex();
@@ -24,6 +24,6 @@ const Projects = () => {
       </div>
     </div>
   );
-};
+}
 
 export default Projects;

@@ -1,10 +1,10 @@
 import React from "react";
-import styles from "./MapFeature.module.scss";
 import { TbMapSearch } from "react-icons/tb";
 import { BiCurrentLocation } from "react-icons/bi";
+import styles from "./MapFeature.module.scss";
 
-const MapFeature = () => {
+function MapFeature() {
   return <div>dd</div>;
-};
+}
 
 export default MapFeature;

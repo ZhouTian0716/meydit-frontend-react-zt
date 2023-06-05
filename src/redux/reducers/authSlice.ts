@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable import/no-cycle */
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IAuthState } from "./types";
 import { RootState } from "../store";
@@ -54,7 +56,11 @@ export const authSlice = createSlice({
     },
     updatePrimaryAddress: (state, action: PayloadAction<{ selectedId: number }>) => {
       state.account.addresses.forEach((address) => {
-        address.id === action.payload.selectedId ? (address.isPrimary = true) : (address.isPrimary = false);
+        if (address.id === action.payload.selectedId) {
+          address.isPrimary = true;
+        } else {
+          address.isPrimary = false;
+        }
       });
     },
     addAddressToState: (state, action: PayloadAction<IAddress>) => {

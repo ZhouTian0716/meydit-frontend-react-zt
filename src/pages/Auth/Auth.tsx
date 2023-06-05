@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import styles from "./Auth.module.scss";
-import scissors from "../../../src/assets/img/resource/scissors.jpg";
+import scissors from "../../assets/img/resource/scissors.jpg";
 import InputV1 from "../../components/Lib/Inputs/InputV1/InputV1";
 import SelectV1 from "../../components/Lib/Select/SelectV1/SelectV1";
 import { IAdonisValidationError, ICreateAccount } from "../../types";
 import { rolesIndex } from "../../api/constants";
-import { toast } from "react-toastify";
 
 // API call
 import { loginApi, registerApi } from "../../api/auth";
@@ -16,7 +16,7 @@ import { logUserIn } from "../../redux/reducers/authSlice";
 import { useAppDispatch } from "../../redux/hooks";
 import { IRole } from "../../api/resTypes";
 
-const Auth = () => {
+function Auth() {
   const firstMount = useRef(true);
   const [hasAccount, setHasAccount] = useState(true);
   const [email, setEmail] = useState("");
@@ -32,14 +32,12 @@ const Auth = () => {
 
   const loadRoles = async () => {
     const rolesData: IRole[] = await rolesIndex();
-    const allowedRoles = rolesData.filter(
-      (role) => role.name === "Maker" || role.name === "Client"
-    );
+    const allowedRoles = rolesData.filter((role) => role.name === "Maker" || role.name === "Client");
     setRoles(allowedRoles);
   };
 
   useEffect(() => {
-    firstMount.current && loadRoles();
+    if (firstMount.current) loadRoles();
     return () => {
       firstMount.current = false;
     };
@@ -92,6 +90,7 @@ const Auth = () => {
       dispatch(logUserIn(actionPayload));
       const from = location.state?.from?.pathname || `/settings/${id}`;
       navigate(from, { replace: true });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       const errorMsg = err?.response?.data?.message;
       toast.error(errorMsg);
@@ -119,20 +118,18 @@ const Auth = () => {
       const res = await registerApi(authPayload);
       toast.success(`Account registed with ${res.email}`);
       setHasAccount(true);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
+      // eslint-disable-next-line no-console
       console.log(err);
-      const errors = err.response?.data?.map(
-        (error: IAdonisValidationError) => error.message
-      );
+      const errors = err.response?.data?.map((error: IAdonisValidationError) => error.message);
       errors.forEach((error: string) => toast.error(error));
     } finally {
       setLoading(false);
     }
   };
 
-  const submitBtnClass = loading
-    ? `${styles.btn} formBtn disabled loading`
-    : `${styles.btn} formBtn`;
+  const submitBtnClass = loading ? `${styles.btn} formBtn disabled loading` : `${styles.btn} formBtn`;
 
   return (
     <div className={styles.auth}>
@@ -142,24 +139,11 @@ const Auth = () => {
         {hasAccount ? (
           <span className={styles.subTitle}>Login to see our marketplace</span>
         ) : (
-          <span className={styles.subTitle}>
-            Please fill in the details below to join the Meyd.it family
-          </span>
+          <span className={styles.subTitle}>Please fill in the details below to join the Meyd.it family</span>
         )}
       </div>
-      <form
-        className={styles.authForm}
-        onSubmit={hasAccount ? onLogin : onRegister}
-      >
-        <InputV1
-          testId="email"
-          type="email"
-          label="Email:"
-          name="email"
-          placeHolder="address@example.com"
-          onParentStateChange={onChangeEmail}
-          required={true}
-        />
+      <form className={styles.authForm} onSubmit={hasAccount ? onLogin : onRegister}>
+        <InputV1 testId="email" type="email" label="Email:" name="email" placeHolder="address@example.com" onParentStateChange={onChangeEmail} required />
         {!hasAccount ? (
           <InputV1
             testId="pwd"
@@ -168,22 +152,12 @@ const Auth = () => {
             name="password"
             placeHolder="password"
             onParentStateChange={onChangePwd}
-            required={true}
+            required
             regex={/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9\s]).+$/}
-            errorMsg={
-              "8-20 characters, 1 uppercase, 1 lowercase, 1 special char"
-            }
+            errorMsg="8-20 characters, 1 uppercase, 1 lowercase, 1 special char"
           />
         ) : (
-          <InputV1
-            testId="pwd"
-            type="password"
-            label="Password:"
-            name="password"
-            placeHolder="password"
-            onParentStateChange={onChangePwd}
-            required={true}
-          />
+          <InputV1 testId="pwd" type="password" label="Password:" name="password" placeHolder="password" onParentStateChange={onChangePwd} required />
         )}
 
         {!hasAccount && (
@@ -195,7 +169,7 @@ const Auth = () => {
               name="passwordConfirm"
               placeHolder="password"
               onParentStateChange={onChangePwdConfirm}
-              required={true}
+              required
             />
             <SelectV1
               testId="role"
@@ -204,42 +178,31 @@ const Auth = () => {
               initialValueFromParent={roleId}
               options={roles}
               onParentStateChange={onChangeRole}
-              required={true}
+              required
             />
           </>
         )}
         {hasAccount ? (
           <div className={styles.spaceBtw}>
-            <button
-              type="button"
-              className={styles.formLink}
-              onClick={() => setHasAccount((prev) => !prev)}
-            >
+            <button type="button" className={styles.formLink} onClick={() => setHasAccount((prev) => !prev)}>
               Create Account ?
             </button>
-            <button
-              type="button"
-              className={styles.formLink}
-              onClick={() => {}}
-            >
+            <button type="button" className={styles.formLink} onClick={() => {}}>
               Password forgotten ?
             </button>
           </div>
         ) : (
-          <button
-            type="button"
-            className={styles.formLink}
-            onClick={() => setHasAccount((prev) => !prev)}
-          >
+          <button type="button" className={styles.formLink} onClick={() => setHasAccount((prev) => !prev)}>
             Sign with existing account ?
           </button>
         )}
         <button type="submit" className={submitBtnClass} disabled={loading}>
+          {/* eslint-disable-next-line no-nested-ternary */}
           {loading ? "Sending..." : hasAccount ? "Login" : "Register"}
         </button>
       </form>
     </div>
   );
-};
+}
 
 export default Auth;

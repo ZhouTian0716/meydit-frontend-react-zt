@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
-const Makers = () => {
-  return (
-    <div>Makers</div>
-  )
+function Makers() {
+  return <div>Makers</div>;
 }
 
-export default Makers
+export default Makers;

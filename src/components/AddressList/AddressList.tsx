@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import styles from "./AddressList.module.scss";
-import { IAddress } from "../../api/resTypes";
 import { FaHome } from "react-icons/fa";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { getToken, removeAddressFromState, updatePrimaryAddress } from "../../redux/reducers/authSlice";
-import { addressDestroy, addressUpdate } from "../../api/addresses";
 import { ThreeCircles } from "react-loader-spinner";
 import { MdDeleteForever } from "react-icons/md";
 import useSwipe from "../../hooks/useSwipe";
 import { isAddressEmpty } from "../../utils/helpers";
+import { addressDestroy, addressUpdate } from "../../api/addresses";
+import { IAddress } from "../../api/resTypes";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { getToken, removeAddressFromState, updatePrimaryAddress } from "../../redux/reducers/authSlice";
+import styles from "./AddressList.module.scss";
 
 interface IProps {
   addresses: IAddress[];
@@ -32,21 +32,22 @@ const AddressList = ({ addresses }: IProps) => {
       await addressUpdate(selectedId, { isPrimary: true }, token);
       dispatch(updatePrimaryAddress({ selectedId: parseInt(selectedId) }));
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.log(err);
     } finally {
       setIsChanging(false);
     }
   };
-
   const deleteSelected = async (e: React.MouseEvent<HTMLButtonElement>) => {
     const target = e.target as HTMLElement;
     const selectedId = target.dataset.addressId;
     if (!selectedId) return;
     setIsChanging(true);
     try {
-      const statusCode = await addressDestroy(selectedId, token);
+      await addressDestroy(selectedId, token);
       dispatch(removeAddressFromState({ selectedId: parseInt(selectedId) }));
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.log(err);
     } finally {
       setIsChanging(false);
@@ -79,15 +80,15 @@ const AddressList = ({ addresses }: IProps) => {
   ) : (
     <ul className={styles.list}>
       {addresses.map(
-        (address, i) =>
+        (address) =>
           !isAddressEmpty(address) && (
             <li key={address.id} data-address-id={address.id} {...swipeHandlers}>
               <button type="button" onClick={setPrimary} data-address-id={address.id}>
                 {formatAddress(address)}
               </button>
-              {address.isPrimary && <FaHome color="#8460c3" fontSize={"1.5em"} />}
+              {address.isPrimary && <FaHome color="#8460c3" fontSize="1.5em" />}
               <button type="button" onClick={deleteSelected} data-address-id={address.id} className={styles.deleteBtn}>
-                <MdDeleteForever fontSize={"1.5em"} color="red" pointerEvents="none" />
+                <MdDeleteForever fontSize="1.5em" color="red" pointerEvents="none" />
               </button>
             </li>
           )

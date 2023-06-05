@@ -5,7 +5,7 @@ import Slide from "../../components/Slide/Slide";
 import { accountsIndex } from "../../api/accounts";
 import { IAccount } from "../../api/resTypes";
 
-const Home = () => {
+function Home() {
   const firstMount = useRef(true);
   const [accounts, setAccounts] = useState<IAccount[]>([]);
   const loadDatas = async () => {
@@ -26,6 +26,6 @@ const Home = () => {
       <Slide topAccounts={accounts} />
     </div>
   );
-};
+}
 
 export default Home;

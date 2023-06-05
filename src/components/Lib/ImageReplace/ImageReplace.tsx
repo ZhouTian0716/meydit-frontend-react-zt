@@ -1,19 +1,15 @@
 import React, { useState } from "react";
-import styles from "./ImageReplace.module.scss";
 import { AiOutlineCloudUpload, AiOutlineEdit } from "react-icons/ai";
 import { ThreeCircles } from "react-loader-spinner";
-import { s3SecureUrlForDelete, s3SecureUrlForUpload } from "../../../api/aws";
-import { IS3UploadPermissionRes, handleDelete } from "../../../utils/aws";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { s3SecureUrlForDelete, s3SecureUrlForUpload } from "../../../api/aws";
+import { IS3UploadPermissionRes, handleDelete } from "../../../utils/aws";
+import styles from "./ImageReplace.module.scss";
 import { toastErrorMessages } from "../../../data/constants";
 import { profileUpdate } from "../../../api/profiles";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
-import {
-  getAccount,
-  getToken,
-  updateProfile,
-} from "../../../redux/reducers/authSlice";
+import { getAccount, getToken, updateProfile } from "../../../redux/reducers/authSlice";
 
 interface IProps {
   defaultSrc: string;
@@ -24,7 +20,7 @@ interface IProps {
   };
 }
 
-const ImageReplace = (props: IProps) => {
+function ImageReplace(props: IProps) {
   const { defaultSrc, category, customStyles } = props;
 
   // Redux
@@ -35,11 +31,7 @@ const ImageReplace = (props: IProps) => {
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState<File | null>(null);
   const { avatar } = profile;
-  let currentSrc = image
-    ? URL.createObjectURL(image)
-    : avatar
-    ? avatar
-    : defaultSrc;
+  const currentSrc = image ? URL.createObjectURL(image) : avatar || defaultSrc;
 
   const handleSetImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -53,22 +45,12 @@ const ImageReplace = (props: IProps) => {
     if (avatar) handleDelete(avatar, accountId.toString(), token);
     confirmUpload(image, accountId.toString(), category);
   };
-  const confirmUpload = async (
-    file: File | null,
-    filesFolder: string,
-    category: string
-  ) => {
+  const confirmUpload = async (file: File | null, filesFolder: string, category: string) => {
     if (!file) return;
     try {
       // Step 1: get s3 presigned url for upload
       const fileType = encodeURIComponent(file.name).split(".")[1];
-      const res: IS3UploadPermissionRes = await s3SecureUrlForUpload(
-        fileType,
-        filesFolder,
-        category,
-        accountId.toString(),
-        token
-      );
+      const res: IS3UploadPermissionRes = await s3SecureUrlForUpload(fileType, filesFolder, category, accountId.toString(), token);
       const { urlOnS3 } = res;
       // Step 2: upload file to s3
       const { statusText } = await axios.put(res.uploadUrl, file);
@@ -104,23 +86,13 @@ const ImageReplace = (props: IProps) => {
           <label htmlFor="setAvatar" className={styles.editBtn}>
             <AiOutlineEdit color="blue" />
           </label>
-          <input
-            type="file"
-            id="setAvatar"
-            className="display-none"
-            onChange={handleSetImage}
-            accept="image/*"
-          />
-          <AiOutlineCloudUpload
-            color="blue"
-            className={styles.uploadBtn}
-            onClick={handleConfirm}
-          />
+          <input type="file" id="setAvatar" className="display-none" onChange={handleSetImage} accept="image/*" />
+          <AiOutlineCloudUpload color="blue" className={styles.uploadBtn} onClick={handleConfirm} />
         </>
       )}
     </div>
   );
-};
+}
 
 export default ImageReplace;
 

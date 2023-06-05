@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
-import styles from "./Project.module.scss";
 import { useParams } from "react-router-dom";
+import { HiOutlineCalendar, HiOutlineLocationMarker } from "react-icons/hi";
+import styles from "./Project.module.scss";
 import { IProjectData } from "../../api/resTypes";
 import { projectShow, projectUpdate } from "../../api/projects";
 import { timeAgo } from "../../utils/formatters";
 import LoaderV1 from "../../components/Loader/LoaderV1";
 import defaultUser from "../../assets/img/defaultUser.png";
-import { HiOutlineCalendar, HiOutlineLocationMarker } from "react-icons/hi";
 import ProjectCarousel from "../../components/Lib/Carousel/ProjectCarousel";
 import BidCard from "../../components/Bid/BidCard";
 import { toggleBidModal } from "../../redux/reducers/uiSlice";
@@ -16,7 +16,7 @@ import { getAccount } from "../../redux/reducers/authSlice";
 import InputV2 from "../../components/Lib/Inputs/InputV2/InputV2";
 import TextAreaV2 from "../../components/Lib/TextArea/TextAreaV2";
 
-const Project = () => {
+function Project() {
   const firstMount = useRef(true);
   const { slug } = useParams();
   // Redux
@@ -40,39 +40,20 @@ const Project = () => {
     };
   }, []);
 
-
   // Display related:
-  const clientName = client?.firstName
-    ? `${client.firstName} ${client.lastName}`
-    : client?.email;
+  const clientName = client?.firstName ? `${client.firstName} ${client.lastName}` : client?.email;
 
-  const clientAvatarSrc = client?.profile.avatar
-    ? client.profile.avatar
-    : defaultUser;
+  const clientAvatarSrc = client?.profile.avatar ? client.profile.avatar : defaultUser;
 
   return project ? (
     <div className={styles.projectPage}>
       <h2 className={styles.title}>
         {client?.id === loginUserId ? (
           <>
-            <InputV2
-              name="title"
-              defaultValue={title ?? ""}
-              projectSlug={slug}
-              projectUpdate={projectUpdate}
-              regex={/^.{5,}$/}
-              maxWidth={"300px"}
-            />
+            <InputV2 name="title" defaultValue={title ?? ""} projectSlug={slug} projectUpdate={projectUpdate} regex={/^.{5,}$/} maxWidth="300px" />
             <span className="flexRow">
               <small>$</small>
-              <InputV2
-                name="startPrice"
-                type="number"
-                defaultValue={startPrice ?? 0}
-                maxWidth={"100px"}
-                projectSlug={slug}
-                projectUpdate={projectUpdate}
-              />
+              <InputV2 name="startPrice" type="number" defaultValue={startPrice ?? 0} maxWidth="100px" projectSlug={slug} projectUpdate={projectUpdate} />
             </span>
           </>
         ) : (
@@ -87,11 +68,7 @@ const Project = () => {
       </h2>
       <div className={`${styles.flexRow} ${styles.alignCenter}`}>
         <div className={styles.avatarContainer}>
-          <img
-            className={styles.avatar}
-            src={clientAvatarSrc}
-            alt={"ownerAvatar"}
-          />
+          <img className={styles.avatar} src={clientAvatarSrc} alt="ownerAvatar" />
         </div>
         <div>
           <span className={styles.clientName}>{clientName}</span>
@@ -101,7 +78,7 @@ const Project = () => {
       <h2 className={styles.title}>Location</h2>
       <p className={styles.content}>
         <HiOutlineLocationMarker color="#8460c3" />
-        {project.client.addresses.length ? getPrimaryAddress(project.client.addresses) : 'Client address pending'}
+        {project.client.addresses.length ? getPrimaryAddress(project.client.addresses) : "Client address pending"}
       </p>
       <h2 className={styles.title}>Due Date</h2>
       <p className={styles.content}>
@@ -110,18 +87,13 @@ const Project = () => {
       </p>
       <h2 className={styles.title}>Description</h2>
       {client?.id === loginUserId ? (
-        <TextAreaV2
-          name="description"
-          defaultValue={description}
-          projectSlug={slug}
-          projectUpdate={projectUpdate}
-        />
+        <TextAreaV2 name="description" defaultValue={description} projectSlug={slug} projectUpdate={projectUpdate} />
       ) : (
         <p className={styles.description}>{description}</p>
       )}
 
       <h2 className={styles.textCenter}>Samples</h2>
-      <ProjectCarousel images={project.images} clientId={project.client.id}/>
+      <ProjectCarousel images={project.images} clientId={project.client.id} />
       {project.tags.length && (
         <>
           <h2 className={styles.title}>Required Skills</h2>
@@ -135,10 +107,7 @@ const Project = () => {
         </>
       )}
 
-      <button
-        className={styles.bidBtn}
-        onClick={() => dispatch(toggleBidModal())}
-      >
+      <button className={styles.bidBtn} onClick={() => dispatch(toggleBidModal())}>
         SUBMIT BID
       </button>
 
@@ -149,11 +118,13 @@ const Project = () => {
             <BidCard bid={bid} key={bid.id} />
           ))}
         </>
-      ) : <p>Update your project details to attract best bids</p>}
+      ) : (
+        <p>Update your project details to attract best bids</p>
+      )}
     </div>
   ) : (
-    <LoaderV1 height={"200"} width={"200"} wrapperClass="pageLoader" />
+    <LoaderV1 height="200" width="200" wrapperClass="pageLoader" />
   );
-};
+}
 
 export default Project;

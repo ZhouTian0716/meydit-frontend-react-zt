@@ -8,8 +8,8 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // Redux Setup
-import { store } from "./redux/store";
 import { Provider } from "react-redux";
+import { store } from "./redux/store";
 
 import App from "./App";
 

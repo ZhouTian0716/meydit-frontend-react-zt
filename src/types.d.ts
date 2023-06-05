@@ -24,10 +24,6 @@ export interface ICreateAccount {
   lastName?: string;
 }
 
-
-
-
-
 export interface IProjectsStoreRes {
   id: number;
   slug?: string;
@@ -37,7 +33,6 @@ export interface IProjectsStoreRes {
   createdAt?: string;
   updatedAt?: string;
 }
-
 
 export interface ILoginData {
   email: string;

@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable import/no-cycle */
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import { IUiState } from "./types";
@@ -16,12 +18,12 @@ export const uiSlice = createSlice({
       state.bottomNav = !state.bottomNav;
     },
     toggleBidModal: (state) => {
-      if (typeof window != "undefined" && window.document) {
+      if (typeof window !== "undefined" && window.document) {
         document.body.style.overflow = "visible";
       }
       state.bidModal = !state.bidModal;
       if (state.bidModal === true) {
-        if (typeof window != "undefined" && window.document) {
+        if (typeof window !== "undefined" && window.document) {
           document.body.style.overflow = "hidden";
         }
       }

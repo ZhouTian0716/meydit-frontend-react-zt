@@ -1,24 +1,15 @@
 import React, { useState, useRef, useEffect } from "react";
-import styles from "./AutoAddress.module.scss";
 import { BiCurrentLocation } from "react-icons/bi";
-import {
-  apiKey,
-  geocodeJson,
-  initMapScript,
-  IAutoAddress,
-  extractAddress,
-} from "../../../../utils/gmap";
 import { AiFillSave, AiOutlineClear } from "react-icons/ai";
 import { ThreeCircles } from "react-loader-spinner";
+import { apiKey, geocodeJson, initMapScript, IAutoAddress, extractAddress } from "../../../../utils/gmap";
+import styles from "./AutoAddress.module.scss";
 import { isAddressEmpty } from "../../../../utils/helpers";
 import { addressStore } from "../../../../api/addresses";
-import {
-  addAddressToState,
-  getToken,
-} from "../../../../redux/reducers/authSlice";
+import { addAddressToState, getToken } from "../../../../redux/reducers/authSlice";
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
 
-const AutoAddress = () => {
+function AutoAddress() {
   const addressInitialState: IAutoAddress = {
     number: "",
     route: "",
@@ -54,9 +45,7 @@ const AutoAddress = () => {
   // init autocomplete
   const initAutocomplete = () => {
     if (!searchInputRef.current) return;
-    const autocomplete = new window.google.maps.places.Autocomplete(
-      searchInputRef.current
-    );
+    const autocomplete = new window.google.maps.places.Autocomplete(searchInputRef.current);
     autocomplete.setFields(["address_component", "geometry"]);
     autocomplete.addListener("place_changed", () => {
       onChangeAddress(autocomplete);
@@ -80,11 +69,9 @@ const AutoAddress = () => {
 
   const findMyLocation = () => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position: GeolocationPosition) => {
-          reverseGeocode(position.coords);
-        }
-      );
+      navigator.geolocation.getCurrentPosition((position: GeolocationPosition) => {
+        reverseGeocode(position.coords);
+      });
     }
   };
 
@@ -138,10 +125,7 @@ const AutoAddress = () => {
 
       <h2>Addresses</h2>
       <div className={styles.searchInputBox}>
-        <BiCurrentLocation
-          className={styles.flexEnd}
-          onClick={() => findMyLocation()}
-        />
+        <BiCurrentLocation className={styles.flexEnd} onClick={() => findMyLocation()} />
         <input
           ref={searchInputRef}
           type="text"
@@ -149,7 +133,7 @@ const AutoAddress = () => {
           placeholder="Search your address..."
           className={styles.searchInput}
           onChange={onSearchChange}
-          autoComplete={"off"}
+          autoComplete="off"
         />
         <AiOutlineClear
           className={styles.flexEnd}
@@ -171,9 +155,7 @@ const AutoAddress = () => {
             autoComplete="off"
             className={styles.addressGrid__item__input}
             style={{
-              width: number
-                ? `${number.toString().length + 1}ch`
-                : defaultInputLength,
+              width: number ? `${number.toString().length + 1}ch` : defaultInputLength,
             }}
             value={number}
             onChange={onAddressPayloadChange}
@@ -189,9 +171,7 @@ const AutoAddress = () => {
             name="route"
             className={styles.addressGrid__item__input}
             style={{
-              width: route
-                ? `${route.toString().length}ch`
-                : defaultInputLength,
+              width: route ? `${route.toString().length}ch` : defaultInputLength,
             }}
             value={route}
             onChange={onAddressPayloadChange}
@@ -223,9 +203,7 @@ const AutoAddress = () => {
             name="state"
             className={styles.addressGrid__item__input}
             style={{
-              width: state
-                ? `${state.toString().length + 2}ch`
-                : defaultInputLength,
+              width: state ? `${state.toString().length + 2}ch` : defaultInputLength,
             }}
             value={state}
             onChange={onAddressPayloadChange}
@@ -257,9 +235,7 @@ const AutoAddress = () => {
             name="country"
             className={styles.addressGrid__item__input}
             style={{
-              width: country
-                ? `${country.toString().length + 2}ch`
-                : defaultInputLength,
+              width: country ? `${country.toString().length + 2}ch` : defaultInputLength,
             }}
             value={country}
             onChange={onAddressPayloadChange}
@@ -268,6 +244,6 @@ const AutoAddress = () => {
       </div>
     </form>
   );
-};
+}
 
 export default AutoAddress;
