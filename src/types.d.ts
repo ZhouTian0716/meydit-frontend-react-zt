@@ -1,6 +1,4 @@
 // Data fetched from API
-
-
 export interface IAccount {
   id: string;
   firstName?: string;

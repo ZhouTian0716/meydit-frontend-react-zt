@@ -3,11 +3,7 @@ import styles from "./AddressList.module.scss";
 import { IAddress } from "../../api/resTypes";
 import { FaHome } from "react-icons/fa";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import {
-  getToken,
-  removeAddressFromState,
-  updatePrimaryAddress,
-} from "../../redux/reducers/authSlice";
+import { getToken, removeAddressFromState, updatePrimaryAddress } from "../../redux/reducers/authSlice";
 import { addressDestroy, addressUpdate } from "../../api/addresses";
 import { ThreeCircles } from "react-loader-spinner";
 import { MdDeleteForever } from "react-icons/md";
@@ -27,9 +23,7 @@ const AddressList = ({ addresses }: IProps) => {
   const dispatch = useAppDispatch();
   const [isChanging, setIsChanging] = useState(false);
 
-  const setPrimary = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
+  const setPrimary = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const target = e.target as HTMLElement;
     const selectedId = target.dataset.addressId;
     if (!selectedId) return;
@@ -87,32 +81,13 @@ const AddressList = ({ addresses }: IProps) => {
       {addresses.map(
         (address, i) =>
           !isAddressEmpty(address) && (
-            <li
-              key={address.id}
-              data-address-id={address.id}
-              {...swipeHandlers}
-            >
-              <button
-                type="button"
-                onClick={setPrimary}
-                data-address-id={address.id}
-              >
+            <li key={address.id} data-address-id={address.id} {...swipeHandlers}>
+              <button type="button" onClick={setPrimary} data-address-id={address.id}>
                 {formatAddress(address)}
               </button>
-              {address.isPrimary && (
-                <FaHome color="#8460c3" fontSize={"1.5em"} />
-              )}
-              <button
-                type="button"
-                onClick={deleteSelected}
-                data-address-id={address.id}
-                className={styles.deleteBtn}
-              >
-                <MdDeleteForever
-                  fontSize={"1.5em"}
-                  color="red"
-                  pointerEvents="none"
-                />
+              {address.isPrimary && <FaHome color="#8460c3" fontSize={"1.5em"} />}
+              <button type="button" onClick={deleteSelected} data-address-id={address.id} className={styles.deleteBtn}>
+                <MdDeleteForever fontSize={"1.5em"} color="red" pointerEvents="none" />
               </button>
             </li>
           )
