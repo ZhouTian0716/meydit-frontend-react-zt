@@ -7,7 +7,9 @@ function Unauthorized() {
     <div>
       <h1>Unauthorized</h1>
       <p>Your login user do not have the match role to access the requested page</p>
-      <button onClick={() => navigate(-1)}>Go Back</button>
+      <button type="button" onClick={() => navigate(-1)}>
+        Go Back
+      </button>
     </div>
   );
 }

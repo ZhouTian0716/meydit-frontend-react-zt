@@ -3,7 +3,7 @@ import { AiOutlineCloudUpload, AiOutlineEdit } from "react-icons/ai";
 import { ThreeCircles } from "react-loader-spinner";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { s3SecureUrlForDelete, s3SecureUrlForUpload } from "../../../api/aws";
+import { s3SecureUrlForUpload } from "../../../api/aws";
 import { IS3UploadPermissionRes, handleDelete } from "../../../utils/aws";
 import styles from "./ImageReplace.module.scss";
 import { toastErrorMessages } from "../../../data/constants";
@@ -22,7 +22,6 @@ interface IProps {
 
 function ImageReplace(props: IProps) {
   const { defaultSrc, category, customStyles } = props;
-
   // Redux
   const { token } = useAppSelector(getToken);
   const { id: accountId, profile } = useAppSelector(getAccount);
@@ -39,18 +38,12 @@ function ImageReplace(props: IProps) {
     }
   };
 
-  const handleConfirm = async () => {
-    if (!image) return;
-    setLoading(true);
-    if (avatar) handleDelete(avatar, accountId.toString(), token);
-    confirmUpload(image, accountId.toString(), category);
-  };
-  const confirmUpload = async (file: File | null, filesFolder: string, category: string) => {
+  const confirmUpload = async (file: File | null, filesFolder: string, selectedCategory: string) => {
     if (!file) return;
     try {
       // Step 1: get s3 presigned url for upload
       const fileType = encodeURIComponent(file.name).split(".")[1];
-      const res: IS3UploadPermissionRes = await s3SecureUrlForUpload(fileType, filesFolder, category, accountId.toString(), token);
+      const res: IS3UploadPermissionRes = await s3SecureUrlForUpload(fileType, filesFolder, selectedCategory, accountId.toString(), token);
       const { urlOnS3 } = res;
       // Step 2: upload file to s3
       const { statusText } = await axios.put(res.uploadUrl, file);
@@ -67,6 +60,13 @@ function ImageReplace(props: IProps) {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleConfirm = async () => {
+    if (!image) return;
+    setLoading(true);
+    if (avatar) handleDelete(avatar, accountId.toString(), token);
+    confirmUpload(image, accountId.toString(), category);
   };
 
   return (

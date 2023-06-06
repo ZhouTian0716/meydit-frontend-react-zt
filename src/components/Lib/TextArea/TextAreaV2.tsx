@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { AiFillSave } from "react-icons/ai";
 import { ThreeCircles } from "react-loader-spinner";
 import styles from "./TextAreaV2.module.scss";
@@ -35,8 +35,8 @@ function TextAreaV2(props: ITextAreaV2) {
     setLoading(true);
     if (!projectUpdate) return;
     const payload = { [name]: val };
-    if (!projectSlug) return console.log("projectSlug is undefined");
-    const res = await projectUpdate(projectSlug, payload, token);
+    if (!projectSlug) return;
+    await projectUpdate(projectSlug, payload, token);
     setLoading(false);
   };
 
@@ -45,7 +45,7 @@ function TextAreaV2(props: ITextAreaV2) {
     <div className={containerClassNames}>
       <textarea name={name} className={styles.textArea} rows={rows} autoCorrect="on" spellCheck="false" value={val} onChange={onChange} />
       {isEditing && (
-        <button onClick={handleSave} className={`${styles.btn} bg-trans`}>
+        <button type="button" onClick={handleSave} className={`${styles.btn} bg-trans`}>
           <AiFillSave fontSize="1.5em" color="#8460c3" pointerEvents="none" />
         </button>
       )}
@@ -72,4 +72,6 @@ TextAreaV2.defaultProps = {
   defaultValue: "",
   projectSlug: "",
   projectUpdate: async () => {},
+  type: "text",
+  required: false,
 };

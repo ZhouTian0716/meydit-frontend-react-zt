@@ -12,7 +12,7 @@ interface IProps {
 }
 
 function BidCard({ bid }: IProps) {
-  const { id, price, comment, createdAt, maker } = bid;
+  const { price, comment, createdAt, maker } = bid;
   const { addresses, profile } = maker;
   const makerName = maker.firstName && maker.lastName ? `${maker.firstName} ${maker.lastName}` : maker.email;
 
@@ -31,7 +31,7 @@ function BidCard({ bid }: IProps) {
                 {[...Array(5)].map((e, i) => (
                   // ZT-NOTE:
                   // maker rating to be continued
-                  <FaStar key={i} color={i < 4 ? "#8460c3" : "pink"} />
+                  <FaStar key={e} color={i < 4 ? "#8460c3" : "pink"} />
                 ))}
               </span>
             </p>

@@ -1,5 +1,8 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import { useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import styles from "./NavLinks.module.scss";
 import defaultUser from "../../assets/img/defaultUser.png";
@@ -16,7 +19,6 @@ interface IProps {
 function NavLinks(props: IProps) {
   const { showOnMobile } = props;
   const [open, setOpen] = useState(false);
-  const { pathname } = useLocation();
   const navigate = useNavigate();
 
   // Redux
@@ -92,7 +94,7 @@ function NavLinks(props: IProps) {
             <Link to={`/settings/${id}`} className={styles.option}>
               Settings
             </Link>
-            <button className={styles.option} onClick={onLogout}>
+            <button type="button" className={styles.option} onClick={onLogout}>
               Logout
             </button>
           </div>

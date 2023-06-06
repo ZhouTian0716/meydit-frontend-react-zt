@@ -30,23 +30,25 @@ function ProjectCarousel({ images, clientId }: IProps) {
     try {
       await imageUpdate(imageId, { isProjectCover: true }, token);
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.log(err);
     } finally {
       setLoading(false);
     }
   };
 
-  const onSelectedImgDelete = async (imageId: string, imageUrl: string, accountId: string, token: string) => {
+  const onSelectedImgDelete = async (imageId: string, imageUrl: string, currentAccountId: string, currentToken: string) => {
     // console.log(imageId, imageUrl, accountId, token);
     setLoading(true);
     try {
       // Step 1: delete image from RDS
-      await imageDelete(imageId, token);
+      await imageDelete(imageId, currentToken);
       // Step 2: delete image from S3
-      await handleDelete(imageUrl, accountId, token);
+      await handleDelete(imageUrl, currentAccountId, currentToken);
       // Step 3: remove the image from current page
       setPageImages((prev) => prev.filter((image) => image.id.toString() !== imageId));
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.log(err);
     } finally {
       setLoading(false);
@@ -60,7 +62,7 @@ function ProjectCarousel({ images, clientId }: IProps) {
       )}
       {pageImages.map((image) => (
         <div key={image.id} className={styles.imageContainer}>
-          <img src={image.url} className={styles.image} />
+          <img src={image.url} className={styles.image} alt={image.fileName} />
           {clientId === accountId && (
             <div className={styles.optionsHeader}>
               {loading ? (

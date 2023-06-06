@@ -65,6 +65,7 @@ function Dashboard() {
   }, []);
 
   // ZT-NOTE: 创建project的过程步骤要之后做好记录，因为涉及到了s3的上传，以及image入档db的顺序
+  // eslint-disable-next-line consistent-return
   const createProject = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);

@@ -48,7 +48,7 @@ function InputV2(props: IInputV2) {
       if (!projectUpdate) return;
       const payload = { [name]: val };
       setLoading(true);
-      if (!projectSlug) return console.log("projectSlug is undefined");
+      if (!projectSlug) return;
       const res = await projectUpdate(projectSlug, payload, token);
       // console.log(res);
       syncVal.current = res[name];
@@ -56,12 +56,11 @@ function InputV2(props: IInputV2) {
     }
   };
 
-  regex &&
-    useEffect(() => {
-      if (typeof val === "string") {
-        if (!regex.test(val)) setError(true);
-      } else setError(false);
-    }, [val]);
+  useEffect(() => {
+    if (regex && typeof val === "string") {
+      if (!regex.test(val)) setError(true);
+    } else setError(false);
+  }, [val, regex]);
 
   const activeClassName = active && styles.inputActive;
 
@@ -107,4 +106,5 @@ InputV2.defaultProps = {
   projectUpdate: async () => {},
   regex: null,
   maxWidth: "200px",
+  classes: [],
 };

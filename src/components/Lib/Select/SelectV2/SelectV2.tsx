@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styles from "./SelectV2.module.scss";
 import Tab from "./Tab";
 
@@ -44,4 +44,5 @@ SelectV2.defaultProps = {
   options: null,
   required: false,
   classes: null,
+  onParentStateChange: () => {},
 };

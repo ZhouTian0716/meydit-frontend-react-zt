@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { BiCurrentLocation } from "react-icons/bi";
 import { AiFillSave, AiOutlineClear } from "react-icons/ai";
 import { ThreeCircles } from "react-loader-spinner";
@@ -36,21 +36,20 @@ function AutoAddress() {
   };
 
   // do something on address change
-  const onChangeAddress = (autocomplete: google.maps.places.Autocomplete) => {
+  const onChangeAddress = useCallback((autocomplete: google.maps.places.Autocomplete) => {
     const place = autocomplete.getPlace();
-    // console.log("place", place);
     setAddress(extractAddress(place));
-  };
+  }, []);
 
   // init autocomplete
-  const initAutocomplete = () => {
+  const initAutocomplete = useCallback(() => {
     if (!searchInputRef.current) return;
     const autocomplete = new window.google.maps.places.Autocomplete(searchInputRef.current);
     autocomplete.setFields(["address_component", "geometry"]);
     autocomplete.addListener("place_changed", () => {
       onChangeAddress(autocomplete);
     });
-  };
+  }, [onChangeAddress, searchInputRef]);
 
   const reverseGeocode = ({ latitude, longitude }: GeolocationCoordinates) => {
     const url = `${geocodeJson}?key=${apiKey}&latlng=${latitude},${longitude}`;
@@ -59,6 +58,7 @@ function AutoAddress() {
       .then((response) => response.json())
       .then((location) => {
         const place = location.results[0];
+        // eslint-disable-next-line no-underscore-dangle, @typescript-eslint/naming-convention
         const _address = extractAddress(place);
         // console.log(_address);
         setAddress(_address);
@@ -77,14 +77,15 @@ function AutoAddress() {
 
   // load map script after mounted
   useEffect(() => {
-    firstMount.current &&
+    if (firstMount.current) {
       initMapScript().then(() => {
         initAutocomplete();
       });
+    }
     return () => {
       firstMount.current = false;
     };
-  }, []);
+  }, [initAutocomplete]);
 
   const onSaveAddress = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -95,6 +96,7 @@ function AutoAddress() {
       const res = await addressStore(addressPayload, token);
       dispatch(addAddressToState(res));
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.log(err);
     } finally {
       setIsStoring(false);

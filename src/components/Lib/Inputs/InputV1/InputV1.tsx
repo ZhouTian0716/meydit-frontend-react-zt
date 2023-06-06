@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { MdVisibilityOff, MdVisibility } from "react-icons/md";
 import styles from "./InputV1.module.scss";
 
@@ -32,6 +32,13 @@ function InputV1(props: IInputV1) {
     }
   };
 
+  useEffect(() => {
+    if (typeof val === "string" && regex) {
+      if (val.length && !regex.test(val)) setError(true);
+      else setError(false);
+    }
+  }, [val, regex]);
+
   if (loading) {
     return <div className={styles.skeleton} />;
   }
@@ -53,13 +60,6 @@ function InputV1(props: IInputV1) {
       }}
     />
   );
-
-  useEffect(() => {
-    if (typeof val === "string" && regex) {
-      if (val.length && !regex.test(val)) setError(true);
-      else setError(false);
-    }
-  }, [val]);
 
   return (
     <div className={[styles.inputContainer, classes].join(" ")}>

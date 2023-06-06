@@ -8,17 +8,21 @@ import { IAccount } from "../../api/resTypes";
 function Home() {
   const firstMount = useRef(true);
   const [accounts, setAccounts] = useState<IAccount[]>([]);
+
   const loadDatas = async () => {
     const accountsData = await accountsIndex();
     setAccounts(accountsData);
   };
 
   useEffect(() => {
-    firstMount.current && loadDatas();
+    if (firstMount.current) {
+      loadDatas();
+    }
     return () => {
       firstMount.current = false;
     };
   }, []);
+
   return (
     <div className={styles.home}>
       <Landing accounts={accounts} />

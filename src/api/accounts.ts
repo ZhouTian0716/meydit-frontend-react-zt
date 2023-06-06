@@ -1,6 +1,5 @@
 import axios from "axios";
 import { configOptions } from "../config/config";
-import { IAccount } from "./resTypes";
 import { IUpdateAccount } from "./payloadTypes";
 
 const { apiAddress } = configOptions;

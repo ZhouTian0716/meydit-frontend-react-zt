@@ -45,6 +45,7 @@ function Setting() {
     try {
       await accountUpdate(id.toString(), account, token);
       dispatch(updateAccount({ ...account }));
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       err?.response?.data?.map((e: { message: string }) => toast.error(e.message));
     } finally {
@@ -63,7 +64,8 @@ function Setting() {
     try {
       await profileUpdate(profile.id, { bio: biography }, token);
       dispatch(updateProfile({ bio: biography }));
-    } catch (err) {
+    } catch (err: unknown) {
+      // eslint-disable-next-line no-console
       console.log(err);
     } finally {
       setProfileUpdateLoading(false);
@@ -135,7 +137,7 @@ function Setting() {
             </>
           )}
           {isEditingAccount && (
-            <button onClick={updateAccountNames} className="bg-trans">
+            <button type="button" onClick={updateAccountNames} className="bg-trans">
               <AiFillSave fontSize="1.5em" color="#8460c3" pointerEvents="none" />
             </button>
           )}
@@ -148,7 +150,7 @@ function Setting() {
           <span className={styles.labelEl}>Biography</span>
           <div className={styles.positionDiv}>
             {isEditingProfile && (
-              <button onClick={updateProfileBio} className={`${styles.bioSaveBtn} bg-trans`}>
+              <button type="button" onClick={updateProfileBio} className={`${styles.bioSaveBtn} bg-trans`}>
                 <AiFillSave fontSize="1.5em" color="#8460c3" pointerEvents="none" />
               </button>
             )}

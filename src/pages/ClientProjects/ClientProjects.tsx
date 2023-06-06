@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import styles from "./ClientProjects.module.scss";
 import { projectsByAccount } from "../../api/projects";
@@ -10,17 +10,21 @@ function ClientProjects() {
   const { accountId } = useParams();
   const [projects, setProjects] = useState([]);
   // console.log(projects);
-  const fetchProjects = async () => {
+  const fetchProjects = useCallback(async () => {
     if (!accountId) return;
     const res = await projectsByAccount(accountId);
     setProjects(res.data);
-  };
+  }, [accountId, setProjects]);
+
   useEffect(() => {
-    firstMount.current && fetchProjects();
+    if (firstMount.current) {
+      fetchProjects();
+    }
     return () => {
       firstMount.current = false;
     };
-  }, []);
+  }, [fetchProjects]);
+
   return (
     <div className={styles.projects}>
       <h2 className={styles.pageTitle}>Projects created by {}</h2>

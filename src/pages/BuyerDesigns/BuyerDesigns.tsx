@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./BuyerDesigns.module.scss";
+// import styles from "./BuyerDesigns.module.scss";
 
 function BuyerDesigns() {
   return <div>BuyerDesigns</div>;

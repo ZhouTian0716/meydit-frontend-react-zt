@@ -17,11 +17,11 @@ function BidModal() {
   };
 
   const onPriceAdd = () => {
-    price ? setPrice((prev) => prev + 10) : setPrice(10);
+    setPrice((prev) => prev + 10);
   };
 
   const onPriceReduce = () => {
-    price > startPrice ? setPrice((prev) => prev - 10) : setPrice(startPrice);
+    setPrice((prev) => prev - 10);
   };
 
   const onPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,23 +32,24 @@ function BidModal() {
     setComment(e.target.value);
   };
 
-  const handleSubmit = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    event.stopPropagation();
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     const newBid = {
       price,
       comment,
     };
+    // eslint-disable-next-line no-console
     console.log(newBid);
     if (price < startPrice) {
-      return toast.error(`Bid price should be at least $${startPrice}`);
+      toast.error(`Bid price should be at least $${startPrice}`);
+      return;
     }
-
     dispatch(toggleBidModal());
   };
 
   return (
     <div className={styles.overlay}>
-      <div className={styles.modal}>
+      <form className={styles.modal} onSubmit={handleSubmit}>
         <AiFillCloseCircle className={`${styles.closeBtn} ${styles.pointer}`} onClick={closeModal} />
         <h3 className={styles.title}>Set your Bid</h3>
         <div className={styles.priceDiv}>
@@ -78,10 +79,10 @@ function BidModal() {
             <small>Photo Library</small>
           </div>
         </div>
-        <button onClick={handleSubmit} className={styles.bidBtn}>
+        <button type="submit" className={styles.bidBtn}>
           SUBMIT
         </button>
-      </div>
+      </form>
     </div>
   );
 }

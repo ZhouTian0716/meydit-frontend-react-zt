@@ -39,20 +39,20 @@ function ImageUpload(props: IProps) {
     }
   };
 
-  const confirmUpload = async (file: File | null, filesFolder: string, category: string) => {
+  const confirmUpload = async (file: File | null, targetFilesFolder: string, targetCategory: string) => {
     if (!file) return;
     setLoading(true);
     try {
       // Step 1: get s3 presigned url for upload
       const fileType = encodeURIComponent(file.name).split(".")[1];
-      const res: IS3UploadPermissionRes = await s3SecureUrlForUpload(fileType, filesFolder, category, accountId.toString(), token);
+      const res: IS3UploadPermissionRes = await s3SecureUrlForUpload(fileType, targetFilesFolder, targetCategory, accountId.toString(), token);
       // Step 2: upload file to s3
       await axios.put(res.uploadUrl, file);
       // Step 3: save new image data to database
       const imagePayload = {
         url: res.urlOnS3,
         fileName: res.fileName,
-        projectId: parseInt(filesFolder),
+        projectId: parseInt(targetFilesFolder),
       };
       const newImgRes = await imagesStore(imagePayload);
       // Step 4: 修改父组件imageArray的state

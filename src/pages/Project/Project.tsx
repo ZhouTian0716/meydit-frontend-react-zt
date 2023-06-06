@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { HiOutlineCalendar, HiOutlineLocationMarker } from "react-icons/hi";
 import styles from "./Project.module.scss";
@@ -27,18 +27,20 @@ function Project() {
   const [project, setProject] = useState<IProjectData | null>(null);
   const { client, title, description, startPrice, tags, bids } = project ?? {};
 
-  const loadProject = async () => {
+  const loadProject = useCallback(async () => {
     if (!slug) return;
     const projectData = await projectShow(slug);
     setProject(projectData);
-  };
+  }, [slug, setProject]);
 
   useEffect(() => {
-    firstMount.current && loadProject();
+    if (firstMount.current) {
+      loadProject();
+    }
     return () => {
       firstMount.current = false;
     };
-  }, []);
+  }, [loadProject]);
 
   // Display related:
   const clientName = client?.firstName ? `${client.firstName} ${client.lastName}` : client?.email;
@@ -107,7 +109,7 @@ function Project() {
         </>
       )}
 
-      <button className={styles.bidBtn} onClick={() => dispatch(toggleBidModal())}>
+      <button type="button" className={styles.bidBtn} onClick={() => dispatch(toggleBidModal())}>
         SUBMIT BID
       </button>
 
