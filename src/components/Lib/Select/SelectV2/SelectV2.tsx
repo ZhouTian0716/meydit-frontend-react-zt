@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unused-prop-types */
 import React from "react";
 import styles from "./SelectV2.module.scss";
 import Tab from "./Tab";

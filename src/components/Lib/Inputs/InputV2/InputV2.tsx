@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unused-prop-types */
 import React, { useEffect, useState, useRef } from "react";
 import { RotatingLines } from "react-loader-spinner";
 import styles from "./InputV2.module.scss";

@@ -28,7 +28,7 @@ function BidCard({ bid }: IProps) {
             <p>
               <span className="mr-1 bold">{makerName}</span>
               <span>
-                {[...Array(5)].map((e, i) => (
+                {["a", "b", "c", "d", "e"].map((e, i) => (
                   // ZT-NOTE:
                   // maker rating to be continued
                   <FaStar key={e} color={i < 4 ? "#8460c3" : "pink"} />

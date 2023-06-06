@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unused-prop-types */
 import React, { useState } from "react";
 import { AiFillSave } from "react-icons/ai";
 import { ThreeCircles } from "react-loader-spinner";
