@@ -1,5 +1,6 @@
 import axios from "axios";
 import { configOptions } from "../config/config";
+
 const { apiAddress } = configOptions;
 
 export const categoriesIndex = async () => {

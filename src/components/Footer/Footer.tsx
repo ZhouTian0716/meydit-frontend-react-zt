@@ -1,11 +1,11 @@
 import React from "react";
-import styles from "./Footer.module.scss";
-import colorLogo from "../../../src/assets/img/logo.png";
 import { Link } from "react-router-dom";
 import { GrFacebookOption, GrLinkedinOption } from "react-icons/gr";
 import { SiInstagram, SiTwitter, SiPinterest } from "react-icons/si";
+import colorLogo from "../../assets/img/logo.png";
+import styles from "./Footer.module.scss";
 
-const Footer = () => {
+function Footer() {
   return (
     <div className={styles.footer}>
       <img src={colorLogo} alt="colorLogo" className={styles.logo} />
@@ -28,17 +28,13 @@ const Footer = () => {
       </div>
       <p>
         <span className={`${styles.link} ${styles.borderRt}`}>About</span>
-        <span className={`${styles.link} ${styles.borderRt}`}>
-          Terms & Conditions
-        </span>
-        <span className={`${styles.link} ${styles.borderRt}`}>
-          Privacy Policy
-        </span>
+        <span className={`${styles.link} ${styles.borderRt}`}>Terms & Conditions</span>
+        <span className={`${styles.link} ${styles.borderRt}`}>Privacy Policy</span>
         <span className={`${styles.link}`}>Contact</span>
       </p>
       <p>Copyright &#169; 2021 Meyd.it</p>
     </div>
   );
-};
+}
 
 export default Footer;

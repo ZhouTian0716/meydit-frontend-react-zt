@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import styles from "./Carousel.module.scss";
-import { IImage } from "../../../api/resTypes";
 import { RiDeleteBin2Fill } from "react-icons/ri";
 import { BsFillHouseCheckFill } from "react-icons/bs";
+import styles from "./Carousel.module.scss";
+import { IImage } from "../../../api/resTypes";
 import { useAppSelector } from "../../../redux/hooks";
 import { getAccount, getToken } from "../../../redux/reducers/authSlice";
 import { imageDelete, imageUpdate } from "../../../api/images";
@@ -17,43 +17,38 @@ interface IProps {
 
 const maxImages = 9;
 
-const ProjectCarousel = ({ images, clientId }: IProps) => {
+function ProjectCarousel({ images, clientId }: IProps) {
   const { id: accountId } = useAppSelector(getAccount);
   const { token } = useAppSelector(getToken);
   const [loading, setLoading] = useState(false);
   // ZT-NOTE: component本地建一个state来响应图片CRUD的前端ui显示
   const [pageImages, setPageImages] = useState(images);
-  const projectId = pageImages[0].projectId;
+  const { projectId } = pageImages[0];
 
   const handleSetCover = async (imageId: string) => {
     setLoading(true);
     try {
       await imageUpdate(imageId, { isProjectCover: true }, token);
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.log(err);
     } finally {
       setLoading(false);
     }
   };
 
-  const onSelectedImgDelete = async (
-    imageId: string,
-    imageUrl: string,
-    accountId: string,
-    token: string
-  ) => {
+  const onSelectedImgDelete = async (imageId: string, imageUrl: string, currentAccountId: string, currentToken: string) => {
     // console.log(imageId, imageUrl, accountId, token);
     setLoading(true);
     try {
       // Step 1: delete image from RDS
-      await imageDelete(imageId, token);
+      await imageDelete(imageId, currentToken);
       // Step 2: delete image from S3
-      await handleDelete(imageUrl, accountId, token);
+      await handleDelete(imageUrl, currentAccountId, currentToken);
       // Step 3: remove the image from current page
-      setPageImages((prev) =>
-        prev.filter((image) => image.id.toString() !== imageId)
-      );
+      setPageImages((prev) => prev.filter((image) => image.id.toString() !== imageId));
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.log(err);
     } finally {
       setLoading(false);
@@ -63,42 +58,26 @@ const ProjectCarousel = ({ images, clientId }: IProps) => {
   return (
     <div className={styles.container}>
       {pageImages.length < maxImages && clientId === accountId && (
-        <ImageUpload
-          category="project"
-          filesFolder={projectId.toString()}
-          setParentStateFn={setPageImages}
-        />
+        <ImageUpload category="project" filesFolder={projectId.toString()} setParentStateFn={setPageImages} />
       )}
       {pageImages.map((image) => (
         <div key={image.id} className={styles.imageContainer}>
-          <img src={image.url} className={styles.image} />
+          <img src={image.url} className={styles.image} alt={image.fileName} />
           {clientId === accountId && (
             <div className={styles.optionsHeader}>
               {loading ? (
                 <>
-                  <LoaderV1 width={"1.5em"} height={"1.5em"} />
-                  <LoaderV1 width={"1.5em"} height={"1.5em"} />
+                  <LoaderV1 width="1.5em" height="1.5em" />
+                  <LoaderV1 width="1.5em" height="1.5em" />
                 </>
               ) : (
                 <>
-                  <button
-                    type="button"
-                    data-image-id={image.id}
-                    onClick={() => handleSetCover(image.id.toString())}
-                    className={`${styles.btn} bg-trans`}
-                  >
+                  <button type="button" data-image-id={image.id} onClick={() => handleSetCover(image.id.toString())} className={`${styles.btn} bg-trans`}>
                     <BsFillHouseCheckFill pointerEvents="none" />
                   </button>
                   <button
                     type="button"
-                    onClick={() =>
-                      onSelectedImgDelete(
-                        image.id.toString(),
-                        image.url,
-                        accountId.toString(),
-                        token
-                      )
-                    }
+                    onClick={() => onSelectedImgDelete(image.id.toString(), image.url, accountId.toString(), token)}
                     className={`${styles.btn} bg-trans`}
                   >
                     <RiDeleteBin2Fill color="red" pointerEvents="none" />
@@ -111,6 +90,6 @@ const ProjectCarousel = ({ images, clientId }: IProps) => {
       ))}
     </div>
   );
-};
+}
 
 export default ProjectCarousel;

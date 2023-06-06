@@ -1,37 +1,31 @@
 import React, { useState } from "react";
-import styles from "./Setting.module.scss";
 import { Link } from "react-router-dom";
+import { AiFillSave } from "react-icons/ai";
+import { ThreeCircles } from "react-loader-spinner";
+import { toast } from "react-toastify";
+import styles from "./Setting.module.scss";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import {
-  getAccount,
-  getToken,
-  updateAccount,
-  updateProfile,
-} from "../../redux/reducers/authSlice";
-import defaultUser from "../../../src/assets/img/defaultUser.png";
-import profileDeco from "../../../src/assets/img/decorations/profile.jpg";
+import { getAccount, getToken, updateAccount, updateProfile } from "../../redux/reducers/authSlice";
+import defaultUser from "../../assets/img/defaultUser.png";
+import profileDeco from "../../assets/img/decorations/profile.jpg";
 import ImageReplace from "../../components/Lib/ImageReplace/ImageReplace";
 import AutoAddress from "../../components/Lib/Inputs/AutoAddress/AutoAddress";
 import { Roles } from "../../data/constants";
 import AddressList from "../../components/AddressList/AddressList";
-import { AiFillSave } from "react-icons/ai";
-import { ThreeCircles } from "react-loader-spinner";
 import { accountUpdate } from "../../api/accounts";
 import { profileUpdate } from "../../api/profiles";
-import { toast } from "react-toastify";
 
-const Setting = () => {
+function Setting() {
   // Redux
   const dispatch = useAppDispatch();
   const loginUser = useAppSelector(getAccount);
   const { token } = useAppSelector(getToken);
-  const { id, firstName, lastName, email, role, profile, addresses } =
-    loginUser;
+  const { id, firstName, lastName, email, role, profile, addresses } = loginUser;
   const isClient = role.id === Roles.CLIENT;
   const isMaker = role.id === Roles.MAKER;
   const accountInitialState = {
-    firstName: firstName,
-    lastName: lastName,
+    firstName,
+    lastName,
   };
   const [account, setAccount] = useState(accountInitialState);
   const [biography, setBiography] = useState(profile.bio);
@@ -51,10 +45,9 @@ const Setting = () => {
     try {
       await accountUpdate(id.toString(), account, token);
       dispatch(updateAccount({ ...account }));
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      err?.response?.data?.map((e: { message: string }) =>
-        toast.error(e.message)
-      );
+      err?.response?.data?.map((e: { message: string }) => toast.error(e.message));
     } finally {
       setAccountUpdateLoading(false);
     }
@@ -71,7 +64,8 @@ const Setting = () => {
     try {
       await profileUpdate(profile.id, { bio: biography }, token);
       dispatch(updateProfile({ bio: biography }));
-    } catch (err) {
+    } catch (err: unknown) {
+      // eslint-disable-next-line no-console
       console.log(err);
     } finally {
       setProfileUpdateLoading(false);
@@ -83,30 +77,21 @@ const Setting = () => {
   return (
     <div className={styles.settingPage}>
       <h2>Account settings</h2>
-      <p className={styles.colorSecondary}>
-        Hi {firstName || email}, customise your account & profile here
-      </p>
+      <p className={styles.colorSecondary}>Hi {firstName || email}, customise your account & profile here</p>
       <div className={styles.pageHeader}>
         <div>
           <h2 className="pb-1">Your profile info in Meydit services</h2>
           <p className={styles.colorSecondary}>
-            Personal info and options to manage it. You can make some of this
-            info, like your contact details, visible to others so that they can
-            reach you easily. You can also see a summary of your profiles.
+            Personal info and options to manage it. You can make some of this info, like your contact details, visible to others so that they can reach you
+            easily. You can also see a summary of your profiles.
           </p>
         </div>
-        <img
-          className={styles.profileDeco}
-          src={profileDeco}
-          alt="profileDeco"
-        />
+        <img className={styles.profileDeco} src={profileDeco} alt="profileDeco" />
       </div>
 
       <div className={styles.section}>
         <h2>Basic info</h2>
-        <p className={styles.colorSecondary}>
-          Some info may be visible to other people using Meydit services
-        </p>
+        <p className={styles.colorSecondary}>Some info may be visible to other people using Meydit services</p>
         <div className={styles.inputRow}>
           <span className={styles.labelEl}>Avatar</span>
           <span>An avatar helps personalise your account</span>
@@ -134,9 +119,7 @@ const Setting = () => {
                 value={account.firstName ? account.firstName : ""}
                 placeholder="First Name"
                 style={{
-                  width: account.firstName
-                    ? `${account.firstName.toString().length + 1}ch`
-                    : defaultInputLength,
+                  width: account.firstName ? `${account.firstName.toString().length + 1}ch` : defaultInputLength,
                 }}
                 onChange={onAccountPayloadChange}
               />
@@ -147,21 +130,15 @@ const Setting = () => {
                 placeholder="Last Name"
                 value={account.lastName ? account.lastName : ""}
                 style={{
-                  width: account.lastName
-                    ? `${account.lastName.toString().length + 1}ch`
-                    : defaultInputLength,
+                  width: account.lastName ? `${account.lastName.toString().length + 1}ch` : defaultInputLength,
                 }}
                 onChange={onAccountPayloadChange}
               />
             </>
           )}
           {isEditingAccount && (
-            <button onClick={updateAccountNames} className="bg-trans">
-              <AiFillSave
-                fontSize={"1.5em"}
-                color="#8460c3"
-                pointerEvents="none"
-              />
+            <button type="button" onClick={updateAccountNames} className="bg-trans">
+              <AiFillSave fontSize="1.5em" color="#8460c3" pointerEvents="none" />
             </button>
           )}
         </div>
@@ -173,15 +150,8 @@ const Setting = () => {
           <span className={styles.labelEl}>Biography</span>
           <div className={styles.positionDiv}>
             {isEditingProfile && (
-              <button
-                onClick={updateProfileBio}
-                className={`${styles.bioSaveBtn} bg-trans`}
-              >
-                <AiFillSave
-                  fontSize={"1.5em"}
-                  color="#8460c3"
-                  pointerEvents="none"
-                />
+              <button type="button" onClick={updateProfileBio} className={`${styles.bioSaveBtn} bg-trans`}>
+                <AiFillSave fontSize="1.5em" color="#8460c3" pointerEvents="none" />
               </button>
             )}
             {profileUpdateLoading ? (
@@ -194,12 +164,7 @@ const Setting = () => {
                 middleCircleColor="#9b71fe"
               />
             ) : (
-              <textarea
-                className={styles.textAreaEl}
-                value={biography ? biography : ""}
-                placeholder="Tell the community a bit about yourself"
-                onChange={onBioChange}
-              />
+              <textarea className={styles.textAreaEl} value={biography || ""} placeholder="Tell the community a bit about yourself" onChange={onBioChange} />
             )}
           </div>
         </div>
@@ -207,11 +172,7 @@ const Setting = () => {
 
       <div className={styles.section}>
         <AutoAddress />
-        {addresses.length ? (
-          <AddressList addresses={addresses} />
-        ) : (
-          <p>Add your address above</p>
-        )}
+        {addresses.length ? <AddressList addresses={addresses} /> : <p>Add your address above</p>}
       </div>
 
       {isClient && (
@@ -226,6 +187,6 @@ const Setting = () => {
       )}
     </div>
   );
-};
+}
 
 export default Setting;

@@ -7,21 +7,10 @@ interface IProps {
   color?: string;
   wrapperClass?: string;
 }
-const LoaderV1 = (props: IProps) => {
+function LoaderV1(props: IProps) {
   const { height, width, color, wrapperClass } = props;
-  return (
-    <Rings
-      height={height}
-      width={width}
-      color={color}
-      radius="6"
-      wrapperStyle={{}}
-      wrapperClass={wrapperClass}
-      visible={true}
-      ariaLabel="rings-loading"
-    />
-  );
-};
+  return <Rings height={height} width={width} color={color} radius="6" wrapperStyle={{}} wrapperClass={wrapperClass} visible ariaLabel="rings-loading" />;
+}
 
 export default LoaderV1;
 

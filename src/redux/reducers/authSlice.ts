@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable import/no-cycle */
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IAuthState } from "./types";
 import { RootState } from "../store";
@@ -52,40 +54,26 @@ export const authSlice = createSlice({
     updateProfile: (state, action: PayloadAction<IUpdateProfile>) => {
       state.account.profile = { ...state.account.profile, ...action.payload };
     },
-    updatePrimaryAddress: (
-      state,
-      action: PayloadAction<{ selectedId: number }>
-    ) => {
+    updatePrimaryAddress: (state, action: PayloadAction<{ selectedId: number }>) => {
       state.account.addresses.forEach((address) => {
-        address.id === action.payload.selectedId
-          ? (address.isPrimary = true)
-          : (address.isPrimary = false);
+        if (address.id === action.payload.selectedId) {
+          address.isPrimary = true;
+        } else {
+          address.isPrimary = false;
+        }
       });
     },
     addAddressToState: (state, action: PayloadAction<IAddress>) => {
       state.account.addresses.push(action.payload);
     },
-    removeAddressFromState: (
-      state,
-      action: PayloadAction<{ selectedId: number }>
-    ) => {
-      state.account.addresses = state.account.addresses.filter(
-        (address) => address.id !== action.payload.selectedId
-      );
+    removeAddressFromState: (state, action: PayloadAction<{ selectedId: number }>) => {
+      state.account.addresses = state.account.addresses.filter((address) => address.id !== action.payload.selectedId);
     },
   },
 });
 
 // ZT-NOTE: Action creators exports
-export const {
-  logUserIn,
-  logUserOut,
-  updateProfile,
-  updateAccount,
-  updatePrimaryAddress,
-  addAddressToState,
-  removeAddressFromState,
-} = authSlice.actions;
+export const { logUserIn, logUserOut, updateProfile, updateAccount, updatePrimaryAddress, addAddressToState, removeAddressFromState } = authSlice.actions;
 
 // ZT-NOTE: Selector funtions exports for multiple react components to use
 export const getAccount = (state: RootState) => state.auth.account;

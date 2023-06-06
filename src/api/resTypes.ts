@@ -36,6 +36,7 @@ export interface IAddress {
   zip: string | null;
   country: string | null;
   isPrimary: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any; // Index signature
 }
 
@@ -64,6 +65,7 @@ export interface IProject {
   startPrice: number;
   createdAt: Date;
   updatedAt: Date;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any; // Index signature
 }
 

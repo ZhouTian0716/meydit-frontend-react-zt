@@ -1,25 +1,24 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import { useState } from "react";
-import styles from "./NavLinks.module.scss";
-import defaultUser from "../../../src/assets/img/defaultUser.png";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import styles from "./NavLinks.module.scss";
+import defaultUser from "../../assets/img/defaultUser.png";
 // API call
 import { logoutApi } from "../../api/auth";
 // Redux
-import {
-  logUserOut,
-  getAccount,
-  getToken,
-} from "../../redux/reducers/authSlice";
+import { logUserOut, getAccount, getToken } from "../../redux/reducers/authSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+
 interface IProps {
   showOnMobile?: boolean;
 }
 
-const NavLinks = (props: IProps) => {
+function NavLinks(props: IProps) {
   const { showOnMobile } = props;
   const [open, setOpen] = useState(false);
-  const { pathname } = useLocation();
   const navigate = useNavigate();
 
   // Redux
@@ -28,13 +27,9 @@ const NavLinks = (props: IProps) => {
   const { token } = useAppSelector(getToken);
   const dispatch = useAppDispatch();
 
-  const optionsClass = open
-    ? `${styles.options} ${styles.active}`
-    : styles.options;
+  const optionsClass = open ? `${styles.options} ${styles.active}` : styles.options;
 
-  const linksClass = showOnMobile
-    ? `${styles.nav__links} ${styles.nav__links__res}`
-    : styles.nav__links;
+  const linksClass = showOnMobile ? `${styles.nav__links} ${styles.nav__links__res}` : styles.nav__links;
 
   const onLogout = async () => {
     const res = await logoutApi(token);
@@ -66,16 +61,10 @@ const NavLinks = (props: IProps) => {
         <div className={styles.account} onClick={() => setOpen(!open)}>
           <div className={styles.accountBtn}>
             <div className={styles.avatarContainer}>
-              <img
-                src={profile.avatar ? profile.avatar : defaultUser}
-                alt="UserIcon"
-                className={styles.avatar}
-              />
+              <img src={profile.avatar ? profile.avatar : defaultUser} alt="UserIcon" className={styles.avatar} />
             </div>
 
-            <span className={styles.accountName}>
-              {loginUser.firstName || loginUser.email?.split("@")[0]}
-            </span>
+            <span className={styles.accountName}>{loginUser.firstName || loginUser.email?.split("@")[0]}</span>
           </div>
 
           <div className={optionsClass}>
@@ -105,23 +94,19 @@ const NavLinks = (props: IProps) => {
             <Link to={`/settings/${id}`} className={styles.option}>
               Settings
             </Link>
-            <button className={styles.option} onClick={onLogout}>
+            <button type="button" className={styles.option} onClick={onLogout}>
               Logout
             </button>
           </div>
         </div>
       ) : (
-        <button
-          className={styles.nav__btn}
-          type="button"
-          onClick={() => navigate("/auth")}
-        >
+        <button className={styles.nav__btn} type="button" onClick={() => navigate("/auth")}>
           Join
         </button>
       )}
     </div>
   );
-};
+}
 
 export default NavLinks;
 

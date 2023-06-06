@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from "react";
 import styles from "./TextAreaV1.module.scss";
 
@@ -15,20 +16,8 @@ interface ITextAreaV1 {
   classes?: string | string[];
 }
 
-const TextAreaV1 = (props: ITextAreaV1) => {
-  const {
-    testId,
-    label,
-    name,
-    rows,
-    placeHolder,
-    defaultValue,
-    type,
-    required,
-    onParentStateChange,
-    loading,
-    classes,
-  } = props;
+function TextAreaV1(props: ITextAreaV1) {
+  const { testId, label, name, rows, placeHolder, defaultValue, type, required, onParentStateChange, loading, classes } = props;
 
   const [val, setVal] = useState<string>();
   const [error, setError] = useState<null | string>(null);
@@ -41,17 +30,8 @@ const TextAreaV1 = (props: ITextAreaV1) => {
     }
   };
   return (
-    <div
-      className={[
-        styles.inputContainer,
-        error ? styles.borderRed : "",
-        classes,
-      ].join(" ")}
-    >
-      <label
-        className={[styles.label, error ? styles.errorRed : ""].join(" ")}
-        htmlFor={name}
-      >
+    <div className={[styles.inputContainer, error ? styles.borderRed : "", classes].join(" ")}>
+      <label className={[styles.label, error ? styles.errorRed : ""].join(" ")} htmlFor={name}>
         {required && <span className={styles.errorRed}>*</span>}
         {label}
       </label>
@@ -70,7 +50,7 @@ const TextAreaV1 = (props: ITextAreaV1) => {
       />
     </div>
   );
-};
+}
 
 export default TextAreaV1;
 

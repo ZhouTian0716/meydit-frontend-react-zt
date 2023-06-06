@@ -26,7 +26,6 @@ export interface IProjectCardProps {
   updatedAt: Date;
 }
 
-
 interface ITag {
   id: number;
   name: string;

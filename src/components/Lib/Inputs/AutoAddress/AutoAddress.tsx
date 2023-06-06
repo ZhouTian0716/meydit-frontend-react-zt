@@ -1,24 +1,15 @@
-import React, { useState, useRef, useEffect } from "react";
-import styles from "./AutoAddress.module.scss";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { BiCurrentLocation } from "react-icons/bi";
-import {
-  apiKey,
-  geocodeJson,
-  initMapScript,
-  IAutoAddress,
-  extractAddress,
-} from "../../../../utils/gmap";
 import { AiFillSave, AiOutlineClear } from "react-icons/ai";
 import { ThreeCircles } from "react-loader-spinner";
+import { apiKey, geocodeJson, initMapScript, IAutoAddress, extractAddress } from "../../../../utils/gmap";
+import styles from "./AutoAddress.module.scss";
 import { isAddressEmpty } from "../../../../utils/helpers";
 import { addressStore } from "../../../../api/addresses";
-import {
-  addAddressToState,
-  getToken,
-} from "../../../../redux/reducers/authSlice";
+import { addAddressToState, getToken } from "../../../../redux/reducers/authSlice";
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
 
-const AutoAddress = () => {
+function AutoAddress() {
   const addressInitialState: IAutoAddress = {
     number: "",
     route: "",
@@ -45,23 +36,20 @@ const AutoAddress = () => {
   };
 
   // do something on address change
-  const onChangeAddress = (autocomplete: google.maps.places.Autocomplete) => {
+  const onChangeAddress = useCallback((autocomplete: google.maps.places.Autocomplete) => {
     const place = autocomplete.getPlace();
-    // console.log("place", place);
     setAddress(extractAddress(place));
-  };
+  }, []);
 
   // init autocomplete
-  const initAutocomplete = () => {
+  const initAutocomplete = useCallback(() => {
     if (!searchInputRef.current) return;
-    const autocomplete = new window.google.maps.places.Autocomplete(
-      searchInputRef.current
-    );
+    const autocomplete = new window.google.maps.places.Autocomplete(searchInputRef.current);
     autocomplete.setFields(["address_component", "geometry"]);
     autocomplete.addListener("place_changed", () => {
       onChangeAddress(autocomplete);
     });
-  };
+  }, [onChangeAddress, searchInputRef]);
 
   const reverseGeocode = ({ latitude, longitude }: GeolocationCoordinates) => {
     const url = `${geocodeJson}?key=${apiKey}&latlng=${latitude},${longitude}`;
@@ -70,6 +58,7 @@ const AutoAddress = () => {
       .then((response) => response.json())
       .then((location) => {
         const place = location.results[0];
+        // eslint-disable-next-line no-underscore-dangle, @typescript-eslint/naming-convention
         const _address = extractAddress(place);
         // console.log(_address);
         setAddress(_address);
@@ -80,24 +69,23 @@ const AutoAddress = () => {
 
   const findMyLocation = () => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position: GeolocationPosition) => {
-          reverseGeocode(position.coords);
-        }
-      );
+      navigator.geolocation.getCurrentPosition((position: GeolocationPosition) => {
+        reverseGeocode(position.coords);
+      });
     }
   };
 
   // load map script after mounted
   useEffect(() => {
-    firstMount.current &&
+    if (firstMount.current) {
       initMapScript().then(() => {
         initAutocomplete();
       });
+    }
     return () => {
       firstMount.current = false;
     };
-  }, []);
+  }, [initAutocomplete]);
 
   const onSaveAddress = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -108,6 +96,7 @@ const AutoAddress = () => {
       const res = await addressStore(addressPayload, token);
       dispatch(addAddressToState(res));
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.log(err);
     } finally {
       setIsStoring(false);
@@ -138,10 +127,7 @@ const AutoAddress = () => {
 
       <h2>Addresses</h2>
       <div className={styles.searchInputBox}>
-        <BiCurrentLocation
-          className={styles.flexEnd}
-          onClick={() => findMyLocation()}
-        />
+        <BiCurrentLocation className={styles.flexEnd} onClick={() => findMyLocation()} />
         <input
           ref={searchInputRef}
           type="text"
@@ -149,7 +135,7 @@ const AutoAddress = () => {
           placeholder="Search your address..."
           className={styles.searchInput}
           onChange={onSearchChange}
-          autoComplete={"off"}
+          autoComplete="off"
         />
         <AiOutlineClear
           className={styles.flexEnd}
@@ -171,9 +157,7 @@ const AutoAddress = () => {
             autoComplete="off"
             className={styles.addressGrid__item__input}
             style={{
-              width: number
-                ? `${number.toString().length + 1}ch`
-                : defaultInputLength,
+              width: number ? `${number.toString().length + 1}ch` : defaultInputLength,
             }}
             value={number}
             onChange={onAddressPayloadChange}
@@ -189,9 +173,7 @@ const AutoAddress = () => {
             name="route"
             className={styles.addressGrid__item__input}
             style={{
-              width: route
-                ? `${route.toString().length}ch`
-                : defaultInputLength,
+              width: route ? `${route.toString().length}ch` : defaultInputLength,
             }}
             value={route}
             onChange={onAddressPayloadChange}
@@ -223,9 +205,7 @@ const AutoAddress = () => {
             name="state"
             className={styles.addressGrid__item__input}
             style={{
-              width: state
-                ? `${state.toString().length + 2}ch`
-                : defaultInputLength,
+              width: state ? `${state.toString().length + 2}ch` : defaultInputLength,
             }}
             value={state}
             onChange={onAddressPayloadChange}
@@ -257,9 +237,7 @@ const AutoAddress = () => {
             name="country"
             className={styles.addressGrid__item__input}
             style={{
-              width: country
-                ? `${country.toString().length + 2}ch`
-                : defaultInputLength,
+              width: country ? `${country.toString().length + 2}ch` : defaultInputLength,
             }}
             value={country}
             onChange={onAddressPayloadChange}
@@ -268,6 +246,6 @@ const AutoAddress = () => {
       </div>
     </form>
   );
-};
+}
 
 export default AutoAddress;

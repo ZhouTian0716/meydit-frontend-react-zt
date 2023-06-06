@@ -40,7 +40,7 @@ export interface IUpdateImage {
 }
 
 export interface ICreateProject {
-  title: string ;
+  title: string;
   startPrice: number;
   description: string | null;
   categoryId: number;

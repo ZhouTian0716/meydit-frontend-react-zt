@@ -5,16 +5,16 @@ import NavLinks from "../NavLinks/NavLinks";
 import { useAppSelector } from "../../redux/hooks";
 import { isShowBottomNav } from "../../redux/reducers/uiSlice";
 
-const Layout = () => {
+function Layout() {
   const bottomNav = useAppSelector(isShowBottomNav);
   return (
     <div className="layoutContainer">
       <Navbar />
       <Outlet />
       <Footer />
-      {bottomNav && <NavLinks showOnMobile={true} />}
+      {bottomNav && <NavLinks showOnMobile />}
     </div>
   );
-};
+}
 
 export default Layout;

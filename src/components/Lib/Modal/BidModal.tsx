@@ -1,19 +1,13 @@
 import React, { useState } from "react";
+import { AiFillCamera, AiFillMinusSquare, AiFillPlusSquare, AiFillCloseCircle } from "react-icons/ai";
+import { BsImageFill } from "react-icons/bs";
+import { toast } from "react-toastify";
 import styles from "./BidModal.module.scss";
 import { useAppDispatch } from "../../../redux/hooks";
 import { toggleBidModal } from "../../../redux/reducers/uiSlice";
-import {
-  AiFillCamera,
-  AiFillMinusSquare,
-  AiFillPlusSquare,
-  AiFillCloseCircle,
-} from "react-icons/ai";
-import { BsImageFill } from "react-icons/bs";
-import { toast } from "react-toastify";
 
-const BidModal = () => {
-  const placeHolderText =
-    "Your comment here... (e.g. I can do this project in 3 days)";
+function BidModal() {
+  const placeHolderText = "Your comment here... (e.g. I can do this project in 3 days)";
   const startPrice = 200;
   const [price, setPrice] = useState<number>(startPrice);
   const [comment, setComment] = useState("");
@@ -23,11 +17,11 @@ const BidModal = () => {
   };
 
   const onPriceAdd = () => {
-    price ? setPrice((prev) => prev + 10) : setPrice(10);
+    setPrice((prev) => prev + 10);
   };
 
   const onPriceReduce = () => {
-    price > startPrice ? setPrice((prev) => prev - 10) : setPrice(startPrice);
+    setPrice((prev) => prev - 10);
   };
 
   const onPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,36 +32,28 @@ const BidModal = () => {
     setComment(e.target.value);
   };
 
-  const handleSubmit = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    event.stopPropagation();
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     const newBid = {
       price,
       comment,
     };
+    // eslint-disable-next-line no-console
     console.log(newBid);
     if (price < startPrice) {
-      return toast.error(`Bid price should be at least $${startPrice}`);
+      toast.error(`Bid price should be at least $${startPrice}`);
+      return;
     }
-
     dispatch(toggleBidModal());
   };
 
   return (
     <div className={styles.overlay}>
-      <div className={styles.modal}>
-        <AiFillCloseCircle
-          className={`${styles.closeBtn} ${styles.pointer}`}
-          onClick={closeModal}
-        />
+      <form className={styles.modal} onSubmit={handleSubmit}>
+        <AiFillCloseCircle className={`${styles.closeBtn} ${styles.pointer}`} onClick={closeModal} />
         <h3 className={styles.title}>Set your Bid</h3>
         <div className={styles.priceDiv}>
-          <AiFillMinusSquare
-            className={`${styles.priceBtn} ${styles.pointer}`}
-            style={{ borderRadius: "50%" }}
-            onClick={onPriceReduce}
-          />
+          <AiFillMinusSquare className={`${styles.priceBtn} ${styles.pointer}`} style={{ borderRadius: "50%" }} onClick={onPriceReduce} />
           <div className={styles.priceContainer}>
             {!!price && <span>$</span>}
             <input
@@ -78,19 +64,10 @@ const BidModal = () => {
               style={{ width: price ? `${price.toString().length}ch` : "2ch" }}
             />
           </div>
-          <AiFillPlusSquare
-            className={`${styles.priceBtn} ${styles.pointer}`}
-            style={{ borderRadius: "50%" }}
-            onClick={onPriceAdd}
-          />
+          <AiFillPlusSquare className={`${styles.priceBtn} ${styles.pointer}`} style={{ borderRadius: "50%" }} onClick={onPriceAdd} />
         </div>
         <h3 className={styles.title}>Your Comment</h3>
-        <textarea
-          className={styles.commentArea}
-          placeholder={placeHolderText}
-          value={comment}
-          onChange={onCommentChange}
-        />
+        <textarea className={styles.commentArea} placeholder={placeHolderText} value={comment} onChange={onCommentChange} />
         <h3 className={styles.title}>Relevant Pictures</h3>
         <div className={styles.flexRow}>
           <div className={styles.uploadArea}>
@@ -102,12 +79,12 @@ const BidModal = () => {
             <small>Photo Library</small>
           </div>
         </div>
-        <button onClick={handleSubmit} className={styles.bidBtn}>
+        <button type="submit" className={styles.bidBtn}>
           SUBMIT
         </button>
-      </div>
+      </form>
     </div>
   );
-};
+}
 
 export default BidModal;
